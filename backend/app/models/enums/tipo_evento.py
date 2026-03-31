@@ -1,0 +1,9 @@
+import enum
+
+class TipoEvento(enum.Enum):
+    PESAGEM = "PESAGEM"
+    VACINACAO = "VACINACAO"
+    DOENCA = "DOENCA"
+    TRATAMENTO = "TRATAMENTO"
+    REPRODUCAO = "REPRODUCAO"
+    MOVIMENTACAO = "MOVIMENTACAO"
