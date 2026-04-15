@@ -8,7 +8,6 @@ from app.enums.animal.categoria import AnimalCategoria
 from app.enums.animal.StatusReprodutivo import AnimalStatusReprodutivo
 from app.enums.animal.AnimalOrigem import AnimalOrigem
 
-
 class Animal:
 
     def __init__(
@@ -54,3 +53,7 @@ class Animal:
         self.peso_nacimento = peso_nacimento
         self.OBS = OBS
         self.animal_categoria = animal_categoria
+
+        self.pesagens = []
+        self.sanidades = []
+        self.reproducoes = [] 
