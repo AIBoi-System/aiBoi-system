@@ -1,6 +1,6 @@
 import enum
 
-class StatusReprodutivo(enum.Enum):
+class  AnimalStatusReprodutivo(enum.Enum):
     VAZIA = "VAZIA"
     PRENHA = "PRENHA"
     LACTANTE = "LACTANTE"
