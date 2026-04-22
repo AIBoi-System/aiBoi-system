@@ -110,7 +110,7 @@ docker-compose down -v
 ```
 > [!CAUTION]
 Aviso de Segurança: O parâmetro -v apaga permanentemente todos os volumes de dados vinculados. Use este comando apenas se tiver certeza de que não há dados de teste críticos no banco local que precisem ser preservados.
->
+
 > ## 💡 Dicas de Desenvolvimento
 
 Para garantir que o fluxo de trabalho da equipe seja fluido e o hardware se mantenha saudável, siga estas recomendações:
@@ -138,3 +138,34 @@ Para manter a integridade e a estética do código no projeto **AiBoi**, é obri
 > **Atenção ao Hardware:** Como o sistema utiliza modelos **YOLO** (*You Only Look Once*) para processamento de visão computacional, o uso da GPU (como a **RTX 3050**) pode ser extremamente intensivo.
 >
 > Monitore a temperatura do hardware durante treinamentos ou inferências prolongadas para evitar o *thermal throttling* (queda de desempenho por calor) ou danos físicos aos componentes.
+
+---
+
+## 👥 Contribuição
+
+Para manter a integridade do código e a sincronia da equipe, siga este fluxo de trabalho:
+
+> [!WARNING]
+> **Antes de iniciar qualquer tarefa:** Sempre execute o comando abaixo para garantir que você está trabalhando com a versão mais recente do projeto:
+> ```bash
+> git pull origin main
+> ```
+
+### 🌿 Fluxo de Desenvolvimento
+
+1.  **Crie uma Branch Separada:** Nunca faça commits diretamente na `main`. Utilize o padrão de nomenclatura:
+    ```bash
+    git checkout -b feature/nome-da-sua-tarefa
+    ```
+2.  **Codificação e Estilo:** Desenvolva sua feature respeitando rigorosamente as regras da **PEP 8**.
+3.  **Submissão:** Ao finalizar, faça o push da sua branch e abra um **Pull Request (PR)**. 
+    * *Nota:* Descreva detalhadamente as alterações realizadas e mencione qual REQ (Requisito) está sendo atendido.
+
+---
+
+<div align="center">
+  <p><i>Este projeto é parte da iniciativa de modernização da pecuária no Pará.</i></p>
+  <p><b>Dúvidas? Entre em contato com o líder técnico.</b></p>
+  <br>
+  <img src="https://img.shields.io/badge/AiBoi-System%202026-green?style=flat-square" alt="AiBoi 2026">
+</div>
