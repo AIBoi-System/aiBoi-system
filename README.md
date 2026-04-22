@@ -74,24 +74,40 @@ O sistema possui rotas específicas para validar a saúde do projeto e facilitar
 
 > [!TIP]
 > **Produtividade:** Utilize o **Swagger UI** (`/docs`) para testar as rotas e os modelos de dados diretamente pelo navegador, dispensando o uso de ferramentas externas como Postman ou Insomnia durante o desenvolvimento.
->
-> ## 📂 Estrutura do Projeto
 
-O **AiBoi** utiliza uma arquitetura em camadas para separar responsabilidades, facilitando a manutenção e a escalabilidade do sistema:
+
+## 📂 Estrutura do Projeto
+
+O ecossistema **AiBoi** está organizado em uma estrutura monorepo, separando as responsabilidades de infraestrutura, backend e frontend:
 
 ```plaintext
-backend/app/
-├── 🎮 controllers/   # Rotas e Endpoints da API (Entrada de dados)
-├── 🧠 services/      # Lógica de negócio e cálculos zootécnicos (O "cérebro")
-├── 🗄️ repositories/  # Camada de persistência e consultas (SQLAlchemy)
-├── 📐 models/        # Entidades e Definição das Tabelas do Banco
-├── 📝 schemas/       # Modelos Pydantic (Validação e Serialização JSON)
-├── 🏷️ enums/         # Padronização de Tipos, Status e Categorias
-├── ⚙️ core/          # Configurações globais, segurança e conexão DB
-└── 🚀 main.py        # Ponto de entrada e inicialização do FastAPI
-```
+aiBoi-system/ (Raiz do Projeto)
+├── 📂 backend/                  # O coração do servidor e lógica de dados
+│   ├── 📂 app/                  # Código-fonte principal (FastAPI)
+│   │   ├── 🎮 controllers/      # Endpoints e Rotas da API
+│   │   ├── 🧠 services/         # Regras de negócio e cálculos zootécnicos
+│   │   ├── 🗄️ repositories/     # Consultas ao banco de dados (SQLAlchemy)
+│   │   ├── 📐 models/           # Definição das tabelas (Entidades)
+│   │   ├── 📝 schemas/          # Validação de dados (Pydantic)
+│   │   ├── 🏷️ enums/            # Padronização de tipos e categorias
+│   │   ├── ⚙️ core/             # Conexão com DB, segurança e ambiente
+│   │   └── 🚀 main.py           # Arquivo de inicialização do backend
+|   |── 📂 test/   
+│   ├── 🧪 tests/                # Testes unitários e de integração
+│   ├── 🐳 Dockerfile            # Receita da imagem Docker do backend
+│   └── 📄 requirements.txt      # Lista de dependências Python
+├── 💻 frontend/                 # Interface Web (React/Vite)
+├── 🐳 docker-compose.yml        # Orquestração de containers (App + DB)
+├── 🔐 .env                      # Variáveis sensíveis (NUNCA versione este arquivo)
+├── 📜 global-bundle.pem         # Certificado SSL para conexão segura AWS RDS
+└── 📜 README.md
+````
+Observações Importantes de Infraestrutura
+##🔐 Arquivo de Certificado (.pem)
+Note que na raiz do seu projeto existe o arquivo global-bundle.pem.
 
----
+[!IMPORTANT]
+Este arquivo é obrigatório para que a aplicação consiga estabelecer uma conexão criptografada (SSL) segura com o AWS RDS. Certifique-se de que o caminho para este arquivo esteja corretamente mapeado no seu arquivo de configuração de banco de dados (core/database.py).
 
 ## 🛠️ Comandos de Manutenção
 
