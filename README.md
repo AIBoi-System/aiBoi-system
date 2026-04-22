@@ -110,3 +110,31 @@ docker-compose down -v
 ```
 > [!CAUTION]
 Aviso de Segurança: O parâmetro -v apaga permanentemente todos os volumes de dados vinculados. Use este comando apenas se tiver certeza de que não há dados de teste críticos no banco local que precisem ser preservados.
+>
+> ## 💡 Dicas de Desenvolvimento
+
+Para garantir que o fluxo de trabalho da equipe seja fluido e o hardware se mantenha saudável, siga estas recomendações:
+
+### 📡 Logs em Tempo Real
+Para depurar erros de lógica ou visualizar as queries SQL sendo executadas pelo SQLAlchemy em tempo real, utilize o comando:
+
+```bash
+# Acompanha a saída de todos os containers em tempo real
+docker-compose logs -f
+```
+
+### 📏 Padronização PEP 8
+
+Para manter a integridade e a estética do código no projeto **AiBoi**, é obrigatório o uso de um linter (como **Flake8** ou **Black**). 
+
+* **Consistência:** Garante que as camadas de `models/`, `schemas/` e `repositories/` sigam a mesma estrutura visual.
+* **Agilidade:** Facilita o processo de *Code Review*, permitindo que a equipe foque na lógica e não na formatação.
+
+---
+
+### 🌡️ Monitoramento Térmico
+
+> [!TIP]
+> **Atenção ao Hardware:** Como o sistema utiliza modelos **YOLO** (*You Only Look Once*) para processamento de visão computacional, o uso da GPU (como a **RTX 3050**) pode ser extremamente intensivo.
+>
+> Monitore a temperatura do hardware durante treinamentos ou inferências prolongadas para evitar o *thermal throttling* (queda de desempenho por calor) ou danos físicos aos componentes.
