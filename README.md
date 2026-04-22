@@ -62,35 +62,15 @@ Copie e cole o conteúdo abaixo no arquivo:
 DATABASE_URL=mysql+pymysql://user:password@localhost:3306/aiboi_db
 ```
 
-<div align="center">
-  <h1>🐂 AiBoi - Gestão Pecuária Inteligente</h1>
-  <p><i>Digitalizando o manejo bovino com alta performance e precisão.</i></p>
+### 🗄️ Verificação e Documentação
 
-  <img src="https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI">
-  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL">
-  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
-</div>
+O sistema possui rotas específicas para validar a saúde do projeto e facilitar os testes da equipe de forma rápida e visual:
 
----
+| 🛠️ Recurso | 📝 Descrição | 🔗 Link de Acesso |
+| :--- | :--- | :--- |
+| **Status do Banco** | Valida a conexão em tempo real com o RDS/Local | [http://localhost:8000/test-db](http://localhost:8000/test-db) |
+| **Swagger UI** | Documentação interativa para teste de endpoints | [http://localhost:8000/docs](http://localhost:8000/docs) |
+| **ReDoc** | Documentação técnica em formato de página estática | [http://localhost:8000/redoc](http://localhost:8000/redoc) |
 
-## 📖 Visão Geral
-
-O **AiBoi** é um ecossistema de backend focado na **Pecuária 4.0**. Desenvolvido para atender requisitos rigorosos de monitoramento zootécnico (REQ-030) e sanitário (REQ-031), o sistema permite o controle total de lotes, pesagens, reprodução e manejo de pastagens.
-
----
-
-## 🛠️ Tecnologias e Padrões
-
-* **Arquitetura:** Camadas (Controllers, Services, Repositories, Models).
-* **Estilo:** `PEP 8` (Código limpo e padronizado).
-* **Infraestrutura:** Dockerizada com suporte a AWS RDS.
-
----
-
-## 📥 Instalação e Setup
-
-### 1️⃣ Clonar Repositório
-```bash
-git clone [https://github.com/seu-usuario/aiBoi-system.git](https://github.com/seu-usuario/aiBoi-system.git)
-cd aiBoi-system
+> [!TIP]
+> **Produtividade:** Utilize o **Swagger UI** (`/docs`) para testar as rotas e os modelos de dados diretamente pelo navegador, dispensando o uso de ferramentas externas como Postman ou Insomnia durante o desenvolvimento.
