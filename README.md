@@ -47,3 +47,17 @@ Antes de começar, verifique se você possui:
 ```bash
 git clone [https://github.com/seu-usuario/aiBoi-system.git](https://github.com/seu-usuario/aiBoi-system.git)
 cd aiBoi-system
+````
+### 2. Variáveis de Ambiente 🔑
+
+Crie um arquivo chamado `.env` na raiz do diretório `backend/`. Este arquivo é essencial para que a API consiga se comunicar com o banco de dados **MySQL/RDS**.
+
+> [!IMPORTANT]
+> **Atenção:** Nunca versione o arquivo `.env`. Certifique-se de que ele esteja listado no seu `.gitignore`.
+
+Copie e cole o conteúdo abaixo no arquivo:
+
+```env
+# Formato: driver://usuario:senha@host:porta/nome_do_banco
+DATABASE_URL=mysql+pymysql://user:password@localhost:3306/aiboi_db
+```
