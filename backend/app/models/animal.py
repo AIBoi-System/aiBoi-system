@@ -1,9 +1,9 @@
 from datetime import date
 from typing import Optional, List
 
-from app.enums.animal.animal_sex import AnimalSex
-from app.enums.animal.animal_life_status import AnimalLifeStatus
-from app.enums.animal.animal_size import AnimalSize
+from backend.app.enums.animal.animal_sex import AnimalSex
+from backend.app.enums.animal.animal_life_tatus import AnimalLifeStatus
+from backend.app.enums.animal.animal_size import AnimalSize
 from app.enums.animal.animal_category import AnimalCategory
 from app.enums.animal.animal_reproductive_status import AnimalReproductiveStatus
 from app.enums.animal.animal_origin import AnimalOrigin

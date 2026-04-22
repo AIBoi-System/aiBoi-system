@@ -7,7 +7,7 @@ class CPF:
         self.valor = self.formatar(valor)
 
     def __str__(self):
-        return self.valor
+        return self.valor   
 
     def validar(self, cpf: str) -> bool:
         cpf = ''.join(filter(str.isdigit, cpf))
