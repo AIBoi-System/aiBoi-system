@@ -74,3 +74,39 @@ O sistema possui rotas específicas para validar a saúde do projeto e facilitar
 
 > [!TIP]
 > **Produtividade:** Utilize o **Swagger UI** (`/docs`) para testar as rotas e os modelos de dados diretamente pelo navegador, dispensando o uso de ferramentas externas como Postman ou Insomnia durante o desenvolvimento.
+>
+> ## 📂 Estrutura do Projeto
+
+O **AiBoi** utiliza uma arquitetura em camadas para separar responsabilidades, facilitando a manutenção e a escalabilidade do sistema:
+
+```plaintext
+backend/app/
+├── 🎮 controllers/   # Rotas e Endpoints da API (Entrada de dados)
+├── 🧠 services/      # Lógica de negócio e cálculos zootécnicos (O "cérebro")
+├── 🗄️ repositories/  # Camada de persistência e consultas (SQLAlchemy)
+├── 📐 models/        # Entidades e Definição das Tabelas do Banco
+├── 📝 schemas/       # Modelos Pydantic (Validação e Serialização JSON)
+├── 🏷️ enums/         # Padronização de Tipos, Status e Categorias
+├── ⚙️ core/          # Configurações globais, segurança e conexão DB
+└── 🚀 main.py        # Ponto de entrada e inicialização do FastAPI
+```
+
+---
+
+## 🛠️ Comandos de Manutenção
+
+### 🔄 Sincronização do Banco de Dados
+O sistema utiliza o mapeamento do **SQLAlchemy** para gerenciar o esquema do banco de dados. A criação das tabelas no **AWS RDS** ou ambiente local ocorre automaticamente na inicialização da aplicação.
+
+> [!IMPORTANT]
+> **Ponto de Atenção:** Para que uma tabela seja criada, o modelo correspondente **DEVE** estar explicitamente importado no arquivo `main.py`. Caso contrário, o motor do SQLAlchemy não reconhecerá a classe e a tabela não será gerada.
+
+### 🧹 Resetar Ambiente Docker
+Se houver necessidade de limpar o ambiente, remover containers órfãos ou resetar completamente o banco de dados de desenvolvimento local, utilize o comando abaixo:
+
+```bash
+# Para parar os serviços e REMOVER os volumes de dados (Limpeza total)
+docker-compose down -v
+```
+> [!CAUTION]
+Aviso de Segurança: O parâmetro -v apaga permanentemente todos os volumes de dados vinculados. Use este comando apenas se tiver certeza de que não há dados de teste críticos no banco local que precisem ser preservados.
