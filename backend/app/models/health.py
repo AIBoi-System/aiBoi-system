@@ -1,31 +1,37 @@
 from datetime import date
 from typing import Optional
 
+from sqlalchemy import Column, Integer, String, Date, Float, Enum, Text, ForeignKey
+from sqlalchemy.orm import relationship
+
+from app.core.database import Base
 from app.enums.health.health_type import HealthType
 
 
-class Health:
+class Health(Base):
+    """
+    Representa os registros sanitários (vacinas, medicamentos, tratamentos) do animal.
+    Essencial para o controle de carência e emissão de GTA.
+    """
+    __tablename__ = "health_records"
 
-    def __init__(
-        self,
-        id_health_record: int,
-        health_type: HealthType,
-        product_name: str,
-        application_date: date,
-        responsible: str,
-        dosage: float,
-        unit_price: float,
-        notes: Optional[str],
-        animal_id: int
-    ):
-        self.id_health_record = id_health_record
-        self.health_type = health_type
-        self.product_name = product_name
-        self.application_date = application_date
-        self.responsible = responsible
-        self.dosage = dosage
-        self.unit_price = unit_price
-        self.notes = notes
+    # Identificação
+    id_health_record = Column(Integer, primary_key=True, index=True)
+    
+    # Detalhes do Tratamento
+    health_type = Column(Enum(HealthType), nullable=False)
+    product_name = Column(String(100), nullable=False)
+    application_date = Column(Date, default=date.today, nullable=False)
+    responsible = Column(String(100), nullable=True)
+    
+    # Dosagem e Custos
+    dosage = Column(Float, nullable=True)
+    unit_price = Column(Float, nullable=True)
+    
+    notes = Column(Text, nullable=True)
 
-        # Relacionamento com Animal
-        self.animal_id = animal_id
+    # Relacionamento com o Animal
+    animal_id = Column(Integer, ForeignKey("animals.id_animal"), nullable=False)
+    
+    # Mapeamento inverso para facilitar consultas
+    animal = relationship("Animal", back_populates="health_records")

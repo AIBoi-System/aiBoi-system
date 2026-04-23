@@ -1,61 +1,64 @@
 from datetime import date
-from typing import Optional, List
+from typing import List, Optional
 
-from backend.app.enums.animal.animal_sex import AnimalSex
-from backend.app.enums.animal.animal_life_tatus import AnimalLifeStatus
-from backend.app.enums.animal.animal_size import AnimalSize
+from sqlalchemy import Column, Integer, String, Date, Float, Enum, Text
+from sqlalchemy.orm import relationship
+
+from app.core.database import Base
+from app.enums.animal.animal_sex import AnimalSex
+# CORRIGIDO: Adicionado o 's' em animal_life_status
+from app.enums.animal.animal_life_tatus import AnimalLifeStatus
+from app.enums.animal.animal_size import AnimalSize
 from app.enums.animal.animal_category import AnimalCategory
 from app.enums.animal.animal_reproductive_status import AnimalReproductiveStatus
 from app.enums.animal.animal_origin import AnimalOrigin
 
 
-class Animal:
+class Animal(Base):
+    """
+    Representa a entidade principal do sistema AiBoi.
+    Seguindo as normas do PEP 8 e mapeamento SQLAlchemy.
+    """
+    __tablename__ = "animals"
 
-    def __init__(
-        self,
-        id_animal: int,
-        identification_number: int,
-        chip_id: int,
-        pedigree_po: int,
-        name: str,
-        sex: AnimalSex,
-        breed: str,
-        category: str,
-        animal_size: AnimalSize,
-        animal_life_status: AnimalLifeStatus,
-        reproductive_status: AnimalReproductiveStatus,
-        birth_date: date,
-        origin: AnimalOrigin,
-        entry_date: Optional[date],
-        exit_date: Optional[date],
-        weaning_date: Optional[date],
-        weaning_weight: Optional[float],
-        birth_weight: Optional[float],
-        notes: Optional[str],
-        animal_category: AnimalCategory
-    ):
-        self.id_animal = id_animal
-        self.identification_number = identification_number
-        self.chip_id = chip_id
-        self.pedigree_po = pedigree_po
-        self.name = name
-        self.sex = sex
-        self.breed = breed
-        self.category = category
-        self.animal_size = animal_size
-        self.animal_life_status = animal_life_status
-        self.reproductive_status = reproductive_status
-        self.birth_date = birth_date
-        self.origin = origin
-        self.entry_date = entry_date
-        self.exit_date = exit_date
-        self.weaning_date = weaning_date
-        self.weaning_weight = weaning_weight
-        self.birth_weight = birth_weight
-        self.notes = notes
-        self.animal_category = animal_category
+    # Identificação
+    id_animal = Column(Integer, primary_key=True, index=True)
+    identification_number = Column(Integer, nullable=False, unique=True)
+    chip_id = Column(Integer, nullable=True)
+    pedigree_po = Column(Integer, nullable=True)
+    name = Column(String(100), nullable=True)
 
-        # Relacionamentos
-        self.weights: List = []
-        self.health_records: List = []
-        self.reproductions: List = []
+    # Atributos Bio-Produtivos
+    sex = Column(Enum(AnimalSex), nullable=False)
+    breed = Column(String(50), nullable=False)
+    animal_size = Column(Enum(AnimalSize), nullable=False)
+    
+    # ATENÇÃO: Garanta que no seu Enum a chave seja ATIVO. 
+    # Se no Enum estiver ACTIVE = "ATIVO", mude aqui para AnimalLifeStatus.ACTIVE
+    animal_life_status = Column(
+        Enum(AnimalLifeStatus), 
+        nullable=False, 
+        default=AnimalLifeStatus.ACTIVE 
+    )
+    
+    reproductive_status = Column(Enum(AnimalReproductiveStatus), nullable=True)
+    animal_category = Column(Enum(AnimalCategory), nullable=False)
+
+    # Datas e Pesos
+    birth_date = Column(Date, nullable=False)
+    origin = Column(Enum(AnimalOrigin), nullable=False)
+    entry_date = Column(Date, nullable=True)
+    exit_date = Column(Date, nullable=True)
+    weaning_date = Column(Date, nullable=True)
+    weaning_weight = Column(Float, nullable=True)
+    birth_weight = Column(Float, nullable=True)
+    
+    notes = Column(Text, nullable=True)
+
+    # Relacionamentos
+    weights = relationship("Weighing", back_populates="animal", cascade="all, delete-orphan")
+    health_records = relationship("Health", back_populates="animal", cascade="all, delete-orphan")
+    reproductions = relationship("Reproduction", back_populates="animal")
+    events = relationship("AnimalEvent", back_populates="animal", cascade="all, delete-orphan")
+    movements = relationship("AnimalMovement", back_populates="animal")
+    death_record = relationship("DeathRecord", back_populates="animal", uselist=False)

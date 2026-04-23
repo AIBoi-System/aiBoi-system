@@ -1,29 +1,38 @@
 from datetime import date
 from typing import Optional, Dict
 
-from backend.app.enums.stepExecution.step_execultion_result import StepExecultionResult
+from sqlalchemy import Column, Integer, Date, Enum, JSON, ForeignKey
+from sqlalchemy.orm import relationship
+
+from app.core.database import Base
+from app.enums.stepExecution.step_execultion_result import StepExecultionResult
+from app.enums.step.step_status import StepStatus
 
 
-class StepExecution:
+class StepExecution(Base):
+    """
+    Representa a realização física de uma etapa de protocolo em um ciclo reprodutivo.
+    Utiliza um campo JSON para suportar dados variáveis de insumos e exames.
+    """
+    __tablename__ = "step_executions"
 
-    def __init__(
-        self,
-        id: int,
-        reproduction_id: int,
-        step_id: int,
-        execution_date: Optional[date],
-        status: StepStatus,
-        values: Optional[Dict] = None,
-        result: Optional[StepExecultionResult] = None
-    ):
-        self.id = id
-        self.reproduction_id = reproduction_id
-        self.step_id = step_id
-        self.execution_date = execution_date
-        self.status = status
+    # Identificação
+    id = Column(Integer, primary_key=True, index=True)
+    
+    # Chaves Estrangeiras
+    reproduction_id = Column(Integer, ForeignKey("reproductions.id"), nullable=False)
+    step_id = Column(Integer, ForeignKey("steps.id"), nullable=False)
+    
+    # Dados da Execução
+    execution_date = Column(Date, nullable=True)
+    status = Column(Enum(StepStatus), nullable=False)
+    
+    # Armazenamento flexível (hormônios, sêmen, etc.)
+    values = Column(JSON, nullable=True)
+    
+    # Resultado técnico (ex: Prenhez Confirmada)
+    result = Column(Enum(StepExecultionResult), nullable=True)
 
-        # JSON flexível (hormônios, sêmen, etc)
-        self.values = values or {}
-
-        # Resultado (apenas no diagnóstico)
-        self.result = result
+    # Relacionamentos
+    reproduction = relationship("Reproduction", back_populates="step_executions")
+    step = relationship("Step", back_populates="executions")

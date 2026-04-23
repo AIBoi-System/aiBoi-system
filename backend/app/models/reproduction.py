@@ -1,31 +1,43 @@
 from datetime import date
-from typing import Optional, List
+from typing import List, Optional
 
-from backend.app.enums.reproduction.reproduction_type import ReproductionType
-from backend.app.enums.reproduction.reproduction_status import ReproductionStatus
+from sqlalchemy import Column, Integer, Date, Enum, Text, ForeignKey
+from sqlalchemy.orm import relationship
+
+from app.core.database import Base
+from app.enums.reproduction.reproduction_type import ReproductionType
+from app.enums.reproduction.reproduction_status import ReproductionStatus
 
 
-class Reproduction:
+class Reproduction(Base):
+    """
+    Representa o ciclo reprodutivo de uma matriz no sistema AiBoi.
+    Vincula animais a protocolos (como IATF) e monitora o status da prenhez.
+    """
+    __tablename__ = "reproductions"
 
-    def __init__(
-        self,
-        id: int,
-        reproduction_type: ReproductionType,
-        start_date: date,
-        end_date: Optional[date],
-        reproduction_status: ReproductionStatus,
-        notes: Optional[str] = None,
-        protocol_id: Optional[int] = None
-    ):
-        self.id = id
-        self.reproduction_type = reproduction_type
-        self.start_date = start_date
-        self.end_date = end_date
-        self.reproduction_status = reproduction_status
-        self.notes = notes
+    # Identificação
+    id = Column(Integer, primary_key=True, index=True)
+    
+    # Dados do Ciclo
+    reproduction_type = Column(Enum(ReproductionType), nullable=False)
+    reproduction_status = Column(Enum(ReproductionStatus), nullable=False)
+    start_date = Column(Date, default=date.today, nullable=False)
+    end_date = Column(Date, nullable=True)
+    
+    notes = Column(Text, nullable=True)
 
-        # Relacionamento com protocolo
-        self.protocol_id = protocol_id
+    # Chaves Estrangeiras
+    animal_id = Column(Integer, ForeignKey("animals.id_animal"), nullable=False)
+    protocol_id = Column(Integer, ForeignKey("protocols.id"), nullable=True)
 
-        # Relacionamento com execuções de etapas
-        self.step_executions: List = []
+    # Relacionamentos
+    animal = relationship("Animal", back_populates="reproductions")
+    protocol = relationship("Protocol")
+    
+    # Execuções das etapas do protocolo (D0, D7, etc.)
+    step_executions = relationship(
+        "StepExecution", 
+        back_populates="reproduction", 
+        cascade="all, delete-orphan"
+    )

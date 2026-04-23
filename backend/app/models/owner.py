@@ -1,36 +1,42 @@
 from typing import List
 
+from sqlalchemy import Column, Integer, ForeignKey, Enum
+from sqlalchemy.orm import relationship
+
 from app.models.user import User
-from app.models.address import Address
-from app.models.property import Property
-from backend.app.enums.owner.owner_subscription_status import OwnerSubscriptionStatus
-from cpf import CPF
+from app.enums.owner.owner_subscription_status import OwnerSubscriptionStatus
 
 
 class Owner(User):
+    """
+    Representa um Proprietário no sistema AiBoi.
+    Herda atributos básicos de User e adiciona dados de assinatura e propriedades.
+    """
+    __tablename__ = "owners"
 
-    def __init__(
-        self,
-        id_user: int,
-        name: str,
-        email: str,
-        password: str,
-        phone: str,
-        account_status: str,
-        address: Address,
-        cpf: CPF,
-        subscription_status: OwnerSubscriptionStatus
-    ):
-        super().__init__(
-            id_user,
-            name,
-            email,
-            password,
-            phone,
-            account_status,
-            address,
-            cpf
-        )
+    # Chave primária que também é chave estrangeira para a tabela de usuários
+    id_owner = Column(
+        Integer, 
+        ForeignKey("users.id_user"), 
+        primary_key=True
+    )
+    
+    # Status da assinatura (Usa o Enum fornecido)
+    subscription_status = Column(
+        Enum(OwnerSubscriptionStatus), 
+        nullable=False,
+        default=OwnerSubscriptionStatus.FREE
+    )
 
-        self.subscription_status = subscription_status
-        self.properties: List[Property] = []
+    # Relacionamentos
+    # Um proprietário pode ter várias fazendas/propriedades
+    properties = relationship(
+        "Property", 
+        back_populates="owner", 
+        cascade="all, delete-orphan"
+    )
+
+    # Configuração para Herança do SQLAlchemy
+    __mapper_args__ = {
+        "polymorphic_identity": "owner",
+    }

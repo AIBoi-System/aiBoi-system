@@ -1,17 +1,26 @@
 from datetime import date
+from sqlalchemy import Column, Integer, Float, Date, ForeignKey
+from sqlalchemy.orm import relationship
+
+from app.core.database import Base
 
 
-class Weighing:
+class Weighing(Base):
+    """
+    Representa o registro de pesagem de um animal.
+    Armazena o peso e a data para monitoramento do desempenho zootécnico.
+    """
+    __tablename__ = "weighings"
 
-    def __init__(
-        self,
-        id: int,
-        weight: float,
-        weigh_date: date,
-        animal_id: int
-    ):
-        self.id = id
-        self.weight = weight
-        self.weigh_date = weigh_date
+    # Identificação do Registro
+    id = Column(Integer, primary_key=True, index=True)
+    
+    # Dados da Pesagem
+    weight = Column(Float, nullable=False)
+    weigh_date = Column(Date, default=date.today, nullable=False)
 
-        self.animal_id = animal_id
+    # Chave Estrangeira para o Animal
+    animal_id = Column(Integer, ForeignKey("animals.id_animal"), nullable=False)
+
+    # Relacionamento
+    animal = relationship("Animal", back_populates="weights")

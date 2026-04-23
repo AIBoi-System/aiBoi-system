@@ -1,28 +1,36 @@
 from datetime import date
-from typing import Optional, List
+from typing import List, Optional
 
+from sqlalchemy import Column, Integer, String, Date, Enum
+from sqlalchemy.orm import relationship
+
+from app.core.database import Base
 from app.enums.batch.batch_purpose import BatchPurpose
 
 
-class Batch:
+class Batch(Base):
+    """
+    Representa um lote de animais no sistema AiBoi.
+    Organiza os animais por finalidade e status de manejo.
+    """
+    __tablename__ = "batches"
 
-    def __init__(
-        self,
-        id_batch: int,
-        name: str,
-        batch_purpose: BatchPurpose,
-        check_in: date,
-        check_out: Optional[date],
-        status: str,
-        category: str
-    ):
-        self.id_batch = id_batch
-        self.name = name
-        self.batch_purpose = batch_purpose
-        self.check_in = check_in
-        self.check_out = check_out
-        self.status = status
-        self.category = category
+    # Identificação do Lote
+    id_batch = Column(Integer, primary_key=True, index=True)
+    name = Column(String(100), nullable=False)
+    
+    # Atributos de Negócio
+    batch_purpose = Column(Enum(BatchPurpose), nullable=False)
+    status = Column(String(50), nullable=False) # Ex: 'Ativo', 'Encerrado'
+    category = Column(String(50), nullable=False) # Ex: 'Bezerros', 'Matrizes'
+    
+    # Controle Temporal
+    check_in = Column(Date, default=date.today, nullable=False)
+    check_out = Column(Date, nullable=True)
 
-        # Relacionamento com animais
-        self.animals: List = []
+    # Relacionamentos
+    # 1. Lista de animais que pertencem atualmente a este lote
+    animals = relationship("Animal", back_populates="batch")
+    
+    # 2. Histórico de movimentações deste lote entre piquetes
+    movements = relationship("BatchMovement", back_populates="batch")
