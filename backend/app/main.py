@@ -26,8 +26,12 @@ from app.models.batch_movement import BatchMovement
 from app.models.animal_event import AnimalEvent
 from app.models.death_record import DeathRecord
 from app.models.paddock import Paddock
+from app.controllers import reproduction_controller
+from app.controllers import reproduction_controller, health_controller
 
 app = FastAPI()
+app.include_router(reproduction_controller.router)
+app.include_router(health_controller.router)
 
 # =================================================================
 # CRIAÇÃO AUTOMÁTICA DE TABELAS
