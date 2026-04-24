@@ -1,6 +1,8 @@
 from enum import Enum
 
+
 class StepStatus(Enum):
-    PENDING = "Pendente"
-    COMPLETED = "Concluida"
-    OVERDUE = "Em andamento"
+    PENDING = "PENDING"
+    IN_PROGRESS = "IN_PROGRESS"
+    COMPLETED = "COMPLETED"
+    DELAYED = "DELAYED"
