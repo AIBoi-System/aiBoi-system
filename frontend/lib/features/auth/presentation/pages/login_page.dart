@@ -1,10 +1,10 @@
+import 'package:ai_boi/core/theme/app_colors.dart';
+import 'package:ai_boi/core/widgets/custom_text_field.dart';
+import 'package:ai_boi/core/widgets/primary_button.dart';
+import 'package:ai_boi/features/auth/presentation/cubits/login_cubit.dart';
+import 'package:ai_boi/features/auth/presentation/cubits/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/widgets/custom_text_field.dart';
-import '../../../../core/widgets/primary_button.dart';
-import '../cubits/login_cubit.dart';
-import '../cubits/login_state.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
