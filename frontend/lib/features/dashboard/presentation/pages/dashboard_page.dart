@@ -16,7 +16,7 @@ class DashboardPage extends StatelessWidget {
       ),
       body: const Center(
         child: Text(
-          'Em breve: Tela Principal do Sistema\n(Aguardando design do Sandro 🎨)',
+          'Em breve: Tela Principal do Sistema\n(Aguardando design 🎨)',
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 18),
         ),
