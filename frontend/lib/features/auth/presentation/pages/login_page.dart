@@ -7,7 +7,6 @@ import 'package:ai_boi/features/dashboard/presentation/pages/dashboard_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// 1. Mudamos para StatefulWidget para poder gerenciar os controladores de texto
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -16,12 +15,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // 2. Criamos a chave do formulário e os espiões (controllers)
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  // É uma boa prática limpar a memória quando a tela for destruída
   @override
   void dispose() {
     _emailController.dispose();
@@ -59,7 +56,6 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                   
-                  // 3. Envolvemos a nossa Column com o widget Form e passamos a chave
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -75,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                             if (!value.contains('@')) {
                               return 'E-mail inválido';
                             }
-                            return null; // Retornar null significa que passou no teste!
+                            return null; 
                           },
                         ),
                         const SizedBox(height: 16),
@@ -126,10 +122,9 @@ class _LoginPageState extends State<LoginPage> {
                             return PrimaryButton(
                               text: isLoading ? 'Carregando...' : 'Entrar',
                               onPressed: isLoading ? null : () {
-                                // 4. A mágica da validação acontece aqui!
-                                // O botão só avança se todos os validators retornarem "null"
+                               
                                 if (_formKey.currentState!.validate()) {
-                                  // Agora pegamos o texto real que o espião capturou
+                                 
                                   context.read<LoginCubit>().fazerLogin(
                                     _emailController.text, 
                                     _passwordController.text,

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatelessWidget {
   final String hintText;
   final bool isObscure;
-  // 1. Adicionamos as variáveis do controlador e do validador
   final TextEditingController? controller;
   final String? Function(String?)? validator;
 
@@ -18,7 +17,6 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 2. Mudamos de TextField para TextFormField
     return TextFormField(
       controller: controller,
       obscureText: isObscure,
@@ -42,7 +40,7 @@ class CustomTextField extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: AppColors.primaryButton),
         ),
-        // 4. Bônus de UI: Bordas vermelhas para quando o validador reprovar o texto
+       
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Colors.red),
