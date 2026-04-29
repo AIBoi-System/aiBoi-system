@@ -1,20 +1,17 @@
 from fastapi import FastAPI
-from app.core.database import (
-    engine,
-    Base,
-)  # Importamos o Base para gerenciar as tabelas
 from sqlalchemy import text
+from app.core.database import engine, Base
 
-
+# --- IMPORTAÇÃO DOS MODELOS ---
 from app.models.animal import Animal
 from app.models.reproduction import Reproduction
 from app.models.health import Health
 from app.models.weighing import Weighing
 from app.models.batch import Batch
-from app.models.user import User  #
+from app.models.user import User
 from app.models.address import Address
 from app.models.pasture import Pasture
-from app.models.paddock import PaddockeStatus
+from app.models.paddock import PaddockeStatus, Paddock
 from app.models.owner import Owner
 from app.models.cpf import CPF
 from app.models.property import Property
@@ -25,11 +22,20 @@ from app.models.animal_movement import AnimalMovement
 from app.models.batch_movement import BatchMovement
 from app.models.animal_event import AnimalEvent
 from app.models.death_record import DeathRecord
-from app.models.paddock import Paddock
-from app.controllers import reproduction_controller
-from app.controllers import reproduction_controller, health_controller
 
+# --- IMPORTAÇÃO DOS CONTROLLERS (ROTAS) ---
+
+from app.controllers import (
+    property_controller,
+    reproduction_controller,
+    health_controller,
+)
+
+# --- CRIAÇÃO DA APLICAÇÃO ---
 app = FastAPI()
+
+# --- INCLUSÃO DAS ROTAS ---
+app.include_router(property_controller.router)
 app.include_router(reproduction_controller.router)
 app.include_router(health_controller.router)
 
