@@ -33,8 +33,10 @@ from app.controllers import (
 )
 
 # --- CRIAÇÃO DA APLICAÇÃO ---
-
-app = FastAPI(title="AiBoi API", version="1.0.0")
+app = FastAPI(
+    title="AiBoi API",
+    version="1.0.0"
+)
 
 # ================================
 # REGISTRO DE ROTAS
@@ -53,14 +55,12 @@ try:
 except Exception as e:
     print(f"Erro ao criar tabelas: {e}")
 
-
 # ================================
 # ROTAS BASE
 # ================================
 @app.get("/")
 def read_root():
     return {"status": "Online", "projeto": "AiBoi"}
-
 
 @app.get("/test-db")
 def test_db_connection():

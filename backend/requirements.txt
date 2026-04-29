@@ -1,7 +1,9 @@
 fastapi==0.135.2
 uvicorn[standard]==0.42.0
-pydantic==2.12.5
+pydantic[email]==2.12.5  
 sqlalchemy
 pymysql
 cryptography
-python-dotenv
+python-dotenv   
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
