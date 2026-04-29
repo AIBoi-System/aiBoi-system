@@ -3,6 +3,7 @@ from sqlalchemy import text
 from app.core.database import engine, Base
 
 # --- IMPORTAÇÃO DOS MODELOS ---
+# Mantemos as importações explícitas para garantir a criação das tabelas
 from app.models.animal import Animal
 from app.models.reproduction import Reproduction
 from app.models.health import Health
@@ -24,33 +25,38 @@ from app.models.animal_event import AnimalEvent
 from app.models.death_record import DeathRecord
 
 # --- IMPORTAÇÃO DOS CONTROLLERS (ROTAS) ---
-
 from app.controllers import (
+    user_controller,
     property_controller,
     reproduction_controller,
     health_controller,
 )
 
 # --- CRIAÇÃO DA APLICAÇÃO ---
-app = FastAPI()
 
-# --- INCLUSÃO DAS ROTAS ---
+app = FastAPI(title="AiBoi API", version="1.0.0")
+
+# ================================
+# REGISTRO DE ROTAS
+# ================================
+app.include_router(user_controller.router)
 app.include_router(property_controller.router)
 app.include_router(reproduction_controller.router)
 app.include_router(health_controller.router)
 
-# =================================================================
-# CRIAÇÃO AUTOMÁTICA DE TABELAS
-# =================================================================
-# Este comando percorre todos os modelos importados que herdam de Base
-# e cria as tabelas no RDS se elas ainda não existirem.
+# ================================
+# CRIAÇÃO DE TABELAS
+# ================================
 try:
     Base.metadata.create_all(bind=engine)
-    print("Mapeamento concluído: Tabelas criadas ou verificadas no RDS! 🚀")
+    print("Tabelas criadas/verificadas com sucesso!")
 except Exception as e:
-    print(f"Erro ao mapear tabelas: {e}")
+    print(f"Erro ao criar tabelas: {e}")
 
 
+# ================================
+# ROTAS BASE
+# ================================
 @app.get("/")
 def read_root():
     return {"status": "Online", "projeto": "AiBoi"}
@@ -63,7 +69,7 @@ def test_db_connection():
             connection.execute(text("SELECT 1"))
             return {
                 "status": "sucesso",
-                "message": "Ligação ao RDS AWS estabelecida e tabelas prontas! 🚀",
+                "message": "Conexão com banco OK 🚀",
             }
     except Exception as e:
         return {"status": "erro", "details": str(e)}
