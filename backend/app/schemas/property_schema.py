@@ -19,15 +19,18 @@ class PropertyUpdateSchema(BaseModel):
     name: Optional[str] = None
     size: Optional[float] = Field(None, gt=0)
     property_type: Optional[PropertyType] = None
+    # ADICIONADOS: Agora o Pydantic permite enviar esses IDs no PUT
+    owner_id: Optional[int] = None
+    address_id: Optional[int] = None
 
 
 class PropertyResponseSchema(BaseModel):
     id_property: int
     name: str
-    total_area: float  # Como está no banco, talvez revisemos e coloquemos "size"
+    area: float  # Sincronizado com o Banco (antigo total_area)
     property_type: str
-    id_owner: int
-    id_address: int
+    owner_id: int  # Sincronizado com o Banco (antigo id_owner)
+    address_id: Optional[int] = None
 
     class Config:
-        from_attributes = True  # Permite que o pydantic leia o objeto do sqlAlchemy
+        from_attributes = True  # Permite que o pydantic leia o objeto do SQLAlchemy

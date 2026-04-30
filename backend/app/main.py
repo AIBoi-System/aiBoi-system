@@ -30,14 +30,11 @@ from app.controllers import (
     property_controller,
     reproduction_controller,
     health_controller,
-    owner_controller
+    address_controller,  # ADICIONADO: Import do controller de endereços
 )
 
 # --- CRIAÇÃO DA APLICAÇÃO ---
-app = FastAPI(
-    title="AiBoi API",
-    version="1.0.0"
-)
+app = FastAPI(title="AiBoi API", version="1.0.0")
 
 # ================================
 # REGISTRO DE ROTAS
@@ -46,7 +43,10 @@ app.include_router(user_controller.router)
 app.include_router(property_controller.router)
 app.include_router(reproduction_controller.router)
 app.include_router(health_controller.router)
-app.include_router(owner_controller.router)
+
+# ADICIONADO: Registro das rotas de endereço no Swagger
+app.include_router(address_controller.router, prefix="/addresses", tags=["Endereços"])
+
 # ================================
 # CRIAÇÃO DE TABELAS
 # ================================
@@ -56,12 +56,14 @@ try:
 except Exception as e:
     print(f"Erro ao criar tabelas: {e}")
 
+
 # ================================
 # ROTAS BASE
 # ================================
 @app.get("/")
 def read_root():
     return {"status": "Online", "projeto": "AiBoi"}
+
 
 @app.get("/test-db")
 def test_db_connection():
