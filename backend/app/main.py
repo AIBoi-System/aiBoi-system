@@ -10,7 +10,8 @@ from app.models import *
 from app.controllers import (
     user_controller,
     reproduction_controller,
-    health_controller
+    health_controller,
+    owner_controller
 )
 
 app = FastAPI(
@@ -24,7 +25,7 @@ app = FastAPI(
 app.include_router(user_controller.router)
 app.include_router(reproduction_controller.router)
 app.include_router(health_controller.router)
-
+app.include_router(owner_controller.router)
 # ================================
 # CRIAÇÃO DE TABELAS
 # ================================
