@@ -1,6 +1,0 @@
-{
-    "python.analysis.extraPaths": [
-        "./backend/app/enums/reproducao"
-    ],
-    "python-envs.defaultEnvManager": "ms-python.python:system"
-}
