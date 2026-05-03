@@ -1,29 +1,51 @@
 from fastapi import FastAPI
 from sqlalchemy import text
-
 from app.core.database import engine, Base
 
+# --- IMPORTAÇÃO DOS MODELOS ---
+# Mantemos as importações explícitas para garantir a criação das tabelas
+from app.models.animal import Animal
+from app.models.reproduction import Reproduction
+from app.models.health import Health
+from app.models.weighing import Weighing
+from app.models.batch import Batch
+from app.models.user import User
+from app.models.address import Address
+from app.models.pasture import Pasture
+from app.models.paddock import PaddockeStatus, Paddock
+from app.models.owner import Owner
+from app.models.cpf import CPF
+from app.models.property import Property
+from app.models.step import Step
+from app.models.step_execution import StepExecution
+from app.models.protocol import Protocol
+from app.models.animal_movement import AnimalMovement
+from app.models.batch_movement import BatchMovement
+from app.models.animal_event import AnimalEvent
+from app.models.death_record import DeathRecord
 
-from app.models import *
-
-# controllers
+# --- IMPORTAÇÃO DOS CONTROLLERS (ROTAS) ---
 from app.controllers import (
     user_controller,
+    property_controller,
     reproduction_controller,
-    health_controller
+    health_controller,
+    address_controller,  # ADICIONADO: Import do controller de endereços
 )
 
-app = FastAPI(
-    title="AiBoi API",
-    version="1.0.0"
-)
+# --- CRIAÇÃO DA APLICAÇÃO ---
+app = FastAPI(title="AiBoi API", version="1.0.0")
 
 # ================================
 # REGISTRO DE ROTAS
 # ================================
 app.include_router(user_controller.router)
+app.include_router(property_controller.router)
 app.include_router(reproduction_controller.router)
 app.include_router(health_controller.router)
+
+# ADICIONADO: Registro das rotas de endereço no Swagger
+app.include_router(address_controller.router, prefix="/addresses", tags=["Endereços"])
 
 # ================================
 # CRIAÇÃO DE TABELAS
@@ -33,6 +55,7 @@ try:
     print("Tabelas criadas/verificadas com sucesso!")
 except Exception as e:
     print(f"Erro ao criar tabelas: {e}")
+
 
 # ================================
 # ROTAS BASE
