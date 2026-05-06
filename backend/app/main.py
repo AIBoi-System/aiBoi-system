@@ -2,8 +2,8 @@ from fastapi import FastAPI
 from sqlalchemy import text
 from app.core.database import engine, Base
 
-# --- IMPORTAÇÃO DOS MODELOS ---
-# Mantemos as importações explícitas para garantir a criação das tabelas
+# importação dos modelos
+# manti as importações explícitas para garantir a criaçao das tabelas
 from app.models.animal import Animal
 from app.models.reproduction import Reproduction
 from app.models.health import Health
@@ -30,7 +30,8 @@ from app.controllers import (
     property_controller,
     reproduction_controller,
     health_controller,
-    address_controller,  # ADICIONADO: Import do controller de endereços
+    address_controller,  # adicionado: import do controller de endereços
+    owner_controller,  # adicionado: Import do controller de donos
 )
 
 # --- CRIAÇÃO DA APLICAÇÃO ---
@@ -43,8 +44,11 @@ app.include_router(user_controller.router)
 app.include_router(property_controller.router)
 app.include_router(reproduction_controller.router)
 app.include_router(health_controller.router)
+app.include_router(
+    owner_controller.router
+)  # adicionado: registro das rotas de owner no swagger
 
-# ADICIONADO: Registro das rotas de endereço no Swagger
+# adicionado: Registro das rotas de endereço no Swagger
 app.include_router(address_controller.router, prefix="/addresses", tags=["Endereços"])
 
 # ================================

@@ -49,6 +49,10 @@ class PropertyService:
         return property_item
 
     @staticmethod
+    def get_all_properties(db: Session):
+        return db.query(Property).all()
+
+    @staticmethod
     def update_property(db: Session, property_id: int, data: PropertyUpdateSchema):
         # 1. Busca a propriedade no banco
         db_property = (
@@ -59,10 +63,10 @@ class PropertyService:
                 status_code=404, detail="Propriedade não encontrada para atualização."
             )
 
-        # Transformamos o schema em um dicionário contendo APENAS o que foi enviado no JSON
+        # Transformamos o schema em um dicionário contendo apenas o que foi enviado no JSON
         update_data = data.model_dump(exclude_unset=True)
 
-        # 2. Se mudar o dono, valida se o novo User existe
+        #  Se mudar o dono, valida se o novo User existe
         if "owner_id" in update_data:
             owner = (
                 db.query(User).filter(User.id_user == update_data["owner_id"]).first()
@@ -73,7 +77,7 @@ class PropertyService:
                 )
             db_property.owner_id = update_data["owner_id"]
 
-        # 3. Se mudar o endereço, valida se existe
+        #  Se mudar o endereço, valida se existe
         if "address_id" in update_data:
             address = (
                 db.query(Address)
@@ -86,7 +90,7 @@ class PropertyService:
                 )
             db_property.address_id = update_data["address_id"]
 
-        # 4. Atualiza os campos básicos se estiverem no dicionário
+        #  Atualiza os campos básicos se estiverem no dicionário
         if "name" in update_data:
             db_property.name = update_data["name"]
 
