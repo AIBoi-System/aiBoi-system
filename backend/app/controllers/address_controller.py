@@ -1,23 +1,39 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from app.core.database import get_db
-from app.models.address import Address
-from app.schemas.address_schema import AddressCreate, AddressResponse
+
+# Adicionado AddressUpdate nos imports
+from app.schemas.address_schema import AddressCreate, AddressResponse, AddressUpdate
+from app.services.address_service import AddressService
 
 router = APIRouter()
 
 
-@router.post("/", response_model=AddressResponse, status_code=201)
+@router.post("/", response_model=AddressResponse, status_code=status.HTTP_201_CREATED)
 def create_address(address: AddressCreate, db: Session = Depends(get_db)):
-    try:
-        # Cria a instância do modelo Address com os dados do Schema
-        new_address = Address(**address.model_dump())
+    return AddressService.create_address(db, address)
 
-        db.add(new_address)
-        db.commit()
-        db.refresh(new_address)
 
-        return new_address
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(status_code=500, detail=f"Erro ao criar endereço: {str(e)}")
+@router.get("/", response_model=list[AddressResponse])
+def list_addresses(db: Session = Depends(get_db)):
+    return AddressService.get_all_addresses(db)
+
+
+@router.get("/{address_id}", response_model=AddressResponse)
+def get_address(address_id: int, db: Session = Depends(get_db)):
+    return AddressService.get_address_by_id(db, address_id)
+
+
+@router.put("/{address_id}", response_model=AddressResponse)
+def update_address(
+    address_id: int, address_data: AddressUpdate, db: Session = Depends(get_db)
+):
+    """
+    Atualiza os dados de um endereço existente no AiBoi-system.
+    """
+    return AddressService.update_address(db, address_id, address_data)
+
+
+@router.delete("/{address_id}")
+def delete_address(address_id: int, db: Session = Depends(get_db)):
+    return AddressService.delete_address(db, address_id)

@@ -28,7 +28,7 @@ def list_properties(db: Session = Depends(get_db)):
 
 @router.get("/{property_id}", response_model=PropertyResponseSchema)
 def get_property(property_id: int, db: Session = Depends(get_db)):
-    return PropertyService.get_property(db, property_id)
+    return PropertyService.get_property_by_id(db, property_id)
 
 
 @router.put("/{property_id}", response_model=PropertyResponseSchema)
