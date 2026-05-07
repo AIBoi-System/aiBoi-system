@@ -1,6 +1,5 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
-from app.schemas.address import AddressSchema
 
 
 class AddressSchema(BaseModel):

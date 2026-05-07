@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from sqlalchemy import text
 from app.core.database import engine, Base
 
 # --- IMPORTAÇÃO DOS MODELOS ---
