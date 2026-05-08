@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from sqlalchemy import text
 from app.core.database import engine, Base
 
 # importação dos modelos
@@ -29,8 +30,8 @@ from app.controllers import (
     property_controller,
     reproduction_controller,
     health_controller,
-    address_controller,  # adicionado: import do controller de endereços
-    owner_controller,  # adicionado: Import do controller de donos
+    address_controller, 
+    owner_controller,  
 )
 
 # --- CRIAÇÃO DA APLICAÇÃO ---
