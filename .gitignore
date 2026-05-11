@@ -3,3 +3,11 @@
 .vscode/
 venv/
 .venv/
+
+# Pastas de build e cache do Flutter
+**/.dart_tool/
+**/build/
+**/*.iml
+**/.idea/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
