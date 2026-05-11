@@ -1,8 +1,8 @@
+import 'package:ai_boi/features/auth/presentation/pages/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/theme/app_colors.dart';
 import 'features/auth/presentation/cubits/login_cubit.dart';
-import 'features/auth/presentation/pages/login_page.dart';
 
 void main() {
   runApp(const AiBoiApp());
@@ -23,7 +23,7 @@ class AiBoiApp extends StatelessWidget {
       ),
       home: BlocProvider(
         create: (context) => LoginCubit(),
-        child: const LoginPage(),
+        child: const WelcomePage(),
       ),
     );
   }
