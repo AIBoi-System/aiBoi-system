@@ -8,7 +8,7 @@ from app.schemas.health.health_update import HealthUpdate
 from app.schemas.health.health_response import HealthResponse
 from app.services.health_service import HealthService
 
-router = APIRouter(prefix="/health", tags=["Saúde"])
+router = APIRouter(prefix="/health", tags=["Health"])
 
 
 @router.post("/", response_model=HealthResponse)
