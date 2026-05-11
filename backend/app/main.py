@@ -30,9 +30,11 @@ from app.controllers import (
     property_controller,
     reproduction_controller,
     health_controller,
-    address_controller, 
-    owner_controller,  
-)
+    address_controller,
+    owner_controller,
+    animal_controller,
+)  
+
 
 # --- CRIAÇÃO DA APLICAÇÃO ---
 app = FastAPI(title="AiBoi API", version="1.0.0")
@@ -44,13 +46,9 @@ app.include_router(user_controller.router)
 app.include_router(property_controller.router)
 app.include_router(reproduction_controller.router)
 app.include_router(health_controller.router)
-app.include_router(
-    owner_controller.router
-)  # adicionado: registro das rotas de owner no swagger
-
-# adicionado: Registro das rotas de endereço no Swagger
+app.include_router(owner_controller.router)
+app.include_router(animal_controller.router)
 app.include_router(address_controller.router, prefix="/addresses", tags=["Endereços"])
-
 # ================================
 # CRIAÇÃO DE TABELAS
 # ================================

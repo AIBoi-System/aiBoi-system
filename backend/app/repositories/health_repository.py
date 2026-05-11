@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 
+
 from app.models.health import Health
 from app.schemas.health.health_create import HealthCreate
 from app.schemas.health.health_update import HealthUpdate
@@ -59,3 +60,4 @@ class HealthRepository:
         db.commit()
 
         return health
+
