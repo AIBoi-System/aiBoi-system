@@ -1,21 +1,25 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
-from app.schemas.address import AddressSchema
 
 
-class AddressSchema(BaseModel):
-    street: str
-    number: str
-    neighborhood: str
-    city: str
-    state: str
-    zip_code: str
+from app.schemas.address_schema import AddressCreate
 
-    
+
 class OwnerCreateSchema(BaseModel):
     name: str
     email: EmailStr
     password: str
     phone: Optional[str] = None
     cpf: str
-    address: Optional[AddressSchema] = None
+    # E usamos o nome exato aqui também!
+    address: Optional[AddressCreate] = None
+    subscription_status: str
+
+
+class OwnerResponseSchema(BaseModel):
+    id_owner: int
+    id_user: int
+    subscription_status: str
+
+    class Config:
+        from_attributes = True
