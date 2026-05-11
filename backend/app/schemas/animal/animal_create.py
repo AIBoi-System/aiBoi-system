@@ -1,0 +1,4 @@
+from .animal_base import AnimalBase
+
+class AnimalCreate(AnimalBase):
+    pass

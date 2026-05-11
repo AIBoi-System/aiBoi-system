@@ -32,6 +32,7 @@ from app.controllers import (
     health_controller,
     address_controller,  # adicionado: import do controller de endereços
     owner_controller,  # adicionado: Import do controller de donos
+    animal_controller,
 )
 
 # --- CRIAÇÃO DA APLICAÇÃO ---
@@ -47,10 +48,10 @@ app.include_router(health_controller.router)
 app.include_router(
     owner_controller.router
 )  # adicionado: registro das rotas de owner no swagger
+app.include_router(animal_controller.router)
 
 # adicionado: Registro das rotas de endereço no Swagger
 app.include_router(address_controller.router, prefix="/addresses", tags=["Endereços"])
-
 # ================================
 # CRIAÇÃO DE TABELAS
 # ================================
