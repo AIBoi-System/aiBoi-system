@@ -31,8 +31,10 @@ class Animal(Base):
 
     # Atributos Bio-Produtivos
     sex = Column(Enum(AnimalSex), nullable=False)
-    breed = Column(String(50), nullable=False)
+    breed = Column(String(50), nullable=True)
     animal_size = Column(Enum(AnimalSize), nullable=False)
+    
+    batch_id = Column(Integer, ForeignKey("batches.id_batch"), nullable=True)
 
     animal_life_status = Column(
         Enum(AnimalLifeStatus), nullable=False, default=AnimalLifeStatus.ACTIVE
@@ -55,14 +57,15 @@ class Animal(Base):
     # --- CHAVES ESTRANGEIRAS ---
     # Vincula o animal a um lote específico
     batch_id = Column(Integer, ForeignKey("batches.id_batch"), nullable=True)
-
+    
     # --- RELACIONAMENTOS ---
     # Relacionamento com Lote (Batch)
     batch = relationship("Batch", back_populates="animals")
 
     weights = relationship(
-        "Weighing", back_populates="animal", cascade="all, delete-orphan"
+        "Weighing", back_populates="animal", cascade="all, delete-orphan", passive_deletes=True
     )
+
     health_records = relationship(
         "Health", back_populates="animal", cascade="all, delete-orphan"
     )
