@@ -15,6 +15,15 @@ class AddressCreate(AddressBase):
     pass
 
 
+class AddressUpdate(BaseModel):
+    zip_code: Optional[str] = None
+    state: Optional[str] = None
+    neighborhood: Optional[str] = None
+    street_name: Optional[str] = None
+    number: Optional[str] = None
+    complement: Optional[str] = None
+
+
 class AddressResponse(AddressBase):
     id_address: int
 

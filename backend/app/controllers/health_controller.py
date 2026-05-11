@@ -1,34 +1,44 @@
-from fastapi import APIRouter, HTTPException
-from app.schemas.health_schema import HealthRecordRequest, HealthRecordResponse
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from typing import List
 
-router = APIRouter(prefix="/health", tags=["Saúde"])
+from app.core.database import get_db
+
+from app.schemas.health.health_create import HealthCreate
+from app.schemas.health.health_update import HealthUpdate
+from app.schemas.health.health_response import HealthResponse
+from app.services.health_service import HealthService
 
 
-@router.post("/record", response_model=HealthRecordResponse)
-def create_health_record(request: HealthRecordRequest):
+router = APIRouter(prefix="/health", tags=["Health"])
 
-    # Validação de Negócio: Não pode mandar os dois vazios!
-    if not request.animal_id and not request.batch_id:
-        raise HTTPException(
-            status_code=400,
-            detail="Erro: Você deve informar o animal_id ou o batch_id para registrar a saúde.",
-        )
 
-    # Validação de Negócio: Não pode mandar os dois ao mesmo tempo!
-    if request.animal_id and request.batch_id:
-        raise HTTPException(
-            status_code=400,
-            detail="Erro: Informe apenas o animal_id OU o batch_id, não ambos.",
-        )
+@router.post("/", response_model=HealthResponse)
+def create_health(data: HealthCreate, db: Session = Depends(get_db)):
+    return HealthService.create(db, data)
 
-    # Define para quem foi a vacina apenas para a mensagem de retorno
-    alvo = (
-        f"Animal {request.animal_id}"
-        if request.animal_id
-        else f"Lote {request.batch_id}"
-    )
 
-    return HealthRecordResponse(
-        message=f"Registro de {request.health_type.value} ({request.product_name}) salvo com sucesso!",
-        target=alvo,
-    )
+@router.get("/", response_model=List[HealthResponse])
+def get_all_health(db: Session = Depends(get_db)):
+    return HealthService.get_all(db)
+
+
+@router.get("/{health_id}", response_model=HealthResponse)
+def get_health_by_id(health_id: int, db: Session = Depends(get_db)):
+    return HealthService.get_by_id(db, health_id)
+
+
+@router.put("/{health_id}", response_model=HealthResponse)
+def update_health(
+    health_id: int,
+    data: HealthUpdate,
+    db: Session = Depends(get_db)
+):
+    return HealthService.update(db, health_id, data)
+
+
+@router.delete("/{health_id}")
+def delete_health(health_id: int, db: Session = Depends(get_db)):
+    return HealthService.delete(db, health_id)
+
+
