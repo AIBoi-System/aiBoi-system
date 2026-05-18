@@ -33,6 +33,7 @@ from app.controllers import (
     address_controller,
     owner_controller,
     animal_controller,
+    weighing_controller
 )  
 
 
@@ -48,6 +49,7 @@ app.include_router(reproduction_controller.router)
 app.include_router(health_controller.router)
 app.include_router(owner_controller.router)
 app.include_router(animal_controller.router)
+app.include_router(weighing_controller.router)
 app.include_router(address_controller.router, prefix="/addresses", tags=["Endereços"])
 # ================================
 # CRIAÇÃO DE TABELAS

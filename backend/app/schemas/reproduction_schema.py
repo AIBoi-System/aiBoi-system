@@ -23,7 +23,6 @@ class ProtocolResponse(BaseModel):
     Schema que define a resposta que a nossa API vai devolver
     para o celular em caso de sucesso.
     """
-
     message: str
     animal_id: int
     protocol: str
