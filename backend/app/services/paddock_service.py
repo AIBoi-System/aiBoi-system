@@ -53,7 +53,7 @@ class PaddockService:
 
         # validações de atualização caso existam mudanças de IDs
         if paddock_update.property_id is not None:
-            if not property_repository.get_by_id(db, paddock_update.property_id):
+            if not PropertyRepository.get_by_id(db, paddock_update.property_id):
                 raise HTTPException(status_code=404, detail="New property not found")
 
         if paddock_update.pasture_id is not None:
