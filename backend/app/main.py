@@ -33,8 +33,9 @@ from app.controllers import (
     address_controller,
     owner_controller,
     animal_controller,
-)  
-
+    pasture_controller,  # Adicionado Pasture
+    paddock_controller,  # Adicionado Paddock
+)
 
 # --- CRIAÇÃO DA APLICAÇÃO ---
 app = FastAPI(title="AiBoi API", version="1.0.0")
@@ -49,6 +50,9 @@ app.include_router(health_controller.router)
 app.include_router(owner_controller.router)
 app.include_router(animal_controller.router)
 app.include_router(address_controller.router, prefix="/addresses", tags=["Endereços"])
+app.include_router(pasture_controller.router)  # Adicionado Rota de Pasture
+app.include_router(paddock_controller.router)  # Adicionado Rota de Paddock
+
 # ================================
 # CRIAÇÃO DE TABELAS
 # ================================
