@@ -43,7 +43,7 @@ class Reproduction(Base):
 
     # Relacionamentos
     animal = relationship("AnimalModel", back_populates="reproductions")
-    protocol = relationship("Protocol")
+    protocol = relationship("Protocol", back_populates="reproductions")
 
     # Execuções das etapas do protocolo (D0, D7, etc.)
     step_executions = relationship(

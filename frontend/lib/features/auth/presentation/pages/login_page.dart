@@ -1,8 +1,8 @@
 import 'package:ai_boi/core/widgets/custom_text_field.dart';
+import 'package:ai_boi/core/navigation/app_router.dart';
 import 'package:ai_boi/core/widgets/primary_button.dart';
 import 'package:ai_boi/features/auth/presentation/cubits/login_cubit.dart';
 import 'package:ai_boi/features/auth/presentation/cubits/login_state.dart';
-import 'package:ai_boi/features/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -106,10 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                 BlocConsumer<LoginCubit, LoginState>(
                   listener: (context, state) {
                     if (state is LoginSuccess) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const DashboardPage()),
-                      );
+                      Navigator.pushReplacementNamed(context, AppRouter.home);
                     } else if (state is LoginError) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(

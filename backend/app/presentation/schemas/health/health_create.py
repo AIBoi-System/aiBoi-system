@@ -1,14 +1,14 @@
 from pydantic import BaseModel
 from typing import Optional
-from datetime import date
 
 from app.domain.enums.health.health_type import HealthType
+from app.presentation.schemas.common import BRDate
 
 
 class HealthCreate(BaseModel):
     health_type: HealthType
     product_name: str
-    application_date: date
+    application_date: BRDate
     responsible: Optional[str] = None
     dosage: Optional[float] = None
     unit_price: Optional[float] = None

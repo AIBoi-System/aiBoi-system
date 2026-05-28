@@ -10,6 +10,7 @@ class UserResponseSchema(BaseModel):
     account_status: str
     cpf: str
     address_id: Optional[int]
+    type: Optional[str] = "user"
 
     class Config:
         from_attributes = True

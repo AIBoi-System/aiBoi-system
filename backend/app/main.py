@@ -1,4 +1,7 @@
+import os
+
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 
 from app.infrastructure.database.connection import Base, engine
@@ -12,8 +15,37 @@ app = FastAPI(
     description="Gestão bovina — Clean Architecture + DDD",
 )
 
+raw_origins = os.getenv("CORS_ALLOWED_ORIGINS", "*")
+allowed_origins = [origin.strip() for origin in raw_origins.split(",") if origin.strip()]
+
 register_exception_handlers(app)
 app.include_router(api_v1_router)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.middleware("http")
+async def security_headers_middleware(request, call_next):
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "no-referrer"
+    if request.url.path.startswith("/docs") or request.url.path.startswith("/redoc"):
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self'; "
+            "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
+            "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
+            "img-src 'self' data: https://fastapi.tiangolo.com"
+        )
+    else:
+        response.headers["Content-Security-Policy"] = "default-src 'self'"
+    return response
 
 
 try:

@@ -8,8 +8,13 @@ from app.infrastructure.persistence.models.batch import Batch
 from app.infrastructure.persistence.models.batch_movement import BatchMovement
 from app.infrastructure.persistence.models.cpf import CPF
 from app.infrastructure.persistence.models.death_record import DeathRecord
+from app.infrastructure.persistence.models.email_verification_code import (
+    EmailVerificationCode,
+)
 from app.infrastructure.persistence.models.health import HealthModel
 from app.infrastructure.persistence.models.owner import Owner
+from app.infrastructure.persistence.models.owner_module import OwnerModule
+from app.infrastructure.persistence.models.password_reset_token import PasswordResetToken
 from app.infrastructure.persistence.models.paddock import Paddock, PaddockeStatus
 from app.infrastructure.persistence.models.pasture import Pasture
 from app.infrastructure.persistence.models.property import Property
@@ -29,8 +34,11 @@ __all__ = [
     "BatchMovement",
     "CPF",
     "DeathRecord",
+    "EmailVerificationCode",
     "HealthModel",
     "Owner",
+    "OwnerModule",
+    "PasswordResetToken",
     "Paddock",
     "PaddockeStatus",
     "Pasture",

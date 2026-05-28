@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:ai_boi/features/auth/presentation/pages/login_page.dart';
+import 'package:ai_boi/core/navigation/app_router.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -71,8 +71,22 @@ class _WelcomePageState extends State<WelcomePage> {
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/images/bg_welcome_page.jpg', 
+              'assets/images/bg_welcome_page.jpg',
               fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Color(0xFF1B4332), Color(0xFF2D6A4F)],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Positioned.fill(
+            child: Container(
+              color: const Color(0xFF1B4332).withValues(alpha: 0.55),
             ),
           ),
 
@@ -97,31 +111,47 @@ class _WelcomePageState extends State<WelcomePage> {
                       },
                       itemCount: onboardingData.length,
                       itemBuilder: (context, index) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              onboardingData[index]["title"]!,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Poppins',
-                                height: 1.1,
+                        return Center(
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 8),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 24,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: Colors.white.withValues(alpha: 0.25),
                               ),
                             ),
-                            const SizedBox(height: 16),
-                            Text(
-                              onboardingData[index]["subtitle"]!,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.white70,
-                                fontSize: 16,
-                                fontFamily: 'Poppins',
-                              ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  onboardingData[index]["title"]!,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Poppins',
+                                    height: 1.1,
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  onboardingData[index]["subtitle"]!,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white.withValues(alpha: 0.9),
+                                    fontSize: 15,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         );
                       },
                     ),
@@ -146,18 +176,23 @@ class _WelcomePageState extends State<WelcomePage> {
                     height: 56,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Navega para o Cadastro
+                        Navigator.pushNamed(context, AppRouter.signup);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.black,
+                        backgroundColor: const Color(0xFFF5F0E6),
+                        foregroundColor: const Color(0xFF1B4332),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(28),
                         ),
+                        elevation: 0,
                       ),
                       child: const Text(
-                        'Criar uma conta',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        'Criar conta',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Poppins',
+                        ),
                       ),
                     ),
                   ),
@@ -167,10 +202,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   Center(
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const LoginPage()),
-                        );
+                        Navigator.pushNamed(context, AppRouter.login);
                       },
                       child: RichText(
                         text: const TextSpan(

@@ -36,3 +36,4 @@ class Protocol(Base):
         cascade="all, delete-orphan",
         order_by="Step.day",  # Agora isso vai funcionar perfeitamente!
     )
+    reproductions = relationship("Reproduction", back_populates="protocol")
