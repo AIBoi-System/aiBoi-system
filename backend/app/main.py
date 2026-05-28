@@ -1,62 +1,21 @@
 from fastapi import FastAPI
 from sqlalchemy import text
-from app.core.database import engine, Base
 
-# importação dos modelos
-# manti as importações explícitas para garantir a criaçao das tabelas
-from app.models.animal import Animal
-from app.models.reproduction import Reproduction
-from app.models.health import Health
-from app.models.weighing import Weighing
-from app.models.batch import Batch
-from app.models.user import User
-from app.models.address import Address
-from app.models.pasture import Pasture
-from app.models.paddock import PaddockeStatus, Paddock
-from app.models.owner import Owner
-from app.models.cpf import CPF
-from app.models.property import Property
-from app.models.step import Step
-from app.models.step_execution import StepExecution
-from app.models.protocol import Protocol
-from app.models.animal_movement import AnimalMovement
-from app.models.batch_movement import BatchMovement
-from app.models.animal_event import AnimalEvent
-from app.models.death_record import DeathRecord
+from app.infrastructure.database.connection import Base, engine
+from app.infrastructure.persistence import models  # noqa: F401 — registra tabelas
+from app.presentation.api.exception_handlers import register_exception_handlers
+from app.presentation.api.v1.router import api_v1_router
 
-# --- IMPORTAÇÃO DOS CONTROLLERS (ROTAS) ---
-from app.controllers import (
-    user_controller,
-    property_controller,
-    reproduction_controller,
-    health_controller,
-    address_controller,
-    owner_controller,
-    animal_controller,
-    pasture_controller,  # Adicionado Pasture
-    paddock_controller,  # Adicionado Paddock
-    weighing_controller
+app = FastAPI(
+    title="AiBoi API",
+    version="2.0.0",
+    description="Gestão bovina — Clean Architecture + DDD",
 )
-# --- CRIAÇÃO DA APLICAÇÃO ---
-app = FastAPI(title="AiBoi API", version="1.0.0")
 
-# ================================
-# REGISTRO DE ROTAS
-# ================================
-app.include_router(user_controller.router)
-app.include_router(property_controller.router)
-app.include_router(reproduction_controller.router)
-app.include_router(health_controller.router)
-app.include_router(owner_controller.router)
-app.include_router(animal_controller.router)
-app.include_router(weighing_controller.router)
-app.include_router(address_controller.router, prefix="/addresses", tags=["Endereços"])
-app.include_router(pasture_controller.router)  # Adicionado Rota de Pasture
-app.include_router(paddock_controller.router)  # Adicionado Rota de Paddock
+register_exception_handlers(app)
+app.include_router(api_v1_router)
 
-# ================================
-# CRIAÇÃO DE TABELAS
-# ================================
+
 try:
     Base.metadata.create_all(bind=engine)
     print("Tabelas criadas/verificadas com sucesso!")
@@ -64,12 +23,9 @@ except Exception as e:
     print(f"Erro ao criar tabelas: {e}")
 
 
-# ================================
-# ROTAS BASE
-# ================================
 @app.get("/")
 def read_root():
-    return {"status": "Online", "projeto": "AiBoi"}
+    return {"status": "Online", "projeto": "AiBoi", "arquitetura": "Clean + DDD"}
 
 
 @app.get("/test-db")
@@ -79,7 +35,7 @@ def test_db_connection():
             connection.execute(text("SELECT 1"))
             return {
                 "status": "sucesso",
-                "message": "Conexão com banco OK 🚀",
+                "message": "Conexão com banco OK",
             }
     except Exception as e:
         return {"status": "erro", "details": str(e)}
