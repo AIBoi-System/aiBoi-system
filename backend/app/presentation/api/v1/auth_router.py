@@ -10,7 +10,6 @@ from app.infrastructure.database.connection import get_db
 from app.infrastructure.persistence.models.password_reset_token import PasswordResetToken
 from app.infrastructure.persistence.repositories.user_repository import get_user_by_email
 from app.infrastructure.security import hash_password, verify_password
-from app.presentation.api.auth_dependencies import get_current_user
 from app.application.auth.registration_service import (
     register_user_with_address,
     send_verification_code,
@@ -25,13 +24,11 @@ from app.presentation.schemas.auth_schema import (
     TokenResponse,
     VerifyEmailCodeRequest,
 )
+from app.core.rate_limit import clear_attempts, is_rate_limited, record_attempt
+from app.presentation.api.auth_dependencies import get_current_user
 from app.presentation.schemas.user.user_response import UserResponseSchema
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
-
-_LOGIN_ATTEMPTS: dict[str, list[datetime]] = {}
-_MAX_ATTEMPTS = 5
-_WINDOW_MINUTES = 5
 
 
 @router.post("/signup/send-code")
@@ -49,7 +46,7 @@ def signup_register(payload: RegisterUserRequest, db: Session = Depends(get_db))
     result = register_user_with_address(db, payload)
     user = result["user"]
     return {
-        "message": "Usuário cadastrado com sucesso.",
+        "message": "User registered successfully.",
         "user_id": user.id_user,
         "address_id": result["address_id"],
     }
@@ -57,9 +54,8 @@ def signup_register(payload: RegisterUserRequest, db: Session = Depends(get_db))
 
 @router.post("/login", response_model=TokenResponse)
 def login(payload: LoginRequest, db: Session = Depends(get_db)):
-    now = datetime.now(timezone.utc)
-    attempts = [a for a in _LOGIN_ATTEMPTS.get(payload.email, []) if now - a < timedelta(minutes=_WINDOW_MINUTES)]
-    if len(attempts) >= _MAX_ATTEMPTS:
+    rate_key = f"login:{payload.email}"
+    if is_rate_limited(rate_key):
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
             detail="Too many login attempts. Please try again later.",
@@ -67,14 +63,13 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
 
     user = get_user_by_email(db, payload.email)
     if not user or not verify_password(payload.password, user.password):
-        attempts.append(now)
-        _LOGIN_ATTEMPTS[payload.email] = attempts
+        record_attempt(rate_key)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid credentials.",
         )
 
-    _LOGIN_ATTEMPTS.pop(payload.email, None)
+    clear_attempts(rate_key)
     role = user.type or "user"
     token = create_access_token(subject=user.email, role=role)
     return TokenResponse(access_token=token, role=role)

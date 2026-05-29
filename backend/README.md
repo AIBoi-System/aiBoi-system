@@ -49,11 +49,22 @@ Crie `backend/.env` (ou `.env` na raiz do monorepo para o Docker):
 
 ```env
 DATABASE_URL=mysql+pymysql://user:password@localhost:3306/aiboi_db
-JWT_SECRET_KEY=sua-chave-secreta-longa
+JWT_SECRET_KEY=your-long-random-secret
 JWT_ALGORITHM=HS256
 JWT_EXPIRE_MINUTES=60
 CORS_ALLOWED_ORIGINS=*
+ENV=development
+
+# SMTP (required when ENV=production)
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USER=api@example.com
+SMTP_PASSWORD=secret
+SMTP_FROM_EMAIL=noreply@aiboi.com
+SMTP_USE_TLS=true
 ```
+
+See [`.env.example`](.env.example) for the full template.
 
 > **Nunca** versione `.env` nem credenciais reais.
 
@@ -139,9 +150,18 @@ pytest
 
 ---
 
+## Security (OWASP-oriented)
+
+- **SQL injection:** SQLAlchemy ORM only (parameterized queries); no raw user input in SQL.
+- **Input validation:** `app/core/security_validators.py` blocks dangerous patterns in text fields.
+- **Email:** normalized and regex-validated before persistence (`EmailStr` + `normalize_email`).
+- **Password policy:** minimum 8 chars, digit + symbol required on registration.
+- **Rate limiting:** login and signup verification endpoints (`app/core/rate_limit.py`).
+- **Headers:** CSP, `X-Frame-Options`, `X-Content-Type-Options` in `main.py`.
+
 ## Estilo de código
 
-- PEP 8
+- PEP 8 — identifiers and module names in **English**
 - Ferramentas sugeridas: **Black**, **Flake8** ou **Ruff**
 
 ```bash

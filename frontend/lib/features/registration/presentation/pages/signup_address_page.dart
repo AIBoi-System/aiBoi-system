@@ -104,8 +104,14 @@ class _SignupAddressPageState extends State<SignupAddressPage> {
                   label: 'Estado (UF)',
                   hintText: 'PA',
                   controller: _stateController,
-                  validator: (v) =>
-                      v == null || v.isEmpty ? 'Informe o estado' : null,
+                  maxLength: 2,
+                  validator: (v) {
+                    if (v == null || v.trim().isEmpty) return 'Informe o UF';
+                    if (v.trim().length != 2) {
+                      return 'Use 2 letras (ex: PA)';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 16),
                 LabeledTextField(

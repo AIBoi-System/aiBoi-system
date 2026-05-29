@@ -9,11 +9,11 @@ class LoginCubit extends Cubit<LoginState> {
 
   final LoginUseCase _loginUseCase;
 
-  Future<void> fazerLogin(String email, String senha) async {
+  Future<void> signIn(String email, String password) async {
     emit(LoginLoading());
 
     try {
-      await _loginUseCase(email: email, password: senha);
+      await _loginUseCase(email: email, password: password);
       emit(LoginSuccess());
     } on Exception catch (e) {
       final message = e.toString().replaceFirst('Exception: ', '');

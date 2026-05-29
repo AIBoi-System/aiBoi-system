@@ -123,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                       text: isLoading ? 'Carregando...' : 'Entrar',
                       onPressed: isLoading ? null : () {
                         if (_formKey.currentState!.validate()) {
-                          context.read<LoginCubit>().fazerLogin(
+                          context.read<LoginCubit>().signIn(
                             _emailController.text, 
                             _passwordController.text,
                           );

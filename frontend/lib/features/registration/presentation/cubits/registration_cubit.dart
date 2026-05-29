@@ -23,7 +23,12 @@ class RegistrationCubit extends Cubit<RegistrationState> {
       await _repository.sendVerificationCode(email);
       emit(RegistrationCodeSent());
     } catch (e) {
-      emit(RegistrationError('Não foi possível enviar o código. Tente novamente.'));
+      final message = e.toString().replaceFirst('Exception: ', '');
+      emit(RegistrationError(
+        message.isNotEmpty
+            ? message
+            : 'Não foi possível enviar o código. Tente novamente.',
+      ));
     }
   }
 
@@ -37,7 +42,10 @@ class RegistrationCubit extends Cubit<RegistrationState> {
         emit(RegistrationError('Código inválido. Verifique e tente novamente.'));
       }
     } catch (e) {
-      emit(RegistrationError('Erro ao verificar o código.'));
+      final message = e.toString().replaceFirst('Exception: ', '');
+      emit(RegistrationError(
+        message.isNotEmpty ? message : 'Erro ao verificar o código.',
+      ));
     }
   }
 
@@ -75,7 +83,7 @@ class RegistrationCubit extends Cubit<RegistrationState> {
       );
       emit(RegistrationPropertyCreated(created));
     } catch (e) {
-      emit(RegistrationError('Erro ao cadastrar propriedade.');
+      emit(RegistrationError('Erro ao cadastrar propriedade.'));
     }
   }
 }

@@ -49,15 +49,6 @@ class _SignupVerifyEmailPageState extends State<SignupVerifyEmailPage> {
                   fontFamily: 'Poppins',
                 ),
               ),
-              const SizedBox(height: 8),
-              const Text(
-                '(Dev: use o código 12345)',
-                style: TextStyle(
-                  color: AppColors.hintText,
-                  fontSize: 12,
-                  fontFamily: 'Poppins',
-                ),
-              ),
               const SizedBox(height: 24),
               OtpCodeField(
                 onChanged: (c) => _code = c,

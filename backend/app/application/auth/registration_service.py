@@ -1,12 +1,14 @@
 import hashlib
 import os
-import random
+import secrets
 from datetime import datetime, timedelta, timezone
 
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.application.user import service as user_service
+from app.core.rate_limit import clear_attempts, is_rate_limited, record_attempt
+from app.infrastructure.email.smtp_service import SmtpEmailService
 from app.infrastructure.persistence.models.email_verification_code import (
     EmailVerificationCode,
 )
@@ -20,20 +22,31 @@ from app.presentation.schemas.auth_schema import (
 )
 from app.presentation.schemas.user.user_create import UserCreateSchema
 
+_CODE_TTL_MINUTES = 15
+_VERIFIED_WINDOW_HOURS = 2
+_email_service = SmtpEmailService()
+
 
 def _hash_code(code: str) -> str:
     return hashlib.sha256(code.encode("utf-8")).hexdigest()
 
 
 def _generate_code() -> str:
-    return f"{random.randint(0, 99999):05d}"
+    return "".join(str(secrets.randbelow(10)) for _ in range(5))
 
 
 def send_verification_code(db: Session, payload: SendVerificationCodeRequest) -> dict:
+    rate_key = f"signup:send:{payload.email}"
+    if is_rate_limited(rate_key, max_attempts=5):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many verification requests. Try again later.",
+        )
+
     if get_user_by_email(db, payload.email):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="E-mail já cadastrado.",
+            detail="Email is already registered.",
         )
 
     raw_code = _generate_code()
@@ -48,15 +61,29 @@ def send_verification_code(db: Session, payload: SendVerificationCodeRequest) ->
     record = EmailVerificationCode(
         email=payload.email,
         code_hash=code_hash,
-        expires_at=now + timedelta(minutes=15),
+        expires_at=now + timedelta(minutes=_CODE_TTL_MINUTES),
         verified=False,
     )
     db.add(record)
     db.commit()
 
+    try:
+        _email_service.send_verification_code(payload.email, raw_code)
+    except RuntimeError:
+        db.query(EmailVerificationCode).filter(
+            EmailVerificationCode.id == record.id
+        ).delete(synchronize_session=False)
+        db.commit()
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Unable to send verification email. Try again later.",
+        ) from None
+
+    record_attempt(rate_key)
+
     response: dict = {
-        "message": "Código de verificação enviado.",
-        "expires_in_minutes": 15,
+        "message": "Verification code sent.",
+        "expires_in_minutes": _CODE_TTL_MINUTES,
     }
     if os.getenv("ENV", "development") != "production":
         response["verification_code"] = raw_code
@@ -64,6 +91,13 @@ def send_verification_code(db: Session, payload: SendVerificationCodeRequest) ->
 
 
 def verify_email_code(db: Session, payload: VerifyEmailCodeRequest) -> dict:
+    rate_key = f"signup:verify:{payload.email}"
+    if is_rate_limited(rate_key, max_attempts=10):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many verification attempts. Try again later.",
+        )
+
     code_hash = _hash_code(payload.code)
     now = datetime.now(timezone.utc)
 
@@ -78,9 +112,10 @@ def verify_email_code(db: Session, payload: VerifyEmailCodeRequest) -> dict:
         .first()
     )
     if not record:
+        record_attempt(rate_key)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Código inválido.",
+            detail="Invalid verification code.",
         )
 
     expiry = record.expires_at
@@ -89,13 +124,14 @@ def verify_email_code(db: Session, payload: VerifyEmailCodeRequest) -> dict:
     if expiry < now:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Código expirado.",
+            detail="Verification code expired.",
         )
 
     record.verified = True
-    record.expires_at = now + timedelta(hours=2)
+    record.expires_at = now + timedelta(hours=_VERIFIED_WINDOW_HOURS)
     db.commit()
-    return {"message": "E-mail verificado com sucesso.", "verified": True}
+    clear_attempts(rate_key)
+    return {"message": "Email verified successfully.", "verified": True}
 
 
 def _email_is_verified(db: Session, email: str) -> bool:
@@ -121,7 +157,7 @@ def register_user_with_address(db: Session, payload: RegisterUserRequest) -> dic
     if not _email_is_verified(db, payload.email):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="E-mail não verificado. Confirme o código antes de concluir o cadastro.",
+            detail="Email not verified. Confirm the code before completing registration.",
         )
 
     from app.application.address.service import AddressService

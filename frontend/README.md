@@ -103,11 +103,27 @@ Se `bg_welcome_page.jpg` não existir, a tela de boas-vindas usa gradiente verde
 
 ## Integração com API
 
-Por padrão o cadastro usa `MockRegistrationRepository` (código de teste `12345`). Para API real, configure a URL base e implemente `ApiRegistrationRepository` apontando para:
+Por padrão o app usa a **API real** em `http://localhost:8000`.
+
+```bash
+# Desktop / iOS simulator
+flutter run
+
+# Android emulator (localhost do host)
+flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8000
+
+# Mock offline
+flutter run --dart-define=USE_MOCK_API=true
+```
+
+Endpoints usados:
 
 - `POST /auth/signup/send-code`
 - `POST /auth/signup/verify-code`
 - `POST /auth/signup/register`
+- `POST /auth/login`
+- `POST /addresses/`
+- `POST /properties/`
 
 ---
 
