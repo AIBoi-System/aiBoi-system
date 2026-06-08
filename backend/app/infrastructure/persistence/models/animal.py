@@ -49,6 +49,7 @@ class AnimalModel(Base):
     weaning_date = Column(Date, nullable=True)  # Estava 'weining'
     weaning_weight = Column(Float, nullable=True)  # Estava 'weining'
     birth_weight = Column(Float, nullable=True)
+    biometric_vector = Column(Text, nullable=True)
 
     notes = Column(Text, nullable=True)
 
@@ -73,3 +74,4 @@ class AnimalModel(Base):
     )
     movements = relationship("AnimalMovement", back_populates="animal")
     death_record = relationship("DeathRecord", back_populates="animal", uselist=False)
+
