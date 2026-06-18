@@ -1,10 +1,10 @@
 from pydantic import BaseModel
 from typing import Optional, Any # Usamos Any com "A" maiúsculo aqui
-from app.domain.enums.animal.animal_sex import AnimalSex
-from app.domain.enums.animal.animal_life_status import AnimalLifeStatus
-from app.domain.enums.animal.animal_size import AnimalSize
-from app.domain.enums.animal.animal_category import AnimalCategory
-from app.domain.enums.animal.animal_reproductive_status import AnimalReproductiveStatus
+from app.enums.animal.animal_sex import AnimalSex
+from app.enums.animal.animal_life_status import AnimalLifeStatus
+from app.enums.animal.animal_size import AnimalSize
+from app.enums.animal.animal_category import AnimalCategory
+from app.enums.animal.animal_reproductive_status import AnimalReproductiveStatus
 
 class AnimalUpdate(BaseModel):
     identification_number: Optional[int] = None
@@ -20,3 +20,44 @@ class AnimalUpdate(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -41,3 +41,6 @@ def test_password_reset_flow(client):
         json={"email": "sandro@test.com", "password": "newpassword123"},
     )
     assert new_login.status_code == 200
+
+
+

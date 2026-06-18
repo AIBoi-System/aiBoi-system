@@ -9,3 +9,43 @@ class AnimalCategory(Enum):
     BULL = "Touro"
     CALF = "Bezerra"
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

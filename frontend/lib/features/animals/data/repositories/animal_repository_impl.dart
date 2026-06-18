@@ -9,17 +9,17 @@ class AnimalRepositoryImpl implements AnimalRepository {
   AnimalRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<List<Animal>> listAnimals() async {
-    return await remoteDataSource.listAnimals();
+  Future<List<Animal>> listAnimals(int propertyId) async {
+    return await remoteDataSource.listAnimals(propertyId);
   }
 
   @override
-  Future<Animal> getAnimal(int id) async {
-    return await remoteDataSource.getAnimal(id);
+  Future<Animal> getAnimal(int id, int propertyId) async {
+    return await remoteDataSource.getAnimal(id, propertyId);
   }
 
   @override
-  Future<Animal> createAnimal(Animal animal) async {
+  Future<Animal> createAnimal(Animal animal, int propertyId) async {
     final model = AnimalModel(
       id: animal.id,
       identificationNumber: animal.identificationNumber,
@@ -38,11 +38,11 @@ class AnimalRepositoryImpl implements AnimalRepository {
       entryDate: animal.entryDate,
       pedigreePo: animal.pedigreePo,
     );
-    return await remoteDataSource.createAnimal(model);
+    return await remoteDataSource.createAnimal(model, propertyId);
   }
 
   @override
-  Future<Animal> updateAnimal(int id, Animal animal) async {
+  Future<Animal> updateAnimal(int id, Animal animal, int propertyId) async {
     final model = AnimalModel(
       id: animal.id,
       identificationNumber: animal.identificationNumber,
@@ -61,6 +61,7 @@ class AnimalRepositoryImpl implements AnimalRepository {
       entryDate: animal.entryDate,
       pedigreePo: animal.pedigreePo,
     );
-    return await remoteDataSource.updateAnimal(id, model);
+    return await remoteDataSource.updateAnimal(id, model, propertyId);
   }
 }
+

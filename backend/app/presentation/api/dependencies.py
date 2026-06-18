@@ -1,26 +1,28 @@
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
-from app.application.animal.use_cases import (
+from app.modules.inventory.application.use_cases import (
     CreateAnimalUseCase,
     GetAnimalUseCase,
     ListAnimalsUseCase,
     UpdateAnimalUseCase,
+    DeleteAnimalUseCase,
 )
-from app.application.health.use_cases import (
+from app.modules.health.application.use_cases import (
     CreateHealthRecordUseCase,
     DeleteHealthRecordUseCase,
     GetHealthRecordUseCase,
     ListHealthRecordsUseCase,
     UpdateHealthRecordUseCase,
 )
-from app.domain.animal.repository import AnimalRepository
-from app.domain.health.repository import HealthRepository
-from app.infrastructure.database.connection import get_db
-from app.infrastructure.persistence.repositories.sqlalchemy_animal_repository import (
+from app.modules.inventory.domain.repository import AnimalRepository
+from app.modules.inventory.domain.animal_domain_service import AnimalDomainService
+from app.modules.health.domain.repository import HealthRepository
+from app.shared.infrastructure.database.connection import get_db
+from app.modules.inventory.infrastructure.persistence.sqlalchemy_animal_repository import (
     SqlAlchemyAnimalRepository,
 )
-from app.infrastructure.persistence.repositories.sqlalchemy_health_repository import (
+from app.modules.health.infrastructure.persistence.sqlalchemy_health_repository import (
     SqlAlchemyHealthRepository,
 )
 
@@ -33,10 +35,17 @@ def get_health_repository(db: Session = Depends(get_db)) -> HealthRepository:
     return SqlAlchemyHealthRepository(db)
 
 
+def get_animal_domain_service(
+    repo: AnimalRepository = Depends(get_animal_repository),
+) -> AnimalDomainService:
+    return AnimalDomainService(repo)
+
+
 def get_create_animal_use_case(
     repo: AnimalRepository = Depends(get_animal_repository),
+    service: AnimalDomainService = Depends(get_animal_domain_service),
 ) -> CreateAnimalUseCase:
-    return CreateAnimalUseCase(repo)
+    return CreateAnimalUseCase(repo, service)
 
 
 def get_list_animals_use_case(
@@ -53,8 +62,15 @@ def get_get_animal_use_case(
 
 def get_update_animal_use_case(
     repo: AnimalRepository = Depends(get_animal_repository),
+    service: AnimalDomainService = Depends(get_animal_domain_service),
 ) -> UpdateAnimalUseCase:
-    return UpdateAnimalUseCase(repo)
+    return UpdateAnimalUseCase(repo, service)
+
+
+def get_delete_animal_use_case(
+    repo: AnimalRepository = Depends(get_animal_repository),
+) -> DeleteAnimalUseCase:
+    return DeleteAnimalUseCase(repo)
 
 
 def get_create_health_use_case(
@@ -85,3 +101,44 @@ def get_delete_health_use_case(
     repo: HealthRepository = Depends(get_health_repository),
 ) -> DeleteHealthRecordUseCase:
     return DeleteHealthRecordUseCase(repo)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

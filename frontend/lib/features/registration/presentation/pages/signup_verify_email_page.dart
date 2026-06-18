@@ -28,20 +28,31 @@ class _SignupVerifyEmailPageState extends State<SignupVerifyEmailPage> {
           AppRouter.navigateRegistration(context, AppRouter.signupPassword);
         } else if (state is RegistrationError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.red,
+            ),
           );
         }
       },
       builder: (context, state) {
         final isLoading = state is RegistrationLoading;
+        
         return SignupStepScaffold(
-          title: 'Verifique seu email',
+          title: 'Verifique seu email 2 / 3',
           currentStep: 2,
+          bottom: PrimaryButton(
+            text: isLoading ? 'Verificando...' : 'Continue',
+            onPressed: isLoading || _code.length < 5
+                ? null
+                : () => context.read<RegistrationCubit>().verifyCode(_code),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'Verifique seu e-mail. Enviamos um código de confirmação para $email:',
+                textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: AppColors.textSecondary,
                   fontSize: 14,
@@ -50,9 +61,22 @@ class _SignupVerifyEmailPageState extends State<SignupVerifyEmailPage> {
                 ),
               ),
               const SizedBox(height: 24),
+              const Text(
+                'Código',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.primaryGreen,
+                  fontFamily: 'Poppins',
+                ),
+              ),
+              const SizedBox(height: 8),
               OtpCodeField(
-                onChanged: (c) => _code = c,
-                onCompleted: (c) => _code = c,
+                onChanged: (c) => setState(() => _code = c),
+                onCompleted: (c) {
+                  setState(() => _code = c);
+                  context.read<RegistrationCubit>().verifyCode(c);
+                },
               ),
               const SizedBox(height: 16),
               Center(
@@ -69,7 +93,7 @@ class _SignupVerifyEmailPageState extends State<SignupVerifyEmailPage> {
                         TextSpan(
                           text: 'Alterar e-mail',
                           style: TextStyle(
-                            color: Colors.black,
+                            color: AppColors.primaryGreen,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -80,14 +104,9 @@ class _SignupVerifyEmailPageState extends State<SignupVerifyEmailPage> {
               ),
             ],
           ),
-          bottom: PrimaryButton(
-            text: isLoading ? 'Verificando...' : 'Verificar email',
-            onPressed: isLoading || _code.length < 5
-                ? null
-                : () => context.read<RegistrationCubit>().verifyCode(_code),
-          ),
         );
       },
     );
   }
 }
+

@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.application.user import service as user_service
-from app.infrastructure.database.connection import get_db
+import app.shared.application.user.user_service as user_service
+from app.shared.infrastructure.database.connection import get_db
 from app.presentation.schemas.user import (
     UserCreateSchema,
     UserResponseSchema,
@@ -51,3 +51,49 @@ def delete_user(
 ):
     user_service.delete_user_service(db, user_id)
     return {"message": "Usuário deletado com sucesso"}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

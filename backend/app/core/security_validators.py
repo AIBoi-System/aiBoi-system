@@ -76,3 +76,44 @@ def validate_state_uf(state: str) -> str:
     if len(uf) != 2 or not uf.isalpha():
         raise ValueError("State must be a 2-letter UF code")
     return uf
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -39,6 +39,7 @@ class RegistrationDraft {
   final AddressDraft address;
   final int? userId;
   final int? userAddressId;
+  final String? accessToken;
 
   const RegistrationDraft({
     required this.name,
@@ -49,11 +50,13 @@ class RegistrationDraft {
     required this.address,
     this.userId,
     this.userAddressId,
+    this.accessToken,
   });
 
   RegistrationDraft copyWith({
     int? userId,
     int? userAddressId,
+    String? accessToken,
   }) {
     return RegistrationDraft(
       name: name,
@@ -64,6 +67,7 @@ class RegistrationDraft {
       address: address,
       userId: userId ?? this.userId,
       userAddressId: userAddressId ?? this.userAddressId,
+      accessToken: accessToken ?? this.accessToken,
     );
   }
 }
@@ -74,6 +78,8 @@ class RegisteredProperty {
   final String cityState;
   final String purpose;
   final double hectares;
+  final int? ownerId;
+  final int? addressId;
 
   const RegisteredProperty({
     required this.id,
@@ -81,5 +87,8 @@ class RegisteredProperty {
     required this.cityState,
     required this.purpose,
     required this.hectares,
+    this.ownerId,
+    this.addressId,
   });
 }
+

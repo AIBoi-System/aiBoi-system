@@ -7,3 +7,43 @@ class UserUpdateSchema(BaseModel):
     phone: Optional[str] = Field(default=None, max_length=20)
     account_status: Optional[str] = None
     address_id: Optional[int] = None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

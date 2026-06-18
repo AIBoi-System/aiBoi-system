@@ -2,11 +2,11 @@ from datetime import date
 
 import pytest
 
-from app.domain.enums.animal.animal_category import AnimalCategory
-from app.domain.enums.animal.animal_life_status import AnimalLifeStatus
-from app.domain.enums.animal.animal_origin import AnimalOrigin
-from app.domain.enums.animal.animal_sex import AnimalSex
-from app.domain.enums.animal.animal_size import AnimalSize
+from app.enums.animal.animal_category import AnimalCategory
+from app.enums.animal.animal_life_status import AnimalLifeStatus
+from app.enums.animal.animal_origin import AnimalOrigin
+from app.enums.animal.animal_sex import AnimalSex
+from app.enums.animal.animal_size import AnimalSize
 
 
 @pytest.fixture
@@ -67,3 +67,6 @@ def test_update_animal(client, animal_payload):
     )
     assert update_resp.status_code == 200
     assert update_resp.json()["name"] == "Mimosa Atualizada"
+
+
+

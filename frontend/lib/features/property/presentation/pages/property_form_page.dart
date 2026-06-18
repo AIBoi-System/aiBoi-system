@@ -101,7 +101,7 @@ class _PropertyFormPageState extends State<PropertyFormPage> {
                         ),
                         const SizedBox(height: 16),
                         DropdownButtonFormField<String>(
-                          value: _selectedType,
+                          initialValue: _selectedType,
                           decoration: InputDecoration(
                             labelText: 'Tipo da propriedade',
                             border: OutlineInputBorder(
@@ -271,3 +271,4 @@ class _SectionCard extends StatelessWidget {
     );
   }
 }
+

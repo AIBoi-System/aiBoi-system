@@ -1,4 +1,4 @@
-from app.domain.animal.entity import Animal
+from app.modules.inventory.domain.entity import Animal
 from app.presentation.schemas.animal import AnimalResponse
 
 
@@ -25,3 +25,49 @@ def animal_to_response(animal: Animal) -> AnimalResponse:
         notes=animal.notes,
         batch_id=animal.batch_id,
     )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

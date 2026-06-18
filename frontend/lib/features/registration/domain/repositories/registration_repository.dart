@@ -10,3 +10,4 @@ abstract class RegistrationRepository {
     required PropertyDraft property,
   });
 }
+

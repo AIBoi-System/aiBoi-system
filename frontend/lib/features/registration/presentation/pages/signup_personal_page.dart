@@ -43,6 +43,19 @@ class _SignupPersonalPageState extends State<SignupPersonalPage> {
         return SignupStepScaffold(
           title: 'Dados Pessoais',
           currentStep: 1,
+          bottom: PrimaryButton(
+            text: isLoading ? 'Enviando...' : 'Criar minha conta',
+            onPressed: isLoading
+                ? null
+                : () {
+                    if (_formKey.currentState!.validate()) {
+                      final cubit = context.read<RegistrationCubit>();
+                      cubit.name = _nameController.text.trim();
+                      cubit.email = _emailController.text.trim();
+                      cubit.sendVerificationCode();
+                    }
+                  },
+          ),
           child: Form(
             key: _formKey,
             child: Column(
@@ -69,21 +82,9 @@ class _SignupPersonalPageState extends State<SignupPersonalPage> {
               ],
             ),
           ),
-          bottom: PrimaryButton(
-            text: isLoading ? 'Enviando...' : 'Criar minha conta',
-            onPressed: isLoading
-                ? null
-                : () {
-                    if (_formKey.currentState!.validate()) {
-                      final cubit = context.read<RegistrationCubit>();
-                      cubit.name = _nameController.text.trim();
-                      cubit.email = _emailController.text.trim();
-                      cubit.sendVerificationCode();
-                    }
-                  },
-          ),
         );
       },
     );
   }
 }
+

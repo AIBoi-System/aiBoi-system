@@ -8,3 +8,44 @@ class PropertyType(Enum):
     REARING = "REARING"
     FEEDLOT = "FEEDLOT"
     SEMI_FEEDLOT = "SEMI_FEEDLOT"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

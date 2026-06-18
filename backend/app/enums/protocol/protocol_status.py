@@ -5,3 +5,43 @@ class ProtocolStatus(Enum):
     IN_PROGRESS = "Em andamento"
     FINISHED = "Finalizado"
     CANCELLED = "Cancelado"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

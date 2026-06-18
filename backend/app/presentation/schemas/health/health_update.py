@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 
-from app.domain.enums.health.health_type import HealthType
+from app.enums.health.health_type import HealthType
 from app.presentation.schemas.common import BRDate
 
 
@@ -15,3 +15,43 @@ class HealthUpdate(BaseModel):
     notes: Optional[str] = None
     animal_id: Optional[int] = None
     batch_id: Optional[int] = None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

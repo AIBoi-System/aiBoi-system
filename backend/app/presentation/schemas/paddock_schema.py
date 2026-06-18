@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional
-from app.domain.enums.paddock.paddocke_status import PaddockeStatus
+from app.enums.paddock.paddocke_status import PaddockeStatus
 
 
 # base
@@ -47,3 +47,44 @@ class PaddockResponse(PaddockBase):
     id_paddock: int
 
     model_config = ConfigDict(from_attributes=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

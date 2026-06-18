@@ -19,3 +19,4 @@ abstract class ValueObject<T> {
   @override
   String toString() => value.toString();
 }
+

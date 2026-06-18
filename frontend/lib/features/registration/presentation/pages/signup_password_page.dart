@@ -31,6 +31,15 @@ class _SignupPasswordPageState extends State<SignupPasswordPage> {
     return SignupStepScaffold(
       title: 'Crie sua senha',
       currentStep: 3,
+      bottom: PrimaryButton(
+        text: 'Continue',
+        onPressed: rules.allMet
+            ? () {
+                context.read<RegistrationCubit>().password = _passwordController.text;
+                AppRouter.navigateRegistration(context, AppRouter.signupAddress);
+              }
+            : null,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -51,15 +60,7 @@ class _SignupPasswordPageState extends State<SignupPasswordPage> {
           PasswordStrengthIndicator(rules: rules),
         ],
       ),
-      bottom: PrimaryButton(
-        text: 'Continue',
-        onPressed: rules.allMet
-            ? () {
-                context.read<RegistrationCubit>().password = _passwordController.text;
-                AppRouter.navigateRegistration(context, AppRouter.signupAddress);
-              }
-            : null,
-      ),
     );
   }
 }
+

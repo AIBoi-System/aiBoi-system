@@ -11,3 +11,6 @@ def test_batch_accepts_and_returns_br_date(client):
     assert create_resp.status_code == 201
     created = create_resp.json()
     assert created["check_in"] == "28/05/2026"
+
+
+

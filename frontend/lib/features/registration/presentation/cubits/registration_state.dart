@@ -24,3 +24,4 @@ class RegistrationPropertyCreated extends RegistrationState {
   final RegisteredProperty property;
   RegistrationPropertyCreated(this.property);
 }
+

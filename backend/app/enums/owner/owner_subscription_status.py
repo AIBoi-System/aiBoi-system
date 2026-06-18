@@ -6,3 +6,43 @@ class OwnerSubscriptionStatus(Enum):
     INACTIVE = "INACTIVE"
     CANCELED = "CANCELED"
     FREE = "LIVRE"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

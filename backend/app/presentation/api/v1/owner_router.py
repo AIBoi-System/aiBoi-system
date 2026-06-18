@@ -3,10 +3,10 @@ from typing import List
 from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.orm import Session
 
-from app.infrastructure.database.connection import get_db
+from app.shared.infrastructure.database.connection import get_db
 from app.presentation.schemas.owner.owner_create import OwnerCreateSchema, OwnerResponseSchema
 from app.presentation.schemas.owner.owner_update import OwnerUpdateSchema
-from app.application.owner import service as owner_service
+import app.shared.application.user.owner_service as owner_service
 
 router = APIRouter(prefix="/owners", tags=["Owners"])
 
@@ -66,4 +66,50 @@ def update_owner(
 def delete_owner(id_user: int, db: Session = Depends(get_db)):
     owner_service.delete_owner_service(db, id_user)
     return None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

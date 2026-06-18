@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 
-from app.infrastructure.database.connection import get_db
+from app.shared.infrastructure.database.connection import get_db
 from app.presentation.schemas.paddock_schema import PaddockCreate, PaddockUpdate, PaddockResponse
-from app.application.paddock.service import paddock_service
+from app.modules.inventory.application.paddock_service import paddock_service
 
 router = APIRouter(prefix="/paddocks", tags=["Paddocks"])
 
@@ -43,4 +43,50 @@ def update_paddock(
 def delete_paddock(paddock_id: int, db: Session = Depends(get_db)):
     paddock_service.delete_paddock(db, paddock_id)
     return None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

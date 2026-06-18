@@ -3,9 +3,9 @@ from sqlalchemy.orm import Session
 from typing import List
 
 
-from app.infrastructure.database.connection import get_db
+from app.shared.infrastructure.database.connection import get_db
 from app.presentation.schemas.pasture_schema import PastureCreate, PastureUpdate, PastureResponse
-from app.application.pasture.service import pasture_service
+from app.modules.inventory.application.pasture_service import pasture_service
 
 router = APIRouter(prefix="/pastures", tags=["Pastures"])
 
@@ -43,4 +43,50 @@ def update_pasture(
 def delete_pasture(pasture_id: int, db: Session = Depends(get_db)):
     pasture_service.delete_pasture(db, pasture_id)
     return None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

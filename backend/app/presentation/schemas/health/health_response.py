@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 
-from app.domain.enums.health.health_type import HealthType
+from app.enums.health.health_type import HealthType
 from app.presentation.schemas.common import BRDate
 
 
@@ -19,3 +19,43 @@ class HealthResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

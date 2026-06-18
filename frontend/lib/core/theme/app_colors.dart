@@ -18,4 +18,7 @@ class AppColors {
   static const Color cardBackground = Colors.white;
   static const Color hintText = Color(0xFF9CA3AF);
   static const Color sectionGreen = Color(0xFF2D6A4F);
+
+  static get primaryButtonHover => null;
 }
+

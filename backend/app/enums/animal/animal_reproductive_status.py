@@ -5,3 +5,43 @@ class AnimalReproductiveStatus(enum.Enum):
     PREGNANT = "PRENHE"
     BREEDING_READY = "FAPTO_MONTA"
     SEMEN_SALE = "VENDA_SEMEM"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

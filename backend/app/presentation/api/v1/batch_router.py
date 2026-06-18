@@ -3,8 +3,8 @@ from typing import List
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
-from app.application.batch.service import BatchService
-from app.infrastructure.database.connection import get_db
+from app.modules.inventory.application.batch_service import BatchService
+from app.shared.infrastructure.database.connection import get_db
 from app.presentation.schemas.batch_schema import (
     BatchCreate,
     BatchResponse,
@@ -42,3 +42,49 @@ def update_batch(batch_id: int, payload: BatchUpdate, db: Session = Depends(get_
 def delete_batch(batch_id: int, db: Session = Depends(get_db)):
     BatchService.delete_batch(db, batch_id)
     return None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

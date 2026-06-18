@@ -1,5 +1,46 @@
-"""Compatibilidade — use app.infrastructure.database.connection."""
+"""Compatibilidade — use app.shared.infrastructure.database.connection."""
 
-from app.infrastructure.database.connection import Base, SessionLocal, engine, get_db
+from app.shared.infrastructure.database.connection import Base, SessionLocal, engine, get_db
 
 __all__ = ["Base", "SessionLocal", "engine", "get_db"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

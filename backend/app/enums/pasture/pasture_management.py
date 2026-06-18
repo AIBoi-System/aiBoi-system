@@ -5,3 +5,43 @@ class PastureManagement(Enum):
     CONTINUOS = "Continuo"
     SEMI_CONFINEMENT = "Semi-Intensivo"
     INTEGRATED = "Intensivo"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

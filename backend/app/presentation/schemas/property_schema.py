@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Optional
-from app.domain.enums.property.property_type import PropertyType
+from app.enums.property.property_type import PropertyType
 
 
 class PropertyCreateSchema(BaseModel):
@@ -34,3 +34,44 @@ class PropertyResponseSchema(BaseModel):
 
     class Config:
         from_attributes = True  # Permite que o pydantic leia o objeto do SQLAlchemy
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
-from app.domain.enums.batch.batch_purpose import BatchPurpose
+from app.enums.batch.batch_purpose import BatchPurpose
 from app.presentation.schemas.common import BRDate
 
 
@@ -33,3 +33,44 @@ class BatchResponse(BatchBase):
 
     class Config:
         from_attributes = True
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

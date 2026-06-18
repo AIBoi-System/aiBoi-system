@@ -13,7 +13,6 @@ class SignupEntryPage extends StatelessWidget {
       title: 'Acesse sua conta',
       subtitle:
           'Comece com uma conta gratuita e veja como é fácil ter o controle total da sua fazenda na palma da mão!',
-      child: const SizedBox.shrink(),
       bottom: Column(
         children: [
           PrimaryButton(
@@ -53,6 +52,7 @@ class SignupEntryPage extends StatelessWidget {
           ),
         ],
       ),
+      child: const SizedBox.shrink(),
     );
   }
 }
@@ -92,3 +92,4 @@ class _SocialButton extends StatelessWidget {
     );
   }
 }
+

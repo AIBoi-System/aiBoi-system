@@ -8,3 +8,43 @@ class UserBaseSchema(BaseModel):
     phone: Optional[str] = Field(default=None, max_length=20)
     cpf: str
     address_id: Optional[int] = None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

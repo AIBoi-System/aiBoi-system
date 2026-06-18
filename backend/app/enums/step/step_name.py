@@ -6,3 +6,44 @@ class StepName(Enum):
     EIGHT = "8"
     TEN = "10"
     DIAGNOSIS = "Diagnosis"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

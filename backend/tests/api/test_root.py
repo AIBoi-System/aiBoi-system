@@ -11,3 +11,6 @@ def test_test_db_sqlite(client):
     response = client.get("/test-db")
     assert response.status_code == 200
     assert response.json()["status"] == "sucesso"
+
+
+

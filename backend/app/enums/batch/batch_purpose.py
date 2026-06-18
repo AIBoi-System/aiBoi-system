@@ -6,3 +6,43 @@ class BatchPurpose(Enum):
     LEITE = "Leite"
     CRIA = "Cria"
     RECRIA = "Recria"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

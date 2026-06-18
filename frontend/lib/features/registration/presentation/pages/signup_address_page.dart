@@ -71,6 +71,29 @@ class _SignupAddressPageState extends State<SignupAddressPage> {
           title: 'Seu endereço',
           subtitle:
               'Precisamos do seu endereço para concluir o cadastro no sistema.',
+          bottom: PrimaryButton(
+            text: isLoading ? 'Salvando...' : 'Concluir cadastro',
+            onPressed: isLoading
+                ? null
+                : () {
+                    if (_formKey.currentState!.validate()) {
+                      final cubit = context.read<RegistrationCubit>();
+                      cubit.cpf = _cpfController.text.replaceAll(RegExp(r'\D'), '');
+                      cubit.completeRegistration(
+                        AddressDraft(
+                          zipCode: _cepController.text.trim(),
+                          state: _stateController.text.trim(),
+                          neighborhood: _neighborhoodController.text.trim(),
+                          streetName: _streetController.text.trim(),
+                          number: _numberController.text.trim(),
+                          complement: _complementController.text.trim().isEmpty
+                              ? null
+                              : _complementController.text.trim(),
+                        ),
+                      );
+                    }
+                  },
+          ),
           child: Form(
             key: _formKey,
             child: Column(
@@ -146,31 +169,9 @@ class _SignupAddressPageState extends State<SignupAddressPage> {
               ],
             ),
           ),
-          bottom: PrimaryButton(
-            text: isLoading ? 'Salvando...' : 'Concluir cadastro',
-            onPressed: isLoading
-                ? null
-                : () {
-                    if (_formKey.currentState!.validate()) {
-                      final cubit = context.read<RegistrationCubit>();
-                      cubit.cpf = _cpfController.text.replaceAll(RegExp(r'\D'), '');
-                      cubit.completeRegistration(
-                        AddressDraft(
-                          zipCode: _cepController.text.trim(),
-                          state: _stateController.text.trim(),
-                          neighborhood: _neighborhoodController.text.trim(),
-                          streetName: _streetController.text.trim(),
-                          number: _numberController.text.trim(),
-                          complement: _complementController.text.trim().isEmpty
-                              ? null
-                              : _complementController.text.trim(),
-                        ),
-                      );
-                    }
-                  },
-          ),
         );
       },
     );
   }
 }
+

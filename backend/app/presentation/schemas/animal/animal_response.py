@@ -6,3 +6,44 @@ class AnimalResponse(AnimalBase):
     class Config:
         from_attributes = True
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

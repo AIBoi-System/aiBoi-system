@@ -1,12 +1,12 @@
 from pydantic import BaseModel
 from typing import Optional
 
-from app.domain.enums.animal.animal_sex import AnimalSex
-from app.domain.enums.animal.animal_life_status import AnimalLifeStatus
-from app.domain.enums.animal.animal_size import AnimalSize
-from app.domain.enums.animal.animal_category import AnimalCategory
-from app.domain.enums.animal.animal_reproductive_status import AnimalReproductiveStatus
-from app.domain.enums.animal.animal_origin import AnimalOrigin
+from app.enums.animal.animal_sex import AnimalSex
+from app.enums.animal.animal_life_status import AnimalLifeStatus
+from app.enums.animal.animal_size import AnimalSize
+from app.enums.animal.animal_category import AnimalCategory
+from app.enums.animal.animal_reproductive_status import AnimalReproductiveStatus
+from app.enums.animal.animal_origin import AnimalOrigin
 from app.presentation.schemas.common import BRDate
 
 
@@ -34,3 +34,43 @@ class AnimalBase(BaseModel):
 
     notes: Optional[str] = None
     batch_id: Optional[int] = None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,12 +1,11 @@
+import 'package:ai_boi/core/di/app_bindings.dart';
 import 'package:ai_boi/core/navigation/app_router.dart';
 import 'package:ai_boi/core/theme/app_colors.dart';
 import 'package:ai_boi/features/registration/domain/entities/registration_draft.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, this.properties = const []});
-
-  final List<RegisteredProperty> properties;
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -14,22 +13,37 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _tabIndex = 0;
-  final List<RegisteredProperty> _properties = [];
+  List<RegisteredProperty> _properties = [];
+  bool _loading = true;
+  String? _error;
 
   @override
   void initState() {
     super.initState();
-    _properties.addAll(widget.properties);
-    if (_properties.isEmpty) {
-      _properties.add(
-        const RegisteredProperty(
-          id: 1,
-          name: 'Sabiá dourado',
-          cityState: 'Anapu - PA',
-          purpose: 'Genética',
-          hectares: 1000,
-        ),
-      );
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      final repo = AppBindings.propertyRepository();
+      final list = await repo.listProperties();
+      if (mounted) {
+        setState(() {
+          _properties = list;
+          _loading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _error = e.toString();
+          _loading = false;
+        });
+      }
     }
   }
 
@@ -40,13 +54,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)?.settings.arguments;
-    if (args is RegisteredProperty && !_properties.any((p) => p.id == args.id)) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        setState(() => _properties.insert(0, args));
-      });
-    }
-
     return Scaffold(
       backgroundColor: AppColors.backgroundScreen,
       body: SafeArea(
@@ -131,7 +138,8 @@ class _HomePageState extends State<HomePage> {
                     borderRadius: BorderRadius.circular(12),
                     child: InkWell(
                       onTap: () async {
-                        await Navigator.pushNamed(context, AppRouter.propertyCreate);
+                        final created = await Navigator.pushNamed(context, AppRouter.propertyCreate);
+                        if (created == true) _load();
                       },
                       borderRadius: BorderRadius.circular(12),
                       child: const SizedBox(
@@ -145,24 +153,31 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(height: 20),
               Expanded(
-                child: _filtered.isEmpty
-                    ? Center(
-                        child: Text(
-                          _tabIndex == 1
-                              ? 'Nenhuma propriedade inativa'
-                              : 'Nenhuma propriedade encontrada',
-                          style: const TextStyle(
-                            color: AppColors.textSecondary,
-                            fontFamily: 'Poppins',
-                          ),
-                        ),
-                      )
-                    : ListView.builder(
-                        itemCount: _filtered.length,
-                        itemBuilder: (context, index) {
-                          final p = _filtered[index];
-                          return _PropertyCard(property: p);
-                        },
+                child: _loading 
+                  ? const Center(child: CircularProgressIndicator())
+                  : _error != null
+                    ? Center(child: Text('Erro: $_error'))
+                    : RefreshIndicator(
+                        onRefresh: _load,
+                        child: _filtered.isEmpty
+                          ? Center(
+                              child: Text(
+                                _tabIndex == 1
+                                    ? 'Nenhuma propriedade inativa'
+                                    : 'Nenhuma propriedade encontrada',
+                                style: const TextStyle(
+                                  color: AppColors.textSecondary,
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
+                            )
+                          : ListView.builder(
+                              itemCount: _filtered.length,
+                              itemBuilder: (context, index) {
+                                final p = _filtered[index];
+                                return _PropertyCard(property: p);
+                              },
+                            ),
                       ),
               ),
             ],

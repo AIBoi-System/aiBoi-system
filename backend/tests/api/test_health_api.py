@@ -2,12 +2,12 @@ from datetime import date
 
 import pytest
 
-from app.domain.enums.animal.animal_category import AnimalCategory
-from app.domain.enums.animal.animal_life_status import AnimalLifeStatus
-from app.domain.enums.animal.animal_origin import AnimalOrigin
-from app.domain.enums.animal.animal_sex import AnimalSex
-from app.domain.enums.animal.animal_size import AnimalSize
-from app.domain.enums.health.health_type import HealthType
+from app.enums.animal.animal_category import AnimalCategory
+from app.enums.animal.animal_life_status import AnimalLifeStatus
+from app.enums.animal.animal_origin import AnimalOrigin
+from app.enums.animal.animal_sex import AnimalSex
+from app.enums.animal.animal_size import AnimalSize
+from app.enums.health.health_type import HealthType
 
 
 @pytest.fixture
@@ -69,3 +69,6 @@ def test_list_and_delete_health(client, health_payload):
 
     get_resp = client.get(f"/health/{health_id}")
     assert get_resp.status_code == 404
+
+
+

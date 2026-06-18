@@ -30,3 +30,6 @@ def test_validate_password_strength():
 
 def test_validate_zip_code():
     assert validate_zip_code("12345-678") == "12345678"
+
+
+

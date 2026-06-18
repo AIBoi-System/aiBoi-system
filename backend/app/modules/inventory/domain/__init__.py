@@ -1,0 +1,45 @@
+from app.modules.inventory.domain.entity import Animal
+from app.modules.inventory.domain.repository import AnimalRepository
+
+__all__ = ["Animal", "AnimalRepository"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

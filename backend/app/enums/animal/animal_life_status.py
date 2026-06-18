@@ -7,3 +7,44 @@ class AnimalLifeStatus(str, enum.Enum):  # Adicionamos o 'str' aqui por boas pr√
     DEAD = "MORTO"
     SLAUGHTERED = "ABATIDO"
     CULLED = "DESCARTADO"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

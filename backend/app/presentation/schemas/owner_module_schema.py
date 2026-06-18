@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from app.domain.enums.module.system_module import SystemModule
+from app.enums.module.system_module import SystemModule
 
 
 class OwnerModuleCreate(BaseModel):
@@ -14,3 +14,44 @@ class OwnerModuleResponse(OwnerModuleCreate):
 
     class Config:
         from_attributes = True
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

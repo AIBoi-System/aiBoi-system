@@ -5,3 +5,43 @@ class PaddockeStatus(Enum):
     IN_USE = "Ocupado"
     RESTING = "Em descanso"
     OUT_OF_SERVICE = "Em reforma"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

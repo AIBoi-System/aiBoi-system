@@ -73,7 +73,7 @@ class _WelcomePageState extends State<WelcomePage> {
             child: Image.asset(
               'assets/images/bg_welcome_page.jpg',
               fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Container(
+              errorBuilder: (_, _, _) => Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,

@@ -7,3 +7,43 @@ class HealthType(Enum):
     MEDICATION = "MEDICATION"
     SUPPLEMENT = "SUPPLEMENT"
     OTHER = "OTHER"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

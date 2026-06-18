@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
-from app.infrastructure.database.connection import get_db
+from app.shared.infrastructure.database.connection import get_db
 
 # Adicionado AddressUpdate nos imports
 from app.presentation.schemas.address_schema import AddressCreate, AddressResponse, AddressUpdate
-from app.application.address.service import AddressService
+from app.shared.application.address.address_service import AddressService
 
 router = APIRouter()
 
@@ -37,4 +37,50 @@ def update_address(
 @router.delete("/{address_id}")
 def delete_address(address_id: int, db: Session = Depends(get_db)):
     return AddressService.delete_address(db, address_id)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -1,0 +1,12 @@
+name: Filesystem MCP
+version: 0.0.1
+schema: v1
+
+mcpServers:
+  - name: filesystem
+    command: C:\nvm4w\nodejs\npx.cmd
+    args:
+      - -y
+      - "@modelcontextprotocol/server-filesystem"
+      - "C:\\Users\\sandr\\aiBoi-system"
+    env: {}

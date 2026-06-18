@@ -102,3 +102,44 @@ class RegisterUserRequest(BaseModel):
         if len(digits) < 10 or len(digits) > 11:
             raise ValueError("Phone must have 10 or 11 digits")
         return digits
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

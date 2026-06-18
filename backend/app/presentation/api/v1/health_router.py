@@ -2,14 +2,14 @@ from typing import List
 
 from fastapi import APIRouter, Depends
 
-from app.application.health.use_cases import (
+from app.modules.health.application.use_cases import (
     CreateHealthRecordUseCase,
     DeleteHealthRecordUseCase,
     GetHealthRecordUseCase,
     ListHealthRecordsUseCase,
     UpdateHealthRecordUseCase,
 )
-from app.domain.health.entity import HealthRecord
+from app.modules.health.domain.entity import HealthRecord
 from app.presentation.api.dependencies import (
     get_create_health_use_case,
     get_delete_health_use_case,
@@ -71,3 +71,49 @@ def delete_health(
 ):
     use_case.execute(health_id)
     return {"message": "Registro de saúde deletado com sucesso."}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

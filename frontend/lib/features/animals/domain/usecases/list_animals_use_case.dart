@@ -6,7 +6,8 @@ class ListAnimalsUseCase {
 
   ListAnimalsUseCase(this.repository);
 
-  Future<List<Animal>> call() async {
-    return await repository.listAnimals();
+  Future<List<Animal>> call(int propertyId) async {
+    return await repository.listAnimals(propertyId);
   }
 }
+

@@ -38,7 +38,8 @@ class ApiClient {
       headers: _headers,
       body: jsonEncode(body ?? {}),
     );
-    return _parseResponse(response);
+    final data = _handleResponse(response);
+    return data is Map<String, dynamic> ? data : {};
   }
 
   Future<Map<String, dynamic>> get(String path) async {
@@ -46,31 +47,54 @@ class ApiClient {
       Uri.parse('$_baseUrl$path'),
       headers: _headers,
     );
-    return _parseResponse(response);
+    final data = _handleResponse(response);
+    return data is Map<String, dynamic> ? data : {};
   }
 
-  Map<String, dynamic> _parseResponse(http.Response response) {
-    Map<String, dynamic>? data;
+  Future<List<dynamic>> getList(String path) async {
+    final response = await _http.get(
+      Uri.parse('$_baseUrl$path'),
+      headers: _headers,
+    );
+    final data = _handleResponse(response);
+    if (data is List) return data;
+    return [];
+  }
+
+  Future<Map<String, dynamic>> put(String path, {required Map<String, dynamic> body}) async {
+    final response = await _http.put(
+      Uri.parse('$_baseUrl$path'),
+      headers: _headers,
+      body: jsonEncode(body),
+    );
+    final data = _handleResponse(response);
+    return data is Map<String, dynamic> ? data : {};
+  }
+
+  dynamic _handleResponse(http.Response response) {
+    dynamic data;
     if (response.body.isNotEmpty) {
-      final decoded = jsonDecode(response.body);
-      if (decoded is Map<String, dynamic>) {
-        data = decoded;
+      try {
+        data = jsonDecode(response.body);
+      } catch (_) {
+        data = null;
       }
     }
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      return data ?? {};
+      return data;
     }
 
-    final detail = data?['detail'];
-    String message;
-    if (detail is String) {
-      message = detail;
-    } else if (detail is List && detail.isNotEmpty) {
-      message = detail.first['msg']?.toString() ?? 'Request failed';
-    } else {
-      message = 'Request failed (${response.statusCode})';
+    String message = 'Request failed (${response.statusCode})';
+    if (data is Map) {
+      final detail = data['detail'];
+      if (detail is String) {
+        message = detail;
+      } else if (detail is List && detail.isNotEmpty) {
+        message = detail.first['msg']?.toString() ?? message;
+      }
     }
+    
     throw ApiException(message, statusCode: response.statusCode);
   }
 

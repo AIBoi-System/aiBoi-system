@@ -4,3 +4,43 @@ class StepExecultionResult(Enum):
     PREGNANT = "prenha"
     OPEN = "vazia"
     ABORTION = "aborto"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

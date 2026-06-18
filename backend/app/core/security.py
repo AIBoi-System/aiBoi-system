@@ -1,5 +1,46 @@
-"""Compatibilidade — use app.infrastructure.security."""
+"""Compatibilidade — use app.shared.infrastructure.auth.security."""
 
-from app.infrastructure.security import hash_password, verify_password
+from app.shared.infrastructure.auth.security import hash_password, verify_password
 
 __all__ = ["hash_password", "verify_password"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -79,6 +79,13 @@ class AppRouter {
         );
       case signupComplete:
         return MaterialPageRoute(builder: (_) => const SignupCompletePage());
+      case propertyCreate:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => AppBindings.createRegistrationCubit(),
+            child: const PropertyFormPage(),
+          ),
+        );
       case propertySuccess:
         return MaterialPageRoute(
           builder: (_) => const PropertySuccessPage(),
@@ -86,13 +93,7 @@ class AppRouter {
         );
       case home:
         return MaterialPageRoute(
-          builder: (_) => HomePage(
-            properties: settings.arguments is List<RegisteredProperty>
-                ? settings.arguments as List<RegisteredProperty>
-                : settings.arguments is RegisteredProperty
-                    ? [settings.arguments as RegisteredProperty]
-                    : const [],
-          ),
+          builder: (_) => const HomePage(),
           settings: settings,
         );
       default:
@@ -101,3 +102,4 @@ class AppRouter {
   }
 
 }
+

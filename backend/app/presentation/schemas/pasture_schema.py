@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional
-from app.domain.enums.pasture.pasture_management import PastureManagement
+from app.enums.pasture.pasture_management import PastureManagement
 
 
 # base
@@ -34,3 +34,44 @@ class PastureResponse(PastureBase):
 
     # le os dados que vem do SQLAlchemy
     model_config = ConfigDict(from_attributes=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

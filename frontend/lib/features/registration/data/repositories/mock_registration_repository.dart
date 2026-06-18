@@ -51,3 +51,4 @@ class MockRegistrationRepository implements RegistrationRepository {
     );
   }
 }
+

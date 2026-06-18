@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 
-from app.infrastructure.database.connection import Base, engine
+from app.shared.infrastructure.database.connection import Base, engine
 from app.infrastructure.persistence import models  # noqa: F401 — registra tabelas
 from app.presentation.api.exception_handlers import register_exception_handlers
 from app.presentation.api.v1.router import api_v1_router
@@ -71,3 +71,44 @@ def test_db_connection():
             }
     except Exception as e:
         return {"status": "erro", "details": str(e)}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -5,12 +5,12 @@ from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.infrastructure.auth import create_access_token
-from app.infrastructure.database.connection import get_db
-from app.infrastructure.persistence.models.password_reset_token import PasswordResetToken
-from app.infrastructure.persistence.repositories.user_repository import get_user_by_email
-from app.infrastructure.security import hash_password, verify_password
-from app.application.auth.registration_service import (
+from app.shared.infrastructure.auth.auth import create_access_token
+from app.shared.infrastructure.database.connection import get_db
+from app.shared.infrastructure.persistence.password_reset_token import PasswordResetToken
+from app.shared.infrastructure.persistence.user_repository import get_user_by_email
+from app.shared.infrastructure.auth.security import hash_password, verify_password
+from app.shared.application.auth.auth_service import (
     register_user_with_address,
     send_verification_code,
     verify_email_code,
@@ -45,10 +45,17 @@ def signup_verify_code(payload: VerifyEmailCodeRequest, db: Session = Depends(ge
 def signup_register(payload: RegisterUserRequest, db: Session = Depends(get_db)):
     result = register_user_with_address(db, payload)
     user = result["user"]
+
+    # Gera token automaticamente após registro para facilitar o fluxo (SaaS UX)
+    role = user.type or "user"
+    token = create_access_token(subject=user.email, role=role)
+
     return {
         "message": "User registered successfully.",
         "user_id": user.id_user,
         "address_id": result["address_id"],
+        "access_token": token,
+        "role": role
     }
 
 
@@ -127,3 +134,49 @@ def reset_password(payload: PasswordResetConfirm, db: Session = Depends(get_db))
     reset_record.used = True
     db.commit()
     return {"message": "Password updated successfully."}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

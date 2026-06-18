@@ -16,3 +16,43 @@ class UserCreateSchema(UserBaseSchema):
             
         # 3. Retorna os números limpos
         return cleaned
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,14 +1,23 @@
+import 'package:ai_boi/core/network/api_client.dart';
+import 'package:ai_boi/features/auth/domain/repositories/auth_repository.dart';
 import 'package:ai_boi/features/registration/domain/entities/registration_draft.dart';
 import 'package:ai_boi/features/registration/domain/repositories/registration_repository.dart';
 import 'package:ai_boi/features/registration/presentation/cubits/registration_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegistrationCubit extends Cubit<RegistrationState> {
-  RegistrationCubit({required RegistrationRepository repository})
-      : _repository = repository,
+  RegistrationCubit({
+    required RegistrationRepository repository,
+    required AuthRepository authRepository,
+    required ApiClient apiClient,
+  })  : _repository = repository,
+        _authRepository = authRepository,
+        _apiClient = apiClient,
         super(RegistrationInitial());
 
   final RegistrationRepository _repository;
+  final AuthRepository _authRepository;
+  final ApiClient _apiClient;
 
   String name = '';
   String email = '';
@@ -62,6 +71,11 @@ class RegistrationCubit extends Cubit<RegistrationState> {
       );
       final result = await _repository.registerUser(draft);
       completedDraft = result;
+      
+      if (result.accessToken != null) {
+        _apiClient.setAccessToken(result.accessToken);
+      }
+
       emit(RegistrationUserCreated(result));
     } catch (e) {
       emit(RegistrationError(e.toString().replaceFirst('Exception: ', '')));
@@ -69,16 +83,27 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   }
 
   Future<void> createProperty(PropertyDraft property) async {
-    final draft = completedDraft;
-    if (draft?.userId == null || draft?.userAddressId == null) {
-      emit(RegistrationError('Cadastro incompleto.'));
-      return;
-    }
+    int? ownerId = completedDraft?.userId;
+    int? addressId = completedDraft?.userAddressId;
+
     emit(RegistrationLoading());
+
     try {
+      if (ownerId == null || addressId == null) {
+        // Tenta obter do usuário logado se não estiver no fluxo de registro
+        final user = await _authRepository.getMe();
+        ownerId = user['id_user'] as int?;
+        addressId = user['address_id'] as int?;
+      }
+
+      if (ownerId == null || addressId == null) {
+        emit(RegistrationError('Sessão expirada ou cadastro incompleto.'));
+        return;
+      }
+
       final created = await _repository.createProperty(
-        ownerId: draft!.userId!,
-        addressId: draft.userAddressId!,
+        ownerId: ownerId,
+        addressId: addressId,
         property: property,
       );
       emit(RegistrationPropertyCreated(created));
@@ -87,3 +112,4 @@ class RegistrationCubit extends Cubit<RegistrationState> {
     }
   }
 }
+

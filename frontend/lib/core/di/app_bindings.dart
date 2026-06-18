@@ -1,16 +1,20 @@
 import 'package:ai_boi/core/config/api_config.dart';
 import 'package:ai_boi/core/network/api_client.dart';
+import 'package:ai_boi/features/animals/data/datasources/animal_remote_data_source.dart';
 import 'package:ai_boi/features/auth/data/datasources/auth_remote_data_source.dart';
-import 'package:ai_boi/features/auth/data/repositories/api_auth_repository.dart';
+import 'package:ai_boi/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:ai_boi/features/auth/data/repositories/mock_auth_repository.dart';
 import 'package:ai_boi/features/auth/domain/repositories/auth_repository.dart';
 import 'package:ai_boi/features/auth/domain/usecases/login_usecase.dart';
 import 'package:ai_boi/features/auth/presentation/cubits/login_cubit.dart';
 import 'package:ai_boi/features/registration/data/datasources/registration_remote_data_source.dart';
-import 'package:ai_boi/features/registration/data/repositories/api_registration_repository.dart';
+import 'package:ai_boi/features/registration/data/repositories/registration_repository_impl.dart';
 import 'package:ai_boi/features/registration/data/repositories/mock_registration_repository.dart';
 import 'package:ai_boi/features/registration/domain/repositories/registration_repository.dart';
 import 'package:ai_boi/features/registration/presentation/cubits/registration_cubit.dart';
+import 'package:ai_boi/features/property/data/datasources/property_remote_data_source.dart';
+import 'package:ai_boi/features/property/data/repositories/property_repository_impl.dart';
+import 'package:ai_boi/features/property/domain/repositories/property_repository.dart';
 
 class AppBindings {
   static final ApiClient _apiClient = ApiClient();
@@ -19,7 +23,7 @@ class AppBindings {
     if (ApiConfig.useMockApi) {
       return MockAuthRepository();
     }
-    return ApiAuthRepository(
+    return AuthRepositoryImpl(
       remote: AuthRemoteDataSource(apiClient: _apiClient),
       apiClient: _apiClient,
     );
@@ -29,7 +33,7 @@ class AppBindings {
     if (ApiConfig.useMockApi) {
       return MockRegistrationRepository();
     }
-    return ApiRegistrationRepository(
+    return RegistrationRepositoryImpl(
       remote: RegistrationRemoteDataSource(apiClient: _apiClient),
     );
   }
@@ -39,6 +43,21 @@ class AppBindings {
   }
 
   static RegistrationCubit createRegistrationCubit() {
-    return RegistrationCubit(repository: _registrationRepository());
+    return RegistrationCubit(
+      repository: _registrationRepository(),
+      authRepository: _authRepository(),
+      apiClient: _apiClient,
+    );
+  }
+
+  static PropertyRepository propertyRepository() {
+    return PropertyRepositoryImpl(
+      PropertyRemoteDataSource(apiClient: _apiClient),
+    );
+  }
+
+  static AnimalRemoteDataSource animalRemote() {
+    return AnimalRemoteDataSource(apiClient: _apiClient);
   }
 }
+

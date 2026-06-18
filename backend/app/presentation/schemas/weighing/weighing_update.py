@@ -9,3 +9,44 @@ class WeighingUpdateSchema(BaseModel):
     weigh_date: Optional[BRDate] = None
     class Config:
         from_attributes = True
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

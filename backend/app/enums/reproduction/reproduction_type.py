@@ -5,3 +5,43 @@ class ReproductionType(Enum):
     IATF = "IATF"
     TE = "Transferencia de Embriao"
     FIV = "FIV"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

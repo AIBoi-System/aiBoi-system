@@ -8,7 +8,7 @@ from sqlalchemy.pool import StaticPool
 
 os.environ["DATABASE_URL"] = "sqlite:///:memory:"
 
-from app.infrastructure.database.connection import Base, get_db
+from app.shared.infrastructure.database.connection import Base, get_db
 from app.infrastructure.persistence import models  # noqa: F401
 from app.main import app
 
@@ -56,3 +56,6 @@ def client(db_session):
     with TestClient(app) as test_client:
         yield test_client
     app.dependency_overrides.clear()
+
+
+

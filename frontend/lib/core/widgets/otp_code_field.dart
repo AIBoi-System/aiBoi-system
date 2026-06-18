@@ -55,7 +55,7 @@ class _OtpCodeFieldState extends State<OtpCodeField> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: List.generate(widget.length, (index) {
         return SizedBox(
-          width: 52,
+          width: 60, // Ajustado para corresponder visualmente ao print
           height: 52,
           child: TextField(
             controller: _controllers[index],
@@ -64,17 +64,22 @@ class _OtpCodeFieldState extends State<OtpCodeField> {
             keyboardType: TextInputType.number,
             maxLength: 1,
             style: const TextStyle(
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: FontWeight.w600,
+              color: Color(0xFF1E3A5F),
               fontFamily: 'Poppins',
             ),
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             decoration: InputDecoration(
               counterText: '',
               contentPadding: EdgeInsets.zero,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey.shade400),
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.grey.shade300),
+                borderSide: BorderSide(color: Colors.grey.shade400),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -99,3 +104,4 @@ class _OtpCodeFieldState extends State<OtpCodeField> {
     );
   }
 }
+

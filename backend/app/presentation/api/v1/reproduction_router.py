@@ -3,8 +3,8 @@ from typing import List
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
-from app.application.reproduction.service import ReproductionService
-from app.infrastructure.database.connection import get_db
+from app.modules.inventory.application.reproduction_service import ReproductionService
+from app.shared.infrastructure.database.connection import get_db
 from app.presentation.api.auth_dependencies import get_current_user, require_roles
 from app.presentation.schemas.reproduction_schema import (
     BirthRecordRequest,
@@ -158,4 +158,50 @@ def register_birth(
     db: Session = Depends(get_db),
 ):
     return ReproductionService.register_birth(db, reproduction_id, payload)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

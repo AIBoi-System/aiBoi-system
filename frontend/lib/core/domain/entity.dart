@@ -11,3 +11,4 @@ abstract class Entity {
   @override
   int get hashCode => id.hashCode;
 }
+

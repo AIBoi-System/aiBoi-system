@@ -14,4 +14,9 @@ class AuthRemoteDataSource {
       body: {'email': email.trim(), 'password': password},
     );
   }
+
+  Future<Map<String, dynamic>> getMe() async {
+    return _api.get('/auth/me');
+  }
 }
+

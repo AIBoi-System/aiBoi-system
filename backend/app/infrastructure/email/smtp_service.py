@@ -54,3 +54,44 @@ class SmtpEmailService:
         except smtplib.SMTPException as exc:
             logger.exception("Failed to send email to %s", to_email)
             raise RuntimeError("Unable to send verification email") from exc
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

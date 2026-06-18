@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from typing import List
 
-from app.infrastructure.database.connection import get_db
-from app.application.weighing.service import WeighingService
+from app.shared.infrastructure.database.connection import get_db
+from app.modules.inventory.application.weighing_service import WeighingService
 from app.presentation.schemas.weighing import (
     WeighingCreateSchema, 
     WeighingResponseSchema, 
@@ -27,4 +27,50 @@ def update(id: int, payload: WeighingUpdateSchema, db: Session = Depends(get_db)
 def delete_weighing(id: int, db: Session = Depends(get_db)):
     WeighingService.delete_weighing(db, id)
     return None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

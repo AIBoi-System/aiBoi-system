@@ -2,13 +2,13 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
-from app.domain.enums.protocol.protocol_status import ProtocolStatus
-from app.domain.enums.reproduction.reproduction_result import ReproductionResult
-from app.domain.enums.reproduction.reproduction_status import ReproductionStatus
-from app.domain.enums.reproduction.reproduction_type import ReproductionType
-from app.domain.enums.step.step_name import StepName
-from app.domain.enums.step.step_status import StepStatus
-from app.domain.enums.stepExecution.step_execultion_result import StepExecultionResult
+from app.enums.protocol.protocol_status import ProtocolStatus
+from app.enums.reproduction.reproduction_result import ReproductionResult
+from app.enums.reproduction.reproduction_status import ReproductionStatus
+from app.enums.reproduction.reproduction_type import ReproductionType
+from app.enums.step.step_name import StepName
+from app.enums.step.step_status import StepStatus
+from app.enums.stepExecution.step_execultion_result import StepExecultionResult
 from app.presentation.schemas.common import BRDate
 
 
@@ -98,3 +98,44 @@ class BirthRecordRequest(BaseModel):
     calf_sex: str = Field(..., pattern="^(M|F)$")
     calf_category: str = Field(..., description="Apenas Novilho(a)/Bezerro(a)")
     notes: Optional[str] = None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

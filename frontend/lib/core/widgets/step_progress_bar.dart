@@ -33,3 +33,4 @@ class StepProgressBar extends StatelessWidget {
     );
   }
 }
+

@@ -2,9 +2,9 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
-from app.infrastructure.auth import decode_access_token
-from app.infrastructure.database.connection import get_db
-from app.infrastructure.persistence.repositories.user_repository import get_user_by_email
+from app.shared.infrastructure.auth.auth import decode_access_token
+from app.shared.infrastructure.database.connection import get_db
+from app.shared.infrastructure.persistence.user_repository import get_user_by_email
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
@@ -48,3 +48,44 @@ def require_roles(*allowed_roles: str):
         return current_user
 
     return _checker
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
