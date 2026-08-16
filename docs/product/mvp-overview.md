@@ -1,3 +1,12 @@
+﻿---
+title: "Visão Geral do MVP (Minimum Viable Product)"
+type: explanation
+status: deprecated
+owner: documentation
+canonical: false
+ai_index: false
+last_verified: 2026-07-16
+---
 # Visão Geral do MVP (Minimum Viable Product)
 
 O MVP do AiBoi foca na base sólida de gerenciamento zootécnico para propriedades de cria, garantindo que o ciclo "Animal -> Manejo -> Histórico" funcione sem fricção.

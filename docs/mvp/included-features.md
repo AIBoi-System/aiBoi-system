@@ -1,3 +1,12 @@
+﻿---
+title: "Funcionalidades Incluídas no MVP"
+type: reference
+status: deprecated
+owner: documentation
+canonical: false
+ai_index: false
+last_verified: 2026-07-16
+---
 # Funcionalidades Incluídas no MVP
 
 As funcionalidades foram agrupadas por domínio de negócio para facilitar a implementação e testes.

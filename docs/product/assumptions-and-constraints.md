@@ -1,3 +1,12 @@
+﻿---
+title: "Premissas e Restrições"
+type: reference
+status: deprecated
+owner: documentation
+canonical: false
+ai_index: false
+last_verified: 2026-07-16
+---
 # Premissas e Restrições
 
 Este documento lista os fatores que aceitamos como verdadeiros para o projeto (Premissas) e as limitações que moldam nosso desenvolvimento (Restrições).

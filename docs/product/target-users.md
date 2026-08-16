@@ -1,3 +1,12 @@
+﻿---
+title: "Usuários-Alvo"
+type: reference
+status: deprecated
+owner: documentation
+canonical: false
+ai_index: false
+last_verified: 2026-07-16
+---
 # Usuários-Alvo
 
 O AiBoi foi concebido para atender diferentes perfis dentro da estrutura de uma propriedade rural, priorizando quem está diretamente envolvido no manejo.

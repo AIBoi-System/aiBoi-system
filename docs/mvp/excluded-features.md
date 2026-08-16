@@ -1,3 +1,12 @@
+﻿---
+title: "Funcionalidades Excluídas do MVP"
+type: reference
+status: deprecated
+owner: documentation
+canonical: false
+ai_index: false
+last_verified: 2026-07-16
+---
 # Funcionalidades Excluídas do MVP
 
 As funcionalidades abaixo foram intencionalmente deixadas fora da versão inicial para reduzir a complexidade e acelerar o tempo de lançamento (Time-to-Market).

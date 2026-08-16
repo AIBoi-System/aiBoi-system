@@ -1,3 +1,12 @@
+﻿---
+title: "Declaração do Problema"
+type: reference
+status: deprecated
+owner: documentation
+canonical: false
+ai_index: false
+last_verified: 2026-07-16
+---
 # Declaração do Problema
 
 A pecuária de pequena e média escala enfrenta um gargalo crítico na organização de dados que impacta diretamente a rentabilidade do negócio.

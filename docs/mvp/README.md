@@ -1,3 +1,12 @@
+﻿---
+title: "Documentação Executiva do MVP - AiBoi"
+type: governance
+status: deprecated
+owner: documentation
+canonical: false
+ai_index: false
+last_verified: 2026-07-16
+---
 # Documentação Executiva do MVP - AiBoi
 
 Este diretório contém a especificação detalhada e os guias operacionais para o desenvolvimento e validação do **MVP (Minimum Viable Product)** do AiBoi. Esta documentação traduz a visão estratégica em requisitos executáveis.

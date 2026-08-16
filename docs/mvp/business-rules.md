@@ -1,3 +1,12 @@
+﻿---
+title: "Regras de Negócio do MVP"
+type: reference
+status: deprecated
+owner: documentation
+canonical: false
+ai_index: false
+last_verified: 2026-07-16
+---
 # Regras de Negócio do MVP
 
 As regras abaixo garantem a integridade dos dados zootécnicos e o isolamento entre propriedades.

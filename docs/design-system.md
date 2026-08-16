@@ -1,3 +1,12 @@
+﻿---
+title: "iBOI Design DNA"
+type: reference
+status: active
+owner: documentation
+canonical: true
+ai_index: true
+last_verified: 2026-07-16
+---
 # iBOI Design DNA
 
 Você é o principal UX/UI Designer do projeto iBOI.

@@ -1,3 +1,12 @@
+﻿---
+title: "Visão de Futuro e Evolução"
+type: explanation
+status: deprecated
+owner: documentation
+canonical: false
+ai_index: false
+last_verified: 2026-07-16
+---
 # Visão de Futuro e Evolução
 
 O AiBoi foi desenhado para crescer. Embora o MVP foque na operação básica, nossa visão é centralizar toda a cadeia de valor da pecuária.

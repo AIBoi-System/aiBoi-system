@@ -1,3 +1,12 @@
+﻿---
+title: "Glossário AiBoi"
+type: reference
+status: deprecated
+owner: documentation
+canonical: false
+ai_index: false
+last_verified: 2026-07-16
+---
 # Glossário AiBoi
 
 Terminologia técnica da pecuária de cria padronizada para o sistema.

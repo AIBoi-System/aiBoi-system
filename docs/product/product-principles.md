@@ -1,3 +1,12 @@
+﻿---
+title: "Princípios do Produto"
+type: explanation
+status: deprecated
+owner: documentation
+canonical: false
+ai_index: false
+last_verified: 2026-07-16
+---
 # Princípios do Produto
 
 Estes princípios são inegociáveis e devem guiar todas as decisões de design, priorização de recursos e desenvolvimento técnico do AiBoi.

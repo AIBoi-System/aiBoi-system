@@ -1,3 +1,12 @@
+﻿---
+title: "Posicionamento do Produto"
+type: reference
+status: deprecated
+owner: documentation
+canonical: false
+ai_index: false
+last_verified: 2026-07-16
+---
 # Posicionamento do Produto
 
 O AiBoi define seu espaço no mercado como uma solução prática e de baixa carga cognitiva para a gestão pecuária.

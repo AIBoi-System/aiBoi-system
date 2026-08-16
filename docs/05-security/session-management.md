@@ -1,0 +1,45 @@
+﻿---
+title: "Session Management"
+type: reference
+status: active
+owner: security
+canonical: true
+ai_index: true
+last_verified: 2026-08-14
+---
+
+# Session Management
+
+## Objetivo
+
+Ciclo de vida de tokens, renovação futura, revogação e encerramento de sessão.
+
+## Especificação vigente
+
+Cada login cria uma linha em `auth_sessions`. O access token carrega o identificador
+da sessão; o refresh token é persistido somente como SHA-256. Renovação rotaciona
+o refresh e revoga a sessão anterior. Reutilização, expiração, usuário inativo,
+logout e redefinição de senha invalidam o acesso.
+
+## Controles e regras
+
+- Negar por padrão e aplicar menor privilégio.
+- Validar autorização no backend e por recurso.
+- Nunca registrar ou retornar segredo, senha, token ou CPF completo.
+- Falhas entre tenants são bloqueadoras de release.
+- O cliente deve apagar access e refresh tokens mesmo quando o logout remoto falhar.
+- Tokens ficam apenas em memória no cliente atual; persistência segura exige uma
+  solução de armazenamento protegido antes da liberação em produção.
+
+## Verificação
+
+- Testar caminho válido, entrada inválida e falha de dependência.
+- Testar acesso sem credencial, com papel insuficiente e entre propriedades quando aplicável.
+- Verificar rollback e ausência de dados sensíveis em resposta e log.
+- Comparar documentação, schema executável e comportamento observado.
+
+## Referências
+
+- [Security Overview](security-overview.md)
+- [Security Checklist](security-checklist.md)
+- [Business Rules](../02-mvp/business-rules.md)

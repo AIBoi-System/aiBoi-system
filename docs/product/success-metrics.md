@@ -1,3 +1,12 @@
+﻿---
+title: "Métricas de Sucesso"
+type: reference
+status: deprecated
+owner: documentation
+canonical: false
+ai_index: false
+last_verified: 2026-07-16
+---
 # Métricas de Sucesso
 
 Mediremos o sucesso do AiBoi não apenas por downloads, mas pela utilidade real percebida no dia a dia da fazenda.

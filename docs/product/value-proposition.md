@@ -1,3 +1,12 @@
+﻿---
+title: "Proposta de Valor"
+type: reference
+status: deprecated
+owner: documentation
+canonical: false
+ai_index: false
+last_verified: 2026-07-16
+---
 # Proposta de Valor
 
 O AiBoi entrega a organização digital necessária para que a pecuária de cria atinja seu potencial máximo de lucratividade.

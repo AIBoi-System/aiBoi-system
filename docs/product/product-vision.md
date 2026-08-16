@@ -1,3 +1,12 @@
+﻿---
+title: "Visão do Produto"
+type: explanation
+status: deprecated
+owner: documentation
+canonical: false
+ai_index: false
+last_verified: 2026-07-16
+---
 # Visão do Produto
 
 O AiBoi é um sistema de gerenciamento bovino projetado para trazer a transformação digital ao campo de forma simples e acessível.

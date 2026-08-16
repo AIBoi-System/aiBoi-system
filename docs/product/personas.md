@@ -1,3 +1,12 @@
+﻿---
+title: "Personas"
+type: reference
+status: deprecated
+owner: documentation
+canonical: false
+ai_index: false
+last_verified: 2026-07-16
+---
 # Personas
 
 Estas personas representam os usuários típicos do AiBoi e ajudam a nortear as decisões de experiência do usuário.

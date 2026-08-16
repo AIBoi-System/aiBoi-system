@@ -1,0 +1,8 @@
+00-master/source-original-agrofence-v1.2.md
+18-archive/**
+mvp/**
+product/**
+**/*.png
+**/*.jpg
+**/*.jpeg
+**/*.pdf

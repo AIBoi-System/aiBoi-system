@@ -1,3 +1,12 @@
+﻿---
+title: "Escopo do MVP"
+type: reference
+status: deprecated
+owner: documentation
+canonical: false
+ai_index: false
+last_verified: 2026-07-16
+---
 # Escopo do MVP
 
 O MVP do AiBoi é focado em digitalizar o inventário zootécnico e os manejos essenciais de campo para propriedades de cria, permitindo a substituição do caderno de campo por uma solução mobile offline-first.

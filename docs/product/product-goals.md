@@ -1,3 +1,12 @@
+﻿---
+title: "Objetivos do Produto"
+type: reference
+status: deprecated
+owner: documentation
+canonical: false
+ai_index: false
+last_verified: 2026-07-16
+---
 # Objetivos do Produto
 
 Os objetivos do AiBoi são divididos por maturidade do sistema, focando primeiro na estabilidade operacional para depois avançar na inteligência de dados.

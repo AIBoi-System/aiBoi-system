@@ -1,0 +1,23 @@
+[[sources]]
+id = "agrofence"
+description = "AgroFence local PostgreSQL (read-only agent access)"
+type = "postgres"
+host = "localhost"
+port = 5432
+database = "db_agrofence"
+user = "codex_reader"
+password = "${AGROFENCE_READER_PASSWORD}"
+sslmode = "disable"
+connection_timeout = 10
+query_timeout = 30
+
+[[tools]]
+name = "execute_sql"
+source = "agrofence"
+readonly = true
+max_rows = 500
+
+[[tools]]
+name = "search_objects"
+source = "agrofence"
+

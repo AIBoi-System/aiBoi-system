@@ -1,3 +1,12 @@
+﻿---
+title: "Requisitos do MVP"
+type: reference
+status: deprecated
+owner: documentation
+canonical: false
+ai_index: false
+last_verified: 2026-07-16
+---
 # Requisitos do MVP
 
 Os requisitos abaixo foram re-numerados para o contexto exclusivo do MVP do AiBoi.

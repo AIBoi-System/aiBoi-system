@@ -1,3 +1,12 @@
+﻿---
+title: "Documentação de Produto AiBoi"
+type: governance
+status: deprecated
+owner: documentation
+canonical: false
+ai_index: false
+last_verified: 2026-07-16
+---
 # Documentação de Produto AiBoi
 
 Este diretório contém a documentação estratégica e de requisitos do AiBoi, servindo como a fonte de verdade para o escopo, visão e regras de negócio do sistema.

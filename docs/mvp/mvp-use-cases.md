@@ -1,3 +1,12 @@
+﻿---
+title: "Casos de Uso do MVP"
+type: reference
+status: deprecated
+owner: documentation
+canonical: false
+ai_index: false
+last_verified: 2026-07-16
+---
 # Casos de Uso do MVP
 
 Esta seção detalha as interações essenciais entre os usuários (Atores) e o AiBoi.
