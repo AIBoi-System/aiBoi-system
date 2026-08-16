@@ -1,13 +1,66 @@
+# ===========================
+# Python
+# ===========================
 **/__pycache__/
 *.pyc
-.vscode/
-venv/
+*.pyo
+*.egg-info/
+dist/
 .venv/
+venv/
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
 
-# Pastas de build e cache do Flutter
+# ===========================
+# Environment & Secrets
+# ===========================
+.env
+**/.env
+!.env.example
+!**/.env.example
+*.pem
+*.key
+
+# ===========================
+# IDEs & Editors
+# ===========================
+.vscode/
+**/.idea/
+**/*.iml
+
+# ===========================
+# OS Files
+# ===========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===========================
+# Flutter / Dart
+# ===========================
 **/.dart_tool/
 **/build/
-**/*.iml
-**/.idea/
 **/.flutter-plugins
 **/.flutter-plugins-dependencies
+
+# ===========================
+# Project-specific
+# ===========================
+.local-tools/
+.local-data/
+.codex/
+.agent-build/
+.continue/
+.uv-cache*/
+skills-lock.json
+llms.txt
+tash
+
+# ===========================
+# Large binary files
+# ===========================
+*.pdf
+*.zip

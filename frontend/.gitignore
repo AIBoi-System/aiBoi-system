@@ -1,5 +1,35 @@
-**/__pycache__/
-*.pyc
+# Generated Dart files
+*.g.dart
+*.freezed.dart
+
+# Dart/Flutter
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# IDE
+.idea/
+*.iml
 .vscode/
-venv/
-.venv/
+
+# Platform build outputs
+android/.gradle/
+android/local.properties
+android/**/GeneratedPluginRegistrant.java
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+ios/Runner/GeneratedPluginRegistrant.*
+ios/Pods/
+ios/.symlinks/
+macos/Flutter/GeneratedPluginRegistrant.swift
+macos/Pods/
+linux/flutter/generated_plugin_registrant.cc
+linux/flutter/generated_plugin_registrant.h
+windows/flutter/generated_plugin_registrant.cc
+windows/flutter/generated_plugin_registrant.h
+
+# Miscellaneous
+*.log
+.DS_Store

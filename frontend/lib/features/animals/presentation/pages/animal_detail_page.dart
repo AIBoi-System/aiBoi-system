@@ -64,16 +64,21 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
       _error = null;
     });
     try {
-      final animal = await widget.dataSource.getAnimal(widget.animalId, widget.propertyId);
+      final animal = await widget.dataSource.getAnimal(
+        widget.animalId,
+        widget.propertyId,
+      );
       _nameController.text = animal.name ?? '';
       _breedController.text = animal.breed ?? '';
       _notesController.text = animal.notes ?? '';
       _category = animal.category;
+      if (!mounted) return;
       setState(() {
         _animal = animal;
         _loading = false;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _loading = false;
         _error = e.toString();
@@ -99,7 +104,12 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
         batchId: _animal!.batchId,
         notes: _notesController.text.trim(),
       );
-      final result = await widget.dataSource.updateAnimal(_animal!.id, updated, widget.propertyId);
+      final result = await widget.dataSource.updateAnimal(
+        _animal!.id,
+        updated,
+        widget.propertyId,
+      );
+      if (!mounted) return;
       setState(() {
         _animal = result;
         _editing = false;
@@ -111,6 +121,7 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
         );
       }
     } catch (_) {
+      if (!mounted) return;
       setState(() => _saving = false);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -235,18 +246,26 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
         batchId: _animal!.batchId,
         notes: 'Óbito em $iso. $deathReason'.trim(),
       );
-      final result = await widget.dataSource.updateAnimal(_animal!.id, updated, widget.propertyId);
+      final result = await widget.dataSource.updateAnimal(
+        _animal!.id,
+        updated,
+        widget.propertyId,
+      );
+      if (!mounted) return;
       setState(() {
         _animal = result;
         _saving = false;
       });
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Óbito registrado. Inventário atualizado.')),
+          const SnackBar(
+            content: Text('Óbito registrado. Inventário atualizado.'),
+          ),
         );
         Navigator.pop(context, true);
       }
     } catch (_) {
+      if (!mounted) return;
       setState(() => _saving = false);
     }
   }
@@ -254,9 +273,7 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
   @override
   Widget build(BuildContext context) {
     if (_loading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     if (_error != null || _animal == null) {
@@ -395,13 +412,19 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
             width: 120,
             child: Text(
               label,
-              style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+              style: const TextStyle(
+                color: AppColors.textSecondary,
+                fontSize: 13,
+              ),
             ),
           ),
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(fontWeight: FontWeight.w600, fontFamily: 'Poppins'),
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Poppins',
+              ),
             ),
           ),
         ],
@@ -409,4 +432,3 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
     );
   }
 }
-

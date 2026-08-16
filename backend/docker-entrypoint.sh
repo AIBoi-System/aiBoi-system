@@ -1,5 +1,5 @@
-#!/bin/sh
-set -e
+#!/bin/bash
+set -euo pipefail
 
 # Executa seed do usuário de teste (se o script existir)
 if [ -f "/app/scripts/seed_test_user.py" ]; then
