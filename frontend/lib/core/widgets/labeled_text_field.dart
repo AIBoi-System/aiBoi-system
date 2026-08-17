@@ -13,6 +13,7 @@ class LabeledTextField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final void Function(String)? onChanged;
   final int? maxLength;
+  final bool readOnly;
 
   const LabeledTextField({
     super.key,
@@ -26,6 +27,7 @@ class LabeledTextField extends StatelessWidget {
     this.inputFormatters,
     this.onChanged,
     this.maxLength,
+    this.readOnly = false,
   });
 
   @override
@@ -39,7 +41,8 @@ class LabeledTextField extends StatelessWidget {
             fontSize: 14,
             fontWeight: FontWeight.w500,
             color: AppColors.textPrimary,
-            fontFamily: 'Poppins',
+            fontFamily: 'Roboto',
+            height: 1.4,
           ),
         ),
         const SizedBox(height: 8),
@@ -50,7 +53,7 @@ class LabeledTextField extends StatelessWidget {
               color: Colors.transparent,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
+                  color: Colors.black.withValues(alpha: 0.04),
                   blurRadius: 14,
                   offset: const Offset(0, 6),
                 ),
@@ -58,33 +61,43 @@ class LabeledTextField extends StatelessWidget {
             ),
             child: TextFormField(
               controller: controller,
+              readOnly: readOnly,
               obscureText: obscureText,
+
               validator: validator,
               keyboardType: keyboardType,
               inputFormatters: inputFormatters,
               onChanged: onChanged,
               maxLength: maxLength,
-              style: const TextStyle(fontFamily: 'Poppins'),
+              style: const TextStyle(
+                fontFamily: 'Roboto',
+                fontSize: 16,
+                color: AppColors.textPrimary,
+              ),
               decoration: InputDecoration(
                 counterText: '',
                 hintText: hintText,
                 hintStyle: const TextStyle(
                   color: AppColors.hintText,
-                  fontFamily: 'Poppins',
+                  fontFamily: 'Roboto',
+                  fontSize: 16,
                 ),
                 isDense: true,
-                constraints: const BoxConstraints(minHeight: 48),
+                constraints: const BoxConstraints(minHeight: 60),
                 filled: true,
                 fillColor: Colors.white,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 18,
+                ),
                 suffixIcon: suffixIcon,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
+                  borderSide: const BorderSide(color: AppColors.border),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
+                  borderSide: const BorderSide(color: AppColors.border),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -105,4 +118,3 @@ class LabeledTextField extends StatelessWidget {
     );
   }
 }
-

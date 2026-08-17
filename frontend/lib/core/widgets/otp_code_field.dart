@@ -104,4 +104,3 @@ class _OtpCodeFieldState extends State<OtpCodeField> {
     );
   }
 }
-

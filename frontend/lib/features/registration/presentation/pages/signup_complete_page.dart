@@ -42,7 +42,7 @@ class SignupCompletePage extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               const Text(
-                'Sua conta foi criada com sucesso. Agora você pode cadastrar sua primeira propriedade ou ir direto para o painel.',
+                'Sua conta foi criada com sucesso. Agora você precisa cadastrar sua primeira propriedade.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,
@@ -55,37 +55,13 @@ class SignupCompletePage extends StatelessWidget {
               PrimaryButton(
                 text: 'Cadastrar propriedade',
                 onPressed: () {
-                  AppRouter.navigateRegistration(context, AppRouter.propertyCreate);
+                  AppRouter.navigateRegistration(
+                    context,
+                    AppRouter.propertyCreate,
+                  );
                 },
               ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: OutlinedButton(
-                  onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      AppRouter.home,
-                      (route) => false,
-                    );
-                  },
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: AppColors.primaryGreen),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: const Text(
-                    'Ir para o painel',
-                    style: TextStyle(
-                      color: AppColors.primaryGreen,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Poppins',
-                    ),
-                  ),
-                ),
-              ),
+
             ],
           ),
         ),
@@ -93,4 +69,3 @@ class SignupCompletePage extends StatelessWidget {
     );
   }
 }
-

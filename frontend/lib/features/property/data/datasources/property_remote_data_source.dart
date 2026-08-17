@@ -9,7 +9,9 @@ class PropertyRemoteDataSource {
 
   Future<List<RegisteredProperty>> listProperties() async {
     final rows = await _api.getList(ApiEndpoints.properties);
-    return rows.map((row) => _mapProperty(row as Map<String, dynamic>)).toList();
+    return rows
+        .map((row) => _mapProperty(row as Map<String, dynamic>))
+        .toList();
   }
 
   Future<RegisteredProperty> getProperty(int id) async {

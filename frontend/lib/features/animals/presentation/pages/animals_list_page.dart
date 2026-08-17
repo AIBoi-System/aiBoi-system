@@ -32,19 +32,16 @@ class _AnimalsListPageState extends State<AnimalsListPage> {
   bool _loading = true;
   String? _error;
 
-  static const _categoryFilters = [
-    'Todos',
-    'Vaca',
-    'Bezerro',
-    'Novilha',
-  ];
+  static const _categoryFilters = ['Todos', 'Vaca', 'Bezerro', 'Novilha'];
 
   @override
   void initState() {
     super.initState();
     _load();
     _searchController.addListener(() {
-      setState(() => _searchQuery = _searchController.text.trim().toLowerCase());
+      setState(
+        () => _searchQuery = _searchController.text.trim().toLowerCase(),
+      );
     });
   }
 
@@ -227,10 +224,29 @@ class _AnimalsListPageState extends State<AnimalsListPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        _statusBadge('Todos', _all.length.toString(), selected: _statusTab == 0),
-                        _statusBadge('Ativos', _all.where((a) => a.isActive).length.toString(), selected: _statusTab == 1),
-                        _statusBadge('Inativos', _all.where((a) => !a.isActive && !a.isDead).length.toString(), selected: _statusTab == 2),
-                        _statusBadge('Óbitos', _all.where((a) => a.isDead).length.toString(), selected: _statusTab == 3),
+                        _statusBadge(
+                          'Todos',
+                          _all.length.toString(),
+                          selected: _statusTab == 0,
+                        ),
+                        _statusBadge(
+                          'Ativos',
+                          _all.where((a) => a.isActive).length.toString(),
+                          selected: _statusTab == 1,
+                        ),
+                        _statusBadge(
+                          'Inativos',
+                          _all
+                              .where((a) => !a.isActive && !a.isDead)
+                              .length
+                              .toString(),
+                          selected: _statusTab == 2,
+                        ),
+                        _statusBadge(
+                          'Óbitos',
+                          _all.where((a) => a.isDead).length.toString(),
+                          selected: _statusTab == 3,
+                        ),
                       ],
                     ),
                   ),
@@ -251,7 +267,9 @@ class _AnimalsListPageState extends State<AnimalsListPage> {
                               setState(() => _categoryFilter = label),
                           selectedColor: AppColors.primaryButton,
                           labelStyle: TextStyle(
-                            color: selected ? Colors.white : AppColors.textPrimary,
+                            color: selected
+                                ? Colors.white
+                                : AppColors.textPrimary,
                             fontFamily: 'Poppins',
                             fontSize: 12,
                           ),
@@ -317,22 +335,24 @@ class _AnimalsListPageState extends State<AnimalsListPage> {
                       ),
                     )
                   else
-                    ...filtered.map((animal) => _AnimalTile(
-                          animal: animal,
-                          onTap: () async {
-                            final changed = await Navigator.push<bool>(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => AnimalDetailPage(
-                                  animalId: animal.id,
-                                  propertyId: widget.propertyId,
-                                  dataSource: _dataSource,
-                                ),
+                    ...filtered.map(
+                      (animal) => _AnimalTile(
+                        animal: animal,
+                        onTap: () async {
+                          final changed = await Navigator.push<bool>(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => AnimalDetailPage(
+                                animalId: animal.id,
+                                propertyId: widget.propertyId,
+                                dataSource: _dataSource,
                               ),
-                            );
-                            if (changed == true) _load();
-                          },
-                        )),
+                            ),
+                          );
+                          if (changed == true) _load();
+                        },
+                      ),
+                    ),
                 ],
               ),
       ),
@@ -372,7 +392,9 @@ class _StatusTab extends StatelessWidget {
             style: TextStyle(
               fontSize: 12,
               fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
-              color: selected ? AppColors.primaryButton : AppColors.textSecondary,
+              color: selected
+                  ? AppColors.primaryButton
+                  : AppColors.textSecondary,
               fontFamily: 'Poppins',
             ),
           ),
@@ -465,4 +487,3 @@ class _AnimalTile extends StatelessWidget {
     );
   }
 }
-

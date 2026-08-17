@@ -40,9 +40,9 @@ class Animal extends Entity {
   bool get isActive => lifeStatus == 'ATIVO';
   bool get isDead => lifeStatus == 'MORTO' || lifeStatus == 'ABATIDO';
 
-  String get displayName =>
-      (name != null && name!.isNotEmpty) ? name! : identificationNumber.toString();
+  String get displayName => (name != null && name!.isNotEmpty)
+      ? name!
+      : identificationNumber.toString();
 
   String get sexLabel => isFemale ? 'Fêmea' : 'Macho';
 }
-

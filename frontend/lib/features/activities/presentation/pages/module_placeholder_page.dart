@@ -65,4 +65,3 @@ class ModulePlaceholderPage extends StatelessWidget {
     );
   }
 }
-

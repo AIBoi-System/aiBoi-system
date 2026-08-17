@@ -3,9 +3,7 @@ import 'package:ai_boi/core/network/api_endpoints.dart';
 import '../models/animal_model.dart';
 
 class AnimalRemoteDataSource {
-  AnimalRemoteDataSource({
-    required ApiClient apiClient,
-  }) : _api = apiClient;
+  AnimalRemoteDataSource({required ApiClient apiClient}) : _api = apiClient;
 
   final ApiClient _api;
 
@@ -15,11 +13,7 @@ class AnimalRemoteDataSource {
     );
 
     return rows
-        .map(
-          (row) => AnimalModel.fromJson(
-            row as Map<String, dynamic>,
-          ),
-        )
+        .map((row) => AnimalModel.fromJson(row as Map<String, dynamic>))
         .toList();
   }
 
@@ -31,10 +25,7 @@ class AnimalRemoteDataSource {
     return AnimalModel.fromJson(response);
   }
 
-  Future<AnimalModel> createAnimal(
-    AnimalModel animal,
-    int propertyId,
-  ) async {
+  Future<AnimalModel> createAnimal(AnimalModel animal, int propertyId) async {
     final response = await _api.post(
       '${ApiEndpoints.animals}?property_id=$propertyId',
       body: animal.toJson(),

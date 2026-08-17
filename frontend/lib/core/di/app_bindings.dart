@@ -16,10 +16,13 @@ import 'package:ai_boi/features/property/data/datasources/property_remote_data_s
 import 'package:ai_boi/features/property/data/repositories/property_repository_impl.dart';
 import 'package:ai_boi/features/property/domain/repositories/property_repository.dart';
 
+import 'package:ai_boi/core/data/operations_remote_data_source.dart';
+import 'package:ai_boi/features/dashboard/presentation/cubits/dashboard_cubit.dart';
+
 class AppBindings {
   static final ApiClient _apiClient = ApiClient();
 
-  static AuthRepository _authRepository() {
+  static AuthRepository _createAuthRepository() {
     if (ApiConfig.useMockApi) {
       return MockAuthRepository();
     }
@@ -28,6 +31,8 @@ class AppBindings {
       apiClient: _apiClient,
     );
   }
+
+  static final AuthRepository authRepository = _createAuthRepository();
 
   static RegistrationRepository _registrationRepository() {
     if (ApiConfig.useMockApi) {
@@ -39,14 +44,16 @@ class AppBindings {
   }
 
   static LoginCubit createLoginCubit() {
-    return LoginCubit(loginUseCase: LoginUseCase(_authRepository()));
+    return LoginCubit(
+      loginUseCase: LoginUseCase(authRepository),
+      authRepository: authRepository,
+    );
   }
 
   static RegistrationCubit createRegistrationCubit() {
     return RegistrationCubit(
       repository: _registrationRepository(),
-      authRepository: _authRepository(),
-      apiClient: _apiClient,
+      authRepository: authRepository,
     );
   }
 
@@ -59,5 +66,12 @@ class AppBindings {
   static AnimalRemoteDataSource animalRemote() {
     return AnimalRemoteDataSource(apiClient: _apiClient);
   }
-}
 
+  static OperationsRemoteDataSource operations() {
+    return OperationsRemoteDataSource(apiClient: _apiClient);
+  }
+
+  static DashboardCubit createDashboardCubit() {
+    return DashboardCubit(operations: operations());
+  }
+}

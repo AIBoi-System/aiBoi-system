@@ -1,9 +1,10 @@
-import 'package:ai_boi/core/navigation/app_router.dart';
 import 'package:ai_boi/core/widgets/labeled_text_field.dart';
 import 'package:ai_boi/core/widgets/password_strength_indicator.dart';
 import 'package:ai_boi/core/widgets/primary_button.dart';
 import 'package:ai_boi/core/widgets/signup_step_scaffold.dart';
 import 'package:ai_boi/features/registration/presentation/cubits/registration_cubit.dart';
+import 'package:ai_boi/features/registration/presentation/cubits/registration_state.dart';
+import 'package:ai_boi/features/registration/presentation/pages/signup_complete_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -27,40 +28,67 @@ class _SignupPasswordPageState extends State<SignupPasswordPage> {
   @override
   Widget build(BuildContext context) {
     final rules = PasswordRules.fromPassword(_passwordController.text);
-
-    return SignupStepScaffold(
-      title: 'Crie sua senha',
-      currentStep: 3,
-      bottom: PrimaryButton(
-        text: 'Continue',
-        onPressed: rules.allMet
-            ? () {
-                context.read<RegistrationCubit>().password = _passwordController.text;
-                AppRouter.navigateRegistration(context, AppRouter.signupAddress);
-              }
-            : null,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          LabeledTextField(
-            label: 'Senha',
-            hintText: '••••••••',
-            controller: _passwordController,
-            obscureText: _obscure,
-            onChanged: (_) => setState(() {}),
-            suffixIcon: IconButton(
-              icon: Icon(
-                _obscure ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                color: Colors.grey,
+    return BlocConsumer<RegistrationCubit, RegistrationState>(
+      listener: (context, state) {
+        if (state is RegistrationUserCreated) {
+          final cubit = context.read<RegistrationCubit>();
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (_) => BlocProvider.value(
+                value: cubit,
+                child: const SignupCompletePage(),
               ),
-              onPressed: () => setState(() => _obscure = !_obscure),
             ),
+            (route) => route.isFirst,
+          );
+        } else if (state is RegistrationError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+          );
+        }
+      },
+      builder: (context, state) {
+        final isLoading = state is RegistrationLoading;
+        return SignupStepScaffold(
+          title: 'Crie sua senha',
+          currentStep: 6,
+          totalSteps: 6,
+          bottom: PrimaryButton(
+            text: 'Concluir cadastro',
+            isLoading: isLoading,
+            onPressed: isLoading || !rules.allMet
+                ? null
+                : () {
+                    final cubit = context.read<RegistrationCubit>();
+                    cubit.password = _passwordController.text;
+                    cubit.completeRegistration();
+                  },
           ),
-          PasswordStrengthIndicator(rules: rules),
-        ],
-      ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              LabeledTextField(
+                label: 'Senha',
+                hintText: '••••••••',
+                controller: _passwordController,
+                obscureText: _obscure,
+                onChanged: (_) => setState(() {}),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscure
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined,
+                    color: Colors.grey,
+                  ),
+                  onPressed: () => setState(() => _obscure = !_obscure),
+                ),
+              ),
+              PasswordStrengthIndicator(rules: rules),
+            ],
+          ),
+        );
+      },
     );
   }
 }
-

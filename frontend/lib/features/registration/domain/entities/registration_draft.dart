@@ -35,28 +35,34 @@ class RegistrationDraft {
   final String email;
   final String password;
   final String cpf;
-  final String? phone;
+  final String phone;
   final AddressDraft address;
   final int? userId;
   final int? userAddressId;
   final String? accessToken;
+  final String? refreshToken;
+  final String? role;
 
   const RegistrationDraft({
     required this.name,
     required this.email,
     required this.password,
     required this.cpf,
-    this.phone,
+    required this.phone,
     required this.address,
     this.userId,
     this.userAddressId,
     this.accessToken,
+    this.refreshToken,
+    this.role,
   });
 
   RegistrationDraft copyWith({
     int? userId,
     int? userAddressId,
     String? accessToken,
+    String? refreshToken,
+    String? role,
   }) {
     return RegistrationDraft(
       name: name,
@@ -68,6 +74,8 @@ class RegistrationDraft {
       userId: userId ?? this.userId,
       userAddressId: userAddressId ?? this.userAddressId,
       accessToken: accessToken ?? this.accessToken,
+      refreshToken: refreshToken ?? this.refreshToken,
+      role: role ?? this.role,
     );
   }
 }
@@ -91,4 +99,3 @@ class RegisteredProperty {
     this.addressId,
   });
 }
-

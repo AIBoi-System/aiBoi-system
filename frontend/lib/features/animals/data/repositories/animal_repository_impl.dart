@@ -64,4 +64,3 @@ class AnimalRepositoryImpl implements AnimalRepository {
     return await remoteDataSource.updateAnimal(id, model, propertyId);
   }
 }
-

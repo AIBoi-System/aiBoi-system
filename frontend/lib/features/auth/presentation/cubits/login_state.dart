@@ -10,3 +10,15 @@ class LoginError extends LoginState {
   final String message;
   LoginError(this.message);
 }
+
+class GoogleLoginNeedsRegistration extends LoginState {
+  final String email;
+  final String? name;
+  final String idToken;
+
+  GoogleLoginNeedsRegistration({
+    required this.email,
+    required this.idToken,
+    this.name,
+  });
+}

@@ -64,14 +64,16 @@ flutter run -d chrome
 | :--- | :--- | :--- |
 | 0 | Boas-vindas (carrossel) | `/` |
 | 1 | Acesse sua conta | `/signup` |
-| 2 | Dados pessoais 1/3 | `/signup/personal` |
-| 3 | Verificar e-mail 2/3 | `/signup/verify-email` |
-| 4 | Criar senha 3/3 | `/signup/password` |
-| 5 | Endereço | `/signup/address` |
-| 6 | Cadastro concluído | `/signup/complete` |
-| 7 | Cadastrar propriedade (opcional) | `/property/create` |
-| 8 | Propriedade cadastrada | `/property/success` |
-| 9 | Home | `/home` |
+| 2 | Dados pessoais | `/signup/personal` |
+| 3 | Verificar e-mail | `/signup/verify-email` |
+| 4 | Informar telefone | `/signup/phone` |
+| 5 | Verificar telefone | `/signup/verify-phone` |
+| 6 | CPF e endereço | `/signup/address` |
+| 7 | Criar senha | `/signup/password` |
+| 8 | Cadastro concluído | `/signup/complete` |
+| 9 | Cadastrar propriedade (opcional) | `/property/create` |
+| 10 | Propriedade cadastrada | `/property/success` |
+| 11 | Home | `/home` |
 
 Login existente: `/login` → após sucesso pode ir para `/home`.
 
@@ -120,8 +122,12 @@ Endpoints usados:
 
 - `POST /auth/signup/send-code`
 - `POST /auth/signup/verify-code`
+- `POST /auth/signup/send-phone-code`
+- `POST /auth/signup/verify-phone-code`
 - `POST /auth/signup/register`
 - `POST /auth/login`
+- `POST /auth/refresh`
+- `POST /auth/logout`
 - `POST /addresses/`
 - `POST /properties/`
 

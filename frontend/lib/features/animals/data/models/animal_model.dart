@@ -19,23 +19,23 @@ class AnimalModel extends Animal {
     String? entryDate,
     int? pedigreePo,
   }) : super(
-          id: id,
-          identificationNumber: identificationNumber,
-          name: name,
-          sex: sex,
-          breed: breed,
-          category: category,
-          lifeStatus: lifeStatus,
-          reproductiveStatus: reproductiveStatus,
-          birthDate: birthDate,
-          origin: origin,
-          batchId: batchId,
-          notes: notes,
-          birthWeight: birthWeight,
-          weaningWeight: weaningWeight,
-          entryDate: entryDate,
-          pedigreePo: pedigreePo,
-        );
+         id: id,
+         identificationNumber: identificationNumber,
+         name: name,
+         sex: sex,
+         breed: breed,
+         category: category,
+         lifeStatus: lifeStatus,
+         reproductiveStatus: reproductiveStatus,
+         birthDate: birthDate,
+         origin: origin,
+         batchId: batchId,
+         notes: notes,
+         birthWeight: birthWeight,
+         weaningWeight: weaningWeight,
+         entryDate: entryDate,
+         pedigreePo: pedigreePo,
+       );
 
   factory AnimalModel.fromJson(Map<String, dynamic> json) {
     return AnimalModel(
@@ -80,4 +80,3 @@ class AnimalModel extends Animal {
     };
   }
 }
-

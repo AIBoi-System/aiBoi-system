@@ -10,4 +10,3 @@ class ListAnimalsUseCase {
     return await repository.listAnimals(propertyId);
   }
 }
-

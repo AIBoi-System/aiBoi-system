@@ -5,12 +5,15 @@ class AnimalStepHeader extends StatelessWidget {
   const AnimalStepHeader({
     super.key,
     required this.currentStep,
-    this.totalSteps = 5,
+    this.totalSteps = 8,
     this.labels = const [
-      'Identificação',
-      'Localização',
-      'Pesagem',
-      'Genealogia',
+      'ID',
+      'Categ.',
+      'Datas',
+      'Local',
+      'Genea.',
+      'Pesos',
+      'Saúde',
       'Resumo',
     ],
   });
@@ -40,55 +43,50 @@ class AnimalStepHeader extends StatelessWidget {
             final step = index ~/ 2 + 1;
             final done = step < currentStep;
             final active = step == currentStep;
-            return Expanded(
-              child: Container(
-                alignment: Alignment.center,
-                child: Container(
-                  width: 28,
-                  height: 28,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: done || active
-                        ? AppColors.primaryButton
-                        : Colors.grey.shade300,
-                  ),
-                  child: Center(
-                    child: done
-                        ? const Icon(Icons.check, color: Colors.white, size: 16)
-                        : Text(
-                            '$step',
-                            style: TextStyle(
-                              color: active ? Colors.white : Colors.grey.shade600,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                            ),
-                          ),
-                  ),
-                ),
+            return Container(
+              width: 24,
+              height: 24,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: done || active
+                    ? AppColors.primaryButton
+                    : Colors.grey.shade300,
+              ),
+              child: Center(
+                child: done
+                    ? const Icon(Icons.check, color: Colors.white, size: 14)
+                    : Text(
+                        '$step',
+                        style: TextStyle(
+                          color: active ? Colors.white : Colors.grey.shade600,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 10,
+                        ),
+                      ),
               ),
             );
           }),
         ),
         const SizedBox(height: 8),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: List.generate(totalSteps, (index) {
             final label = labels[index];
             return Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 2),
-                child: Text(
-                  label,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: index + 1 == currentStep ? FontWeight.w600 : FontWeight.w500,
-                    color: index + 1 == currentStep
-                        ? AppColors.primaryButton
-                        : Colors.grey.shade600,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+              child: Text(
+                label,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 9,
+                  fontWeight: index + 1 == currentStep
+                      ? FontWeight.w600
+                      : FontWeight.w500,
+                  color: index + 1 == currentStep
+                      ? AppColors.primaryButton
+                      : Colors.grey.shade600,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             );
           }),
@@ -97,4 +95,3 @@ class AnimalStepHeader extends StatelessWidget {
     );
   }
 }
-

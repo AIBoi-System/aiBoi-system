@@ -6,4 +6,3 @@ abstract class AnimalRepository {
   Future<Animal> createAnimal(Animal animal, int propertyId);
   Future<Animal> updateAnimal(int id, Animal animal, int propertyId);
 }
-

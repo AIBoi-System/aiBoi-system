@@ -2,6 +2,7 @@ import 'package:ai_boi/core/navigation/app_router.dart';
 import 'package:ai_boi/core/widgets/labeled_text_field.dart';
 import 'package:ai_boi/core/widgets/primary_button.dart';
 import 'package:ai_boi/core/widgets/signup_step_scaffold.dart';
+import 'package:ai_boi/features/registration/domain/registration_validators.dart';
 import 'package:ai_boi/features/registration/presentation/cubits/registration_cubit.dart';
 import 'package:ai_boi/features/registration/presentation/cubits/registration_state.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +17,16 @@ class SignupPersonalPage extends StatefulWidget {
 
 class _SignupPersonalPageState extends State<SignupPersonalPage> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    _emailController.text = context.read<RegistrationCubit>().email;
+  }
+
+  @override
   void dispose() {
-    _nameController.dispose();
     _emailController.dispose();
     super.dispose();
   }
@@ -41,45 +46,30 @@ class _SignupPersonalPageState extends State<SignupPersonalPage> {
       builder: (context, state) {
         final isLoading = state is RegistrationLoading;
         return SignupStepScaffold(
-          title: 'Dados Pessoais',
+          title: 'Seu e-mail',
           currentStep: 1,
+          totalSteps: 6,
           bottom: PrimaryButton(
-            text: isLoading ? 'Enviando...' : 'Criar minha conta',
+            text: 'Enviar código',
+            isLoading: isLoading,
             onPressed: isLoading
                 ? null
                 : () {
                     if (_formKey.currentState!.validate()) {
                       final cubit = context.read<RegistrationCubit>();
-                      cubit.name = _nameController.text.trim();
-                      cubit.email = _emailController.text.trim();
+                      cubit.email = _emailController.text;
                       cubit.sendVerificationCode();
                     }
                   },
           ),
           child: Form(
             key: _formKey,
-            child: Column(
-              children: [
-                LabeledTextField(
-                  label: 'Nome',
-                  hintText: 'Seu nome completo',
-                  controller: _nameController,
-                  validator: (v) =>
-                      v == null || v.trim().length < 3 ? 'Informe seu nome' : null,
-                ),
-                const SizedBox(height: 20),
-                LabeledTextField(
-                  label: 'E-mail',
-                  hintText: 'seu@email.com',
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (v) {
-                    if (v == null || v.isEmpty) return 'Informe o e-mail';
-                    if (!v.contains('@')) return 'E-mail inválido';
-                    return null;
-                  },
-                ),
-              ],
+            child: LabeledTextField(
+              label: 'E-mail',
+              hintText: 'seu@email.com',
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              validator: RegistrationValidators.email,
             ),
           ),
         );
@@ -87,4 +77,3 @@ class _SignupPersonalPageState extends State<SignupPersonalPage> {
     );
   }
 }
-

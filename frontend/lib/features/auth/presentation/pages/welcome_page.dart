@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
+
 import 'package:ai_boi/core/navigation/app_router.dart';
+import 'package:ai_boi/core/theme/app_colors.dart';
+import 'package:flutter/material.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -10,56 +12,46 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  // Controlador do Carrossel
-  final PageController _pageController = PageController();
-  int _currentPage = 0;
-  Timer? _timer;
-  
-  final List<Map<String, String>> onboardingData = [
-    {
-      "title": "Controle total do rebanho",
-      "subtitle": "Todos os animais organizados e acessíveis em segundos."
-    },
-    {
-      "title": "Gestão Reprodutiva",
-      "subtitle": "Acompanhe cios, prenhezes e partos com alertas inteligentes."
-    },
-    {
-      "title": "Saúde em Dia",
-      "subtitle": "Mantenha o calendário de vacinação e pesagem sob controle."
-    },
-    {
-      "title": "Relatórios Precisos",
-      "subtitle": "Tome decisões baseadas em dados reais da sua fazenda."
-    },
+  static const _slides = [
+    (
+      'Controle total do rebanho',
+      'Todos os animais organizados e acessíveis em segundos.',
+    ),
+    (
+      'Gestão reprodutiva',
+      'Acompanhe cios, prenhezes e partos com mais segurança.',
+    ),
+    (
+      'Saúde em dia',
+      'Mantenha vacinações, tratamentos e pesagens sob controle.',
+    ),
+    (
+      'Decisões com dados',
+      'Visualize a fazenda e planeje os próximos manejos.',
+    ),
   ];
+
+  final PageController _pageController = PageController();
+  Timer? _timer;
+  int _currentPage = 0;
 
   @override
   void initState() {
     super.initState();
-    // Cria um loop infinito que roda a cada 4 segundos
-    _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
-      if (_currentPage < onboardingData.length - 1) {
-        _currentPage++;
-      } else {
-        _currentPage = 0; // Se chegou na última, volta para a primeira
-      }
-
-      // Faz a animação de deslize suave
-      if (_pageController.hasClients) {
-        _pageController.animateToPage(
-          _currentPage,
-          duration: const Duration(milliseconds: 350),
-          curve: Curves.easeInOut,
-        );
-      }
+    _timer = Timer.periodic(const Duration(seconds: 4), (_) {
+      if (!_pageController.hasClients) return;
+      final nextPage = (_currentPage + 1) % _slides.length;
+      _pageController.animateToPage(
+        nextPage,
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeInOut,
+      );
     });
   }
 
-
   @override
   void dispose() {
-    _timer?.cancel(); // Cancela o timer para evitar vazamento de memória
+    _timer?.cancel();
     _pageController.dispose();
     super.dispose();
   }
@@ -68,179 +60,177 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
+        fit: StackFit.expand,
         children: [
-          Positioned.fill(
-            child: Image.asset(
-              'assets/images/bg_welcome_page.jpg',
-              fit: BoxFit.cover,
-              errorBuilder: (_, _, _) => Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Color(0xFF1B4332), Color(0xFF2D6A4F)],
+          Image.asset(
+            'assets/images/figma_welcome_background.jpg',
+            fit: BoxFit.cover,
+            alignment: Alignment.center,
+          ),
+          const ColoredBox(color: Color(0x33000000)),
+          SafeArea(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 412),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 40),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SizedBox(
+                        height: 220,
+                        child: PageView.builder(
+                          controller: _pageController,
+                          itemCount: _slides.length,
+                          onPageChanged: (value) {
+                            if (mounted) setState(() => _currentPage = value);
+                          },
+                          itemBuilder: (context, index) {
+                            final slide = _slides[index];
+                            return Container(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withValues(alpha: 0.10),
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.45),
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    slide.$1,
+                                    textAlign: TextAlign.center,
+                                    maxLines: 2,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'Poppins',
+                                      height: 1.4,
+                                      letterSpacing: -0.35,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 27),
+                                  SizedBox(
+                                    height: 52,
+                                    child: Center(
+                                      child: Text(
+                                        slide.$2,
+                                        textAlign: TextAlign.center,
+                                        maxLines: 2,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontFamily: 'Roboto',
+                                          height: 1.6,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 27),
+                                  SizedBox(
+                                    height: 27,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: List.generate(
+                                        _slides.length,
+                                        (dotIndex) => AnimatedContainer(
+                                          duration: const Duration(
+                                            milliseconds: 180,
+                                          ),
+                                          margin: const EdgeInsets.symmetric(
+                                            horizontal: 1.5,
+                                          ),
+                                          width: 8,
+                                          height: 8,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: dotIndex == _currentPage
+                                                ? Colors.white
+                                                : Colors.transparent,
+                                            border: Border.all(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 47),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 60,
+                        child: ElevatedButton(
+                          onPressed: () =>
+                              Navigator.pushNamed(context, AppRouter.signup),
+                          style: ButtonStyle(
+                            elevation: const WidgetStatePropertyAll(0),
+                            backgroundColor: WidgetStateProperty.resolveWith(
+                              (states) => states.contains(WidgetState.hovered)
+                                  ? const Color(0xFFF5F8EA)
+                                  : const Color(0xFFFCFFF3),
+                            ),
+                            foregroundColor: const WidgetStatePropertyAll(
+                              AppColors.progressActive,
+                            ),
+                            shape: WidgetStatePropertyAll(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          ),
+                          child: const Text(
+                            'Criar conta',
+                            style: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              height: 1.6,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      TextButton(
+                        onPressed: () =>
+                            Navigator.pushNamed(context, AppRouter.login),
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text.rich(
+                          TextSpan(
+                            text: 'Já possui cadastro? ',
+                            children: [
+                              TextSpan(
+                                text: 'Log in',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                          style: TextStyle(
+                            fontFamily: 'Roboto',
+                            fontSize: 16,
+                            height: 1.6,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
           ),
-          Positioned.fill(
-            child: Container(
-              color: const Color(0xFF1B4332).withValues(alpha: 0.55),
-            ),
-          ),
-
-          // 3. Conteúdo da Tela
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  
-                  // --- ÁREA DO CARROSSEL ---
-                  SizedBox(
-                    height: 200, // Altura reservada para os textos
-                    child: PageView.builder(
-                      controller: _pageController,
-                      onPageChanged: (value) {
-                        setState(() {
-                          _currentPage = value;
-                        });
-                      },
-                      itemCount: onboardingData.length,
-                      itemBuilder: (context, index) {
-                        return Center(
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 8),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 24,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: Colors.white.withValues(alpha: 0.25),
-                              ),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  onboardingData[index]["title"]!,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 26,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Poppins',
-                                    height: 1.1,
-                                  ),
-                                ),
-                                const SizedBox(height: 12),
-                                Text(
-                                  onboardingData[index]["subtitle"]!,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.white.withValues(alpha: 0.9),
-                                    fontSize: 15,
-                                    fontFamily: 'Poppins',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // --- Indicador de Página ---
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      onboardingData.length,
-                      (index) => buildDot(index: index),
-                    ),
-                  ),
-
-                  const SizedBox(height: 48), // Espaço antes dos botões
-
-                  // --- BOTÕES FIXOS ---
-                  SizedBox(
-                    width: double.infinity,
-                    height: 56,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, AppRouter.signup);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFF5F0E6),
-                        foregroundColor: const Color(0xFF1B4332),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(28),
-                        ),
-                        elevation: 0,
-                      ),
-                      child: const Text(
-                        'Criar conta',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Poppins',
-                        ),
-                      ),
-                    ),
-                  ),
-                  
-                  const SizedBox(height: 16),
-                  
-                  Center(
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, AppRouter.login);
-                      },
-                      child: RichText(
-                        text: const TextSpan(
-                          text: 'Já tem uma conta? ',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                          children: [
-                            TextSpan(
-                              text: 'Entrar',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
         ],
-      ),
-    );
-  }
-
-  // Função que desenha cada bolinha
-  Widget buildDot({required int index}) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      margin: const EdgeInsets.only(right: 8),
-      height: 8,
-      // Se for a página atual, a bolinha fica maior e totalmente branca
-      width: _currentPage == index ? 24 : 8,
-      decoration: BoxDecoration(
-        color: _currentPage == index ? Colors.white : Colors.white.withValues(alpha: 0.4),
-        borderRadius: BorderRadius.circular(4),
       ),
     );
   }

@@ -6,104 +6,120 @@ import 'package:flutter/material.dart';
 
 class PropertySuccessPage extends StatelessWidget {
   const PropertySuccessPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     final property =
         ModalRoute.of(context)?.settings.arguments as RegisteredProperty?;
-
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.figmaBackground,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
+        backgroundColor: AppColors.figmaBackground,
+        surfaceTintColor: AppColors.figmaBackground,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.maybePop(context),
+          icon: const Icon(Icons.arrow_back, color: AppColors.figmaText),
         ),
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.fromLTRB(24, 10, 24, 28),
           child: Column(
             children: [
-              const Spacer(),
               Container(
-                width: 72,
-                height: 72,
+                width: double.infinity,
+                padding: const EdgeInsets.fromLTRB(20, 29, 20, 24),
                 decoration: BoxDecoration(
-                  color: AppColors.progressActive.withValues(alpha: 0.25),
-                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: .04),
+                      blurRadius: 15,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
                 ),
-                child: const Icon(
-                  Icons.check,
-                  color: AppColors.progressActive,
-                  size: 40,
+                child: Column(
+                  children: [
+                    Container(
+                      width: 74,
+                      height: 74,
+                      decoration: const BoxDecoration(
+                        color: AppColors.figmaSoftGreen,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.check,
+                        color: AppColors.figmaSecondary,
+                        size: 38,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'Propriedade cadastrada\ncom sucesso',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 21,
+                        height: 1.15,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.figmaPrimary,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                    const SizedBox(height: 9),
+                    Text(
+                      property == null
+                          ? 'Sua propriedade foi cadastrada no sistema!'
+                          : '${property.name} foi cadastrada no sistema!',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: AppColors.figmaMuted,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 24),
-              const Text(
-                'Propriedade cadastrada com sucesso',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primaryGreen,
-                  fontFamily: 'Poppins',
-                ),
+              const SizedBox(height: 10),
+              Image.asset(
+                'assets/images/figma_property_success.png',
+                width: double.infinity,
+                height: 190,
+                fit: BoxFit.contain,
               ),
-              const SizedBox(height: 12),
-              Text(
-                property != null
-                    ? '${property.name} foi cadastrada no sistema!'
-                    : 'Sua propriedade foi cadastrada no sistema!',
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: AppColors.textSecondary,
-                  fontFamily: 'Poppins',
-                ),
-              ),
-              const SizedBox(height: 32),
-              Icon(Icons.agriculture, size: 120, color: AppColors.sectionGreen.withValues(alpha: 0.6)),
               const Spacer(),
               PrimaryButton(
                 text: 'Entrar na Propriedade',
-                onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    AppRouter.home,
-                    (route) => false,
-                    arguments: property,
-                  );
-                },
+                onPressed: property == null
+                    ? null
+                    : () => Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        AppRouter.home,
+                        (_) => false,
+                        arguments: property,
+                      ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
               SizedBox(
                 width: double.infinity,
-                height: 50,
+                height: 52,
                 child: OutlinedButton(
-                  onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      AppRouter.home,
-                      (route) => false,
-                      arguments: property,
-                    );
-                  },
+                  onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    AppRouter.properties,
+                    (_) => false,
+                  ),
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: AppColors.primaryGreen),
+                    backgroundColor: Colors.white,
+                    foregroundColor: AppColors.figmaPrimary,
+                    side: BorderSide.none,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                   child: const Text(
                     'Ver minhas Propriedades',
-                    style: TextStyle(
-                      color: AppColors.primaryGreen,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Poppins',
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.w700),
                   ),
                 ),
               ),
@@ -114,4 +130,3 @@ class PropertySuccessPage extends StatelessWidget {
     );
   }
 }
-

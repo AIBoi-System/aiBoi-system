@@ -25,24 +25,23 @@ class _SignupVerifyEmailPageState extends State<SignupVerifyEmailPage> {
     return BlocConsumer<RegistrationCubit, RegistrationState>(
       listener: (context, state) {
         if (state is RegistrationEmailVerified) {
-          AppRouter.navigateRegistration(context, AppRouter.signupPassword);
+          AppRouter.navigateRegistration(context, AppRouter.signupPhone);
         } else if (state is RegistrationError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-              backgroundColor: Colors.red,
-            ),
+            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
           );
         }
       },
       builder: (context, state) {
         final isLoading = state is RegistrationLoading;
-        
+
         return SignupStepScaffold(
-          title: 'Verifique seu email 2 / 3',
+          title: 'Confirme seu e-mail',
           currentStep: 2,
+          totalSteps: 6,
           bottom: PrimaryButton(
-            text: isLoading ? 'Verificando...' : 'Continue',
+            text: 'Continuar',
+            isLoading: isLoading,
             onPressed: isLoading || _code.length < 5
                 ? null
                 : () => context.read<RegistrationCubit>().verifyCode(_code),
@@ -109,4 +108,3 @@ class _SignupVerifyEmailPageState extends State<SignupVerifyEmailPage> {
     );
   }
 }
-

@@ -10,7 +10,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PropertyFormPage extends StatefulWidget {
   const PropertyFormPage({super.key});
-
   @override
   State<PropertyFormPage> createState() => _PropertyFormPageState();
 }
@@ -18,10 +17,9 @@ class PropertyFormPage extends StatefulWidget {
 class _PropertyFormPageState extends State<PropertyFormPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
-  String? _selectedType;
   final _areaController = TextEditingController();
   final _cityController = TextEditingController();
-
+  String? _selectedType;
   static const _types = ['Cria', 'Corte', 'Leite', 'Mista', 'Recria'];
 
   @override
@@ -33,242 +31,291 @@ class _PropertyFormPageState extends State<PropertyFormPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return BlocConsumer<RegistrationCubit, RegistrationState>(
-      listener: (context, state) {
-        if (state is RegistrationPropertyCreated) {
-          Navigator.pushReplacementNamed(
-            context,
-            AppRouter.propertySuccess,
-            arguments: state.property,
-          );
-        } else if (state is RegistrationError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
-          );
-        }
-      },
-      builder: (context, state) {
-        final isLoading = state is RegistrationLoading;
-        return Scaffold(
-          backgroundColor: AppColors.backgroundScreen,
-          appBar: AppBar(
-            backgroundColor: AppColors.backgroundScreen,
-            elevation: 0,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () => Navigator.pop(context),
-            ),
-            title: const Text(
-              'Cadastrar propriedade',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                fontFamily: 'Poppins',
-              ),
-            ),
-            centerTitle: true,
+  Widget build(
+    BuildContext context,
+  ) => BlocConsumer<RegistrationCubit, RegistrationState>(
+    listener: (context, state) {
+      if (state is RegistrationPropertyCreated) {
+        Navigator.pushReplacementNamed(
+          context,
+          AppRouter.propertySuccess,
+          arguments: state.property,
+        );
+      } else if (state is RegistrationError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+        );
+      }
+    },
+    builder: (context, state) {
+      final loading = state is RegistrationLoading;
+      return Scaffold(
+        backgroundColor: AppColors.figmaBackground,
+        appBar: AppBar(
+          backgroundColor: AppColors.figmaBackground,
+          surfaceTintColor: AppColors.figmaBackground,
+          leading: IconButton(
+            onPressed: () => Navigator.maybePop(context),
+            icon: const Icon(Icons.arrow_back, color: AppColors.figmaText),
           ),
-          body: SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Adicione uma nova fazenda ao sistema para começar a gerenciar seus dados.',
-                      style: TextStyle(
-                        color: AppColors.textSecondary,
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
+          title: const Text(
+            'Cadastrar propriedade',
+            style: TextStyle(
+              color: AppColors.figmaText,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              fontFamily: 'Poppins',
+            ),
+          ),
+          centerTitle: true,
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 28),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Expanded(
+                        child: Text(
+                          'Adicione uma nova fazenda ao\nsistema para começar a gerenciar\nseus dados',
+                          style: TextStyle(
+                            color: AppColors.figmaMuted,
+                            fontSize: 13,
+                            height: 1.45,
+                          ),
+                        ),
                       ),
+                      Image.asset(
+                        'assets/images/figma_property_form_header.png',
+                        width: 150,
+                        height: 83,
+                        fit: BoxFit.contain,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(20, 22, 20, 20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: .05),
+                          blurRadius: 15,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 20),
-                    _SectionCard(
-                      icon: Icons.home_work_outlined,
-                      title: 'Dados da propriedade',
-                      subtitle: 'Informe os principais dados da sua propriedade',
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        const _FormSectionHeader(
+                          icon: Icons.eco_rounded,
+                          title: 'Dados da propriedade',
+                          subtitle:
+                              'Informe os principais dados da sua propriedade',
+                        ),
+                        const SizedBox(height: 18),
                         LabeledTextField(
                           label: 'Nome da propriedade',
                           hintText: 'Ex: Sabiá dourado',
                           controller: _nameController,
-                          validator: (v) =>
-                              v == null || v.isEmpty ? 'Informe o nome' : null,
+                          validator: (v) => v == null || v.trim().isEmpty
+                              ? 'Informe o nome'
+                              : null,
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 14),
+                        const Text(
+                          'Tipo da propriedade',
+                          style: TextStyle(
+                            color: AppColors.figmaText,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 7),
                         DropdownButtonFormField<String>(
                           initialValue: _selectedType,
+                          hint: const Text(
+                            'Ex: Cria',
+                            style: TextStyle(
+                              color: Color(0xFFA7B0AB),
+                              fontSize: 13,
+                            ),
+                          ),
                           decoration: InputDecoration(
-                            labelText: 'Tipo da propriedade',
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 15,
+                              vertical: 15,
+                            ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: AppColors.figmaBorder,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: AppColors.figmaBorder,
+                              ),
                             ),
                           ),
                           items: _types
-                              .map((t) => DropdownMenuItem(value: t, child: Text(t)))
+                              .map(
+                                (type) => DropdownMenuItem(
+                                  value: type,
+                                  child: Text(type),
+                                ),
+                              )
                               .toList(),
-                          onChanged: (v) => setState(() => _selectedType = v),
-                          validator: (v) =>
-                              v == null || v.isEmpty ? 'Selecione o tipo' : null,
+                          onChanged: (value) =>
+                              setState(() => _selectedType = value),
+                          validator: (value) =>
+                              value == null ? 'Selecione o tipo' : null,
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 14),
                         LabeledTextField(
                           label: 'Área (Hectare)',
                           hintText: 'Ex: 500',
                           controller: _areaController,
                           keyboardType: TextInputType.number,
                           validator: (v) {
-                            if (v == null || v.isEmpty) return 'Informe a área';
-                            if (double.tryParse(v.replaceAll(',', '.')) == null) {
+                            if (v == null || v.isEmpty) {
+                              return 'Informe a área';
+                            }
+                            if (double.tryParse(v.replaceAll(',', '.')) ==
+                                null) {
                               return 'Área inválida';
                             }
                             return null;
                           },
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    _SectionCard(
-                      icon: Icons.location_on_outlined,
-                      title: 'Localização',
-                      subtitle: 'Informações de localização da propriedade',
-                      children: [
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 18),
+                          child: Divider(height: 1),
+                        ),
+                        const _FormSectionHeader(
+                          icon: Icons.location_on_rounded,
+                          title: 'Localização',
+                          subtitle: 'Informações de localização da propriedade',
+                        ),
+                        const SizedBox(height: 18),
                         LabeledTextField(
                           label: 'Cidade/Estado',
                           hintText: 'Ex: Anapú - PA',
                           controller: _cityController,
-                          validator: (v) =>
-                              v == null || v.isEmpty ? 'Informe cidade/estado' : null,
+                          validator: (v) => v == null || v.trim().isEmpty
+                              ? 'Informe cidade/estado'
+                              : null,
                         ),
                       ],
                     ),
-                    const SizedBox(height: 24),
-                    PrimaryButton(
-                      text: isLoading ? 'Salvando...' : 'Salvar Propriedade',
-                      onPressed: isLoading ? null : _submit,
-                    ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: OutlinedButton(
-                        onPressed: () {
-                          Navigator.pushNamedAndRemoveUntil(
-                            context,
-                            AppRouter.home,
-                            (route) => false,
-                          );
-                        },
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: AppColors.primaryGreen),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: const Text(
-                          'Cancelar',
-                          style: TextStyle(
-                            color: AppColors.primaryGreen,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Poppins',
-                          ),
+                  ),
+                  const SizedBox(height: 12),
+                  PrimaryButton(
+                    text: loading ? 'Salvando...' : 'Salvar Propriedade',
+                    onPressed: loading ? null : _submit,
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 52,
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        AppRouter.properties,
+                        (_) => false,
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: AppColors.figmaPrimary,
+                        side: BorderSide.none,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
+                      child: const Text(
+                        'Cancelar',
+                        style: TextStyle(fontWeight: FontWeight.w700),
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+  );
 
   void _submit() {
-    if (!_formKey.currentState!.validate()) return;
-    if (_selectedType == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Selecione o tipo da propriedade')),
-      );
-      return;
-    }
+    if (!_formKey.currentState!.validate() || _selectedType == null) return;
     context.read<RegistrationCubit>().createProperty(
-          PropertyDraft(
-            name: _nameController.text.trim(),
-            propertyType: _selectedType!,
-            sizeHectares:
-                double.parse(_areaController.text.trim().replaceAll(',', '.')),
-            cityState: _cityController.text.trim(),
-          ),
-        );
+      PropertyDraft(
+        name: _nameController.text.trim(),
+        propertyType: _selectedType!,
+        sizeHectares: double.parse(
+          _areaController.text.trim().replaceAll(',', '.'),
+        ),
+        cityState: _cityController.text.trim(),
+      ),
+    );
   }
 }
 
-class _SectionCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final List<Widget> children;
-
-  const _SectionCard({
+class _FormSectionHeader extends StatelessWidget {
+  const _FormSectionHeader({
     required this.icon,
     required this.title,
     required this.subtitle,
-    required this.children,
   });
-
+  final IconData icon;
+  final String title;
+  final String subtitle;
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
+  Widget build(BuildContext context) => Row(
+    children: [
+      Container(
+        width: 36,
+        height: 36,
+        decoration: BoxDecoration(
+          color: AppColors.figmaSoftGreen,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Icon(icon, color: AppColors.figmaSecondary, size: 19),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(icon, color: AppColors.sectionGreen, size: 22),
-              const SizedBox(width: 8),
-              Text(
-                title,
-                style: const TextStyle(
-                  color: AppColors.sectionGreen,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Poppins',
-                ),
+      const SizedBox(width: 11),
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                color: AppColors.figmaPrimary,
+                fontSize: 15,
+                fontWeight: FontWeight.w800,
+                fontFamily: 'Poppins',
               ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Text(
-            subtitle,
-            style: const TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 12,
-              fontFamily: 'Poppins',
             ),
-          ),
-          const SizedBox(height: 16),
-          ...children,
-        ],
+            Text(
+              subtitle,
+              style: const TextStyle(
+                color: AppColors.figmaMuted,
+                fontSize: 11.5,
+              ),
+            ),
+          ],
+        ),
       ),
-    );
-  }
+    ],
+  );
 }
-

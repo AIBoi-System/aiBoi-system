@@ -71,8 +71,11 @@ class _ModuleListPageState extends State<ModuleListPage> {
                     padding: const EdgeInsets.all(24),
                     child: Column(
                       children: [
-                        Icon(Icons.cloud_off,
-                            size: 48, color: Colors.red.shade300),
+                        Icon(
+                          Icons.cloud_off,
+                          size: 48,
+                          color: Colors.red.shade300,
+                        ),
                         const SizedBox(height: 16),
                         Text(
                           'Erro ao carregar dados da API',
@@ -175,4 +178,3 @@ class _ModuleListPageState extends State<ModuleListPage> {
     );
   }
 }
-

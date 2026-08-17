@@ -9,7 +9,13 @@ class ApiEndpoints {
   static const authResetPassword = '/auth/reset-password';
   static const authSignupSendCode = '/auth/signup/send-code';
   static const authSignupVerifyCode = '/auth/signup/verify-code';
+  static const authSignupSendPhoneCode = '/auth/signup/send-phone-code';
+  static const authSignupVerifyPhoneCode = '/auth/signup/verify-phone-code';
   static const authSignupRegister = '/auth/signup/register';
+  static const authRefresh = '/auth/refresh';
+  static const authLogout = '/auth/logout';
+  static const authLoginGoogle = '/auth/login/google';
+  static const authRegisterGoogle = '/auth/register/google';
 
   static const users = '/users/';
   static const addresses = '/addresses/';
@@ -28,8 +34,7 @@ class ApiEndpoints {
   static const weighings = '/weighings/'; // RF024
 
   // RF011 – módulos habilitados por proprietário
-  static String ownerModulesByOwner(int ownerId) =>
-      '$ownerModules/$ownerId';
+  static String ownerModulesByOwner(int ownerId) => '$ownerModules/$ownerId';
 
   static String propertyById(int id) => '/properties/$id';
   static String animalById(int id) => '/animals/$id';
@@ -42,5 +47,6 @@ class ApiEndpoints {
       '$pastures?property_id=$propertyId';
   static String paddocksByProperty(int propertyId) =>
       '$paddocks?property_id=$propertyId';
+  static String dashboard(int propertyId) =>
+      '/properties/$propertyId/dashboard';
 }
-

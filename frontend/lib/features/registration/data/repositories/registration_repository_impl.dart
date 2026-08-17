@@ -5,7 +5,7 @@ import 'package:ai_boi/features/registration/domain/repositories/registration_re
 
 class RegistrationRepositoryImpl implements RegistrationRepository {
   RegistrationRepositoryImpl({required RegistrationRemoteDataSource remote})
-      : _remote = remote;
+    : _remote = remote;
 
   final RegistrationRemoteDataSource _remote;
 
@@ -36,19 +36,58 @@ class RegistrationRepositoryImpl implements RegistrationRepository {
   }
 
   @override
+  Future<void> sendPhoneVerificationCode(String phone) async {
+    await _remote.sendPhoneVerificationCode(phone);
+  }
+
+  @override
+  Future<bool> verifyPhoneCode(String phone, String code) async {
+    await _remote.verifyPhoneCode(phone, code);
+    return true;
+  }
+
+  @override
   Future<RegistrationDraft> registerUser(RegistrationDraft draft) async {
     final response = await _remote.registerUser(draft);
     final userId = response['user_id'] as int?;
     final addressId = response['address_id'] as int?;
     final token = response['access_token'] as String?;
-    
+    final refreshToken = response['refresh_token'] as String?;
+    final role = response['role'] as String?;
+
     if (userId == null || addressId == null) {
       throw ApiException('Invalid registration response from server.');
     }
     return draft.copyWith(
-      userId: userId, 
+      userId: userId,
       userAddressId: addressId,
       accessToken: token,
+      refreshToken: refreshToken,
+      role: role,
+    );
+  }
+
+  @override
+  Future<RegistrationDraft> registerUserWithGoogle(
+    RegistrationDraft draft,
+    String idToken,
+  ) async {
+    final response = await _remote.registerUserWithGoogle(draft, idToken);
+    final userId = response['user_id'] as int?;
+    final addressId = response['address_id'] as int?;
+    final token = response['access_token'] as String?;
+    final refreshToken = response['refresh_token'] as String?;
+    final role = response['role'] as String?;
+
+    if (userId == null || addressId == null) {
+      throw ApiException('Invalid registration response from server.');
+    }
+    return draft.copyWith(
+      userId: userId,
+      userAddressId: addressId,
+      accessToken: token,
+      refreshToken: refreshToken,
+      role: role,
     );
   }
 
@@ -66,7 +105,8 @@ class RegistrationRepositoryImpl implements RegistrationRepository {
       streetName: 'Rural property',
       number: 'S/N',
     );
-    final propertyAddressId = addressResponse['id_address'] as int? ?? addressId;
+    final propertyAddressId =
+        addressResponse['id_address'] as int? ?? addressId;
 
     final apiType = _propertyTypeToApi[property.propertyType] ?? 'BEEF';
     final response = await _remote.createProperty(
@@ -97,4 +137,3 @@ class RegistrationRepositoryImpl implements RegistrationRepository {
     return (city: cityState.trim(), state: 'PA');
   }
 }
-

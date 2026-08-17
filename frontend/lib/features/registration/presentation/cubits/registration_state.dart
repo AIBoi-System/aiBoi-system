@@ -15,6 +15,12 @@ class RegistrationCodeSent extends RegistrationState {}
 
 class RegistrationEmailVerified extends RegistrationState {}
 
+class RegistrationPhoneCodeSent extends RegistrationState {}
+
+class RegistrationPhoneVerified extends RegistrationState {}
+
+class RegistrationProfileReady extends RegistrationState {}
+
 class RegistrationUserCreated extends RegistrationState {
   final RegistrationDraft draft;
   RegistrationUserCreated(this.draft);
@@ -24,4 +30,3 @@ class RegistrationPropertyCreated extends RegistrationState {
   final RegisteredProperty property;
   RegistrationPropertyCreated(this.property);
 }
-

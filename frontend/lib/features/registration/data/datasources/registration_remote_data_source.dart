@@ -3,7 +3,7 @@ import 'package:ai_boi/features/registration/domain/entities/registration_draft.
 
 class RegistrationRemoteDataSource {
   RegistrationRemoteDataSource({required ApiClient apiClient})
-      : _api = apiClient;
+    : _api = apiClient;
 
   final ApiClient _api;
 
@@ -18,6 +18,17 @@ class RegistrationRemoteDataSource {
     );
   }
 
+  Future<void> sendPhoneVerificationCode(String phone) async {
+    await _api.post('/auth/signup/send-phone-code', body: {'phone': phone});
+  }
+
+  Future<void> verifyPhoneCode(String phone, String code) async {
+    await _api.post(
+      '/auth/signup/verify-phone-code',
+      body: {'phone': phone, 'code': code},
+    );
+  }
+
   Future<Map<String, dynamic>> registerUser(RegistrationDraft draft) async {
     return _api.post(
       '/auth/signup/register',
@@ -26,7 +37,30 @@ class RegistrationRemoteDataSource {
         'email': draft.email,
         'password': draft.password,
         'cpf': draft.cpf,
-        if (draft.phone != null) 'phone': draft.phone,
+        'phone': draft.phone,
+        'address': {
+          'zip_code': draft.address.zipCode,
+          'state': draft.address.state,
+          'neighborhood': draft.address.neighborhood,
+          'street_name': draft.address.streetName,
+          'number': draft.address.number,
+          if (draft.address.complement != null)
+            'complement': draft.address.complement,
+        },
+      },
+    );
+  }
+
+  Future<Map<String, dynamic>> registerUserWithGoogle(
+    RegistrationDraft draft,
+    String idToken,
+  ) async {
+    return _api.post(
+      '/auth/register/google',
+      body: {
+        'id_token': idToken,
+        'cpf': draft.cpf,
+        'phone': draft.phone,
         'address': {
           'zip_code': draft.address.zipCode,
           'state': draft.address.state,
@@ -80,4 +114,3 @@ class RegistrationRemoteDataSource {
     );
   }
 }
-

@@ -16,7 +16,9 @@ class PasswordRules {
     return PasswordRules(
       minLength: password.length >= 8,
       hasNumber: RegExp(r'\d').hasMatch(password),
-      hasSymbol: RegExp(r'[!@#$%^&*(),.?":{}|<>_\-+=\[\]\\;/]').hasMatch(password),
+      hasSymbol: RegExp(
+        r'[!@#$%^&*(),.?":{}|<>_\-+=\[\]\\;/]',
+      ).hasMatch(password),
     );
   }
 
@@ -96,4 +98,3 @@ class _RuleRow extends StatelessWidget {
     );
   }
 }
-
