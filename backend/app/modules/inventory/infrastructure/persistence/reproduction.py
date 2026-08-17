@@ -1,6 +1,4 @@
 from datetime import date
-from typing import List, Optional
-
 from sqlalchemy import Column, Integer, Date, Enum, Text, ForeignKey
 from sqlalchemy.orm import relationship
 
@@ -38,8 +36,13 @@ class Reproduction(Base):
     )  # O Sandro usou 'notes' em vez de 'observation', mantivemos o dele para não quebrar o banco
 
     # Chaves Estrangeiras
-    animal_id = Column(Integer, ForeignKey("animals.id_animal"), nullable=False)
-    protocol_id = Column(Integer, ForeignKey("protocols.id"), nullable=True)
+    animal_id = Column(
+        Integer,
+        ForeignKey("animals.id_animal"),
+        nullable=False,
+        index=True,
+    )
+    protocol_id = Column(Integer, ForeignKey("protocols.id"), nullable=True, index=True)
 
     # Relacionamentos
     animal = relationship("AnimalModel", back_populates="reproductions")

@@ -16,6 +16,7 @@ class HealthRecord(Entity):
     dosage: Optional[float] = None
     unit_price: Optional[float] = None
     notes: Optional[str] = None
+    property_id: int
     animal_id: Optional[int] = None
     batch_id: Optional[int] = None
 

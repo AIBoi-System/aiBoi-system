@@ -67,8 +67,12 @@ class SqlAlchemyAnimalRepository(AnimalRepository):
             model = to_model(animal)
             self._session.add(model)
 
-        self._session.commit()
-        self._session.refresh(model)
+        try:
+            self._session.commit()
+            self._session.refresh(model)
+        except Exception:
+            self._session.rollback()
+            raise
         return to_domain(model)
 
     def delete(self, animal: Animal) -> None:
@@ -82,8 +86,12 @@ class SqlAlchemyAnimalRepository(AnimalRepository):
                 .first()
             )
             if model:
-                self._session.delete(model)
-                self._session.commit()
+                try:
+                    self._session.delete(model)
+                    self._session.commit()
+                except Exception:
+                    self._session.rollback()
+                    raise
 
 
 

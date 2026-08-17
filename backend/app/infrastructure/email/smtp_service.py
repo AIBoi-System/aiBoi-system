@@ -30,6 +30,24 @@ class SmtpEmailService:
         )
         self._send(to_email, subject, body)
 
+    def send_password_reset(self, to_email: str, raw_token: str) -> None:
+        """Send a password reset link to the user via email.
+
+        The raw token is included ONLY in the email body and must NEVER be
+        returned in the HTTP response.
+        """
+        frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
+        reset_link = f"{frontend_url}/reset-password?token={raw_token}"
+        subject = "AiBoi — Password Reset Request"
+        body = (
+            f"You have requested a password reset for your AiBoi account.\n\n"
+            f"Click the link below to set a new password (valid for 30 minutes):\n"
+            f"{reset_link}\n\n"
+            "If you did not request a password reset, please ignore this email.\n"
+            "Your password will not be changed unless you click the link above."
+        )
+        self._send(to_email, subject, body)
+
     def _send(self, to_email: str, subject: str, body: str) -> None:
         env = os.getenv("ENV", "development")
         if not self.is_configured:

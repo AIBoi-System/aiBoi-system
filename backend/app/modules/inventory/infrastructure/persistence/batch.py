@@ -1,7 +1,5 @@
 from datetime import date
-from typing import List, Optional
-
-from sqlalchemy import Column, Integer, String, Date, Enum, ForeignKey
+from sqlalchemy import Column, Integer, String, Date, Enum, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from app.shared.infrastructure.database.connection import Base
@@ -15,6 +13,13 @@ class Batch(Base):
     """
 
     __tablename__ = "batches"
+    __table_args__ = (
+        UniqueConstraint(
+            "id_batch",
+            "property_id",
+            name="uq_batches_id_property",
+        ),
+    )
 
     # Identificação do Lote
     id_batch = Column(Integer, primary_key=True, index=True)
@@ -37,13 +42,21 @@ class Batch(Base):
     property = relationship("Property")
 
     # 1. Lista de animais que pertencem atualmente a este lote
-    animals = relationship("AnimalModel", back_populates="batch")
+    animals = relationship(
+        "AnimalModel",
+        back_populates="batch",
+        overlaps="property",
+    )
 
     # 2. Histórico de movimentações deste lote entre piquetes
     movements = relationship("BatchMovement", back_populates="batch")
 
     # 3. Registros sanitários aplicados a este lote (EM MASSA)
-    health_records = relationship("HealthModel", back_populates="batch")
+    health_records = relationship(
+        "HealthModel",
+        back_populates="batch",
+        overlaps="health_records",
+    )
 
 
 

@@ -7,8 +7,6 @@ from typing import Final
 _FORBIDDEN_SUBSTRINGS: Final[tuple[str, ...]] = (
     "<",
     ">",
-    '"',
-    "'",
     ";",
     "--",
     "/*",

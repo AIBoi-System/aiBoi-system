@@ -29,6 +29,34 @@ class ResendEmailService:
         """
         self._send(to_email, subject, html_body)
 
+    def send_password_reset(self, to_email: str, raw_token: str) -> None:
+        """Send a password reset link via Resend API.
+
+        The raw token is included ONLY in the email body and must NEVER be
+        returned in the HTTP response.
+        """
+        frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
+        reset_link = f"{frontend_url}/reset-password?token={raw_token}"
+        subject = "AiBoi - Redefinição de Senha"
+        html_body = f"""
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2>Redefinição de senha 🐂</h2>
+            <p>Você solicitou a redefinição da sua senha no AiBoi.</p>
+            <p>
+                <a href="{reset_link}"
+                   style="background: #2e7d32; color: white; padding: 12px 24px;
+                          text-decoration: none; border-radius: 4px; display: inline-block;">
+                    Redefinir Senha
+                </a>
+            </p>
+            <p style="color: #666; font-size: 12px;">Este link expira em 30 minutos.</p>
+            <p style="color: #666; font-size: 12px;">
+                Se você não solicitou a redefinição, ignore este e-mail.
+            </p>
+        </div>
+        """
+        self._send(to_email, subject, html_body)
+
     def _send(self, to_email: str, subject: str, html_body: str) -> None:
         env = os.getenv("ENV", "development")
         

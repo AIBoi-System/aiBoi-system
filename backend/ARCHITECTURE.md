@@ -1,38 +1,39 @@
-# Arquitetura AiBoi — Clean Architecture + DDD
+# Arquitetura do backend AiBoi
 
-```
-backend/app/
-├── domain/              # Entidades, regras de negócio, portas (repositórios)
-│   ├── animal/
-│   ├── health/
-│   ├── enums/
-│   └── shared/
-├── application/         # Casos de uso (orquestração)
-│   ├── animal/use_cases.py
-│   ├── health/use_cases.py
-│   └── {modulo}/service.py   # serviços legados em migração
-├── infrastructure/      # SQLAlchemy, repositórios concretos, segurança
-│   ├── database/
-│   └── persistence/
-├── presentation/        # API FastAPI + schemas Pydantic
-│   ├── api/v1/
-│   └── schemas/
-└── main.py
+O backend é um monólito modular FastAPI em migração incremental para DDD e
+Clean Architecture. A especificação canônica de dependências está em
+[`docs/04-architecture/dependency-rules.md`](../docs/04-architecture/dependency-rules.md).
+
+## Estrutura vigente
+
+```text
+app/
+|-- modules/
+|   |-- inventory/{domain,application,infrastructure}
+|   `-- health/{domain,application,infrastructure}
+|-- shared/{domain,application,infrastructure}
+|-- presentation/{api,schemas}
+|-- infrastructure/       # adapters transversais
+`-- main.py               # bootstrap FastAPI
 ```
 
-## Fluxo de uma requisição (ex.: Animal)
+Fluxo alvo:
 
-1. **Presentation** — `animal_router` valida JSON com Pydantic.
-2. **Application** — `CreateAnimalUseCase` orquestra a operação.
-3. **Domain** — `Animal.ensure_unique_identification()` aplica regra de negócio.
-4. **Infrastructure** — `SqlAlchemyAnimalRepository` persiste via `AnimalModel`.
+```text
+Router -> Use case -> Domain port <- Infrastructure adapter
+```
 
-## Testes
+O código legado pode seguir temporariamente `Router -> Service -> ORM`, mas não
+deve ampliar os acoplamentos registrados. Os testes em
+`tests/architecture/test_layer_dependencies.py` bloqueiam novas violações.
 
-```bash
+## Verificação
+
+```powershell
 cd backend
-set DATABASE_URL=sqlite:///:memory:   # Windows
-python -m pytest tests/ -v
+python -m pytest tests/architecture -q
+python -m pytest tests/api -q
 ```
 
-Os testes usam SQLite em memória e não exigem MySQL.
+Testes locais usam SQLite em memória. A validação de release também deve
+executar a integração PostgreSQL com schema aplicado por Alembic.

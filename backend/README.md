@@ -1,6 +1,6 @@
 # AiBoi — Backend (API)
 
-API REST em **FastAPI** com **SQLAlchemy**, **MySQL** e arquitetura em camadas (Clean Architecture + DDD).
+API REST em **FastAPI** com **SQLAlchemy**, **PostgreSQL/psycopg 3** e arquitetura em camadas (Clean Architecture + DDD).
 
 ---
 
@@ -11,7 +11,9 @@ API REST em **FastAPI** com **SQLAlchemy**, **MySQL** e arquitetura em camadas (
 | Linguagem | Python 3.10+ |
 | Framework | FastAPI |
 | ORM | SQLAlchemy |
-| Banco | MySQL (local ou AWS RDS) |
+| Banco | PostgreSQL 18 local; implantação gerenciada compatível |
+| Driver | psycopg 3 |
+| Migrations | Alembic |
 | Auth | JWT (`python-jose`) + bcrypt |
 | Testes | pytest + httpx |
 
@@ -37,7 +39,7 @@ backend/
 ## Pré-requisitos
 
 - Python 3.10+ **ou** Docker + Docker Compose
-- MySQL acessível (container ou RDS)
+- PostgreSQL acessível; o desenvolvimento local usa `localhost:5432/db_agrofence`
 
 ---
 
@@ -45,15 +47,17 @@ backend/
 
 ### Variáveis de ambiente
 
-Crie `backend/.env` (ou `.env` na raiz do monorepo para o Docker):
+Crie `backend/.env` a partir de `.env.example`:
 
 ```env
-DATABASE_URL=mysql+pymysql://user:password@localhost:3306/aiboi_db
+DATABASE_URL=postgresql+psycopg://agrofence_app:YOUR_PASSWORD_URL_ENCODED@localhost:5432/db_agrofence
+MIGRATION_DATABASE_URL=postgresql+psycopg://agrofence_app:YOUR_PASSWORD_URL_ENCODED@localhost:5432/db_agrofence
 JWT_SECRET_KEY=your-long-random-secret
 JWT_ALGORITHM=HS256
 JWT_EXPIRE_MINUTES=60
 CORS_ALLOWED_ORIGINS=*
 ENV=development
+REDIS_URL=
 
 # SMTP (required when ENV=production)
 SMTP_HOST=smtp.example.com
@@ -68,9 +72,17 @@ See [`.env.example`](.env.example) for the full template.
 
 > **Nunca** versione `.env` nem credenciais reais.
 
-### SSL com AWS RDS
+Em desenvolvimento e testes, `REDIS_URL` pode permanecer vazio e o rate limiter
+usa memória local do processo. Em `ENV=production`, `REDIS_URL` é obrigatório e
+deve responder no startup; fallback em memória não é aceito em produção porque
+não coordena limites entre processos ou instâncias.
 
-Na raiz do monorepo existe `global-bundle.pem`. Configure o caminho no módulo de conexão do banco quando usar RDS com SSL.
+### Conexões locais e gerenciadas
+
+No PostgreSQL local, use a conexão direta configurada em `DATABASE_URL`. Em um
+provedor gerenciado, habilite TLS conforme o provedor e use conexão direta para
+Alembic, backups e restaurações em `MIGRATION_DATABASE_URL`. Senhas com caracteres
+reservados devem ser codificadas na URL.
 
 ---
 
@@ -82,6 +94,15 @@ Na raiz do monorepo existe `global-bundle.pem`. Configure o caminho no módulo d
 docker compose up --build
 ```
 
+O Compose usa o PostgreSQL local já configurado, sem criar outro banco: dentro
+do contêiner, `DATABASE_HOST_OVERRIDE=host.docker.internal` troca apenas o host
+da URL de runtime. Também inicia Mailpit em `http://127.0.0.1:8025`. Antes de
+subir, aplique as migrations localmente com Alembic. Para parar o ambiente:
+
+```bash
+docker compose down
+```
+
 ### Local
 
 ```bash
@@ -89,6 +110,7 @@ cd backend
 python -m venv .venv
 # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
+python -m alembic -c alembic.ini upgrade head
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
@@ -99,7 +121,7 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 | Endpoint | Descrição |
 | :--- | :--- |
 | `GET /` | Status da API |
-| `GET /test-db` | Teste de conexão MySQL |
+| `GET /test-db` | Teste de conexão PostgreSQL |
 | `GET /docs` | Swagger UI |
 | `GET /redoc` | ReDoc |
 
@@ -111,7 +133,7 @@ Rotas agregadas em `app/presentation/api/v1/router.py`:
 
 | Prefixo | Domínio |
 | :--- | :--- |
-| `/auth` | Login, JWT, reset de senha, **cadastro com verificação de e-mail** |
+| `/auth` | Login, sessões, logout, reset e cadastro com verificação de e-mail e telefone |
 | `/users` | Usuários |
 | `/addresses` | Endereços |
 | `/properties` | Propriedades rurais |
@@ -122,22 +144,30 @@ Rotas agregadas em `app/presentation/api/v1/router.py`:
 
 ### Cadastro de usuário
 
-1. `POST /auth/signup/send-code` — envia código de 5 dígitos ao e-mail (em dev o código pode vir na resposta).
-2. `POST /auth/signup/verify-code` — valida o código antes de definir a senha.
-3. `POST /auth/signup/register` — cria **endereço** + **usuário** (e-mail deve estar verificado).
+1. `POST /auth/signup/send-code` — envia o código ao e-mail.
+2. `POST /auth/signup/verify-code` — confirma o e-mail.
+3. `POST /auth/signup/send-phone-code` — envia o código ao telefone.
+4. `POST /auth/signup/verify-phone-code` — confirma o telefone.
+5. `POST /auth/signup/register` — valida CPF e endereço, cria o usuário e devolve a sessão.
 
-O usuário exige `address_id` no modelo; o cadastro unificado cria o endereço na mesma requisição.
+Os códigos nunca são retornados pela API nem gravados em logs. No modo local,
+e-mail e SMS simulado são capturados pelo Mailpit. O cadastro cria CPF e endereço
+na mesma transação e só aceita a senha após as duas confirmações.
 
 ---
 
 ## Banco de dados
 
-Na subida, `Base.metadata.create_all` cria/atualiza tabelas. Modelos precisam estar importados em `app/infrastructure/persistence/models/__init__.py`.
+O startup da API não cria nem altera tabelas. Alembic é a autoridade do schema:
 
 ```bash
-# Reset total do ambiente Docker (apaga volumes)
-docker compose down -v
+cd backend
+python -m alembic -c alembic.ini upgrade head
+python -m alembic -c alembic.ini current
 ```
+
+Use `MIGRATION_DATABASE_URL` para separar a conexão administrativa da conexão
+de runtime. Não aplique migrations em produção sem backup e validação em staging.
 
 ---
 
@@ -156,7 +186,9 @@ pytest
 - **Input validation:** `app/core/security_validators.py` blocks dangerous patterns in text fields.
 - **Email:** normalized and regex-validated before persistence (`EmailStr` + `normalize_email`).
 - **Password policy:** minimum 8 chars, digit + symbol required on registration.
-- **Rate limiting:** login and signup verification endpoints (`app/core/rate_limit.py`).
+- **Rate limiting:** login e verificação de cadastro usam Redis compartilhado em
+  produção; o fallback em memória é exclusivo de desenvolvimento e testes
+  (`app/core/rate_limit.py`).
 - **Headers:** CSP, `X-Frame-Options`, `X-Content-Type-Options` in `main.py`.
 
 ## Estilo de código

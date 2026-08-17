@@ -1,0 +1,4 @@
+interface:
+  display_name: "AiBoi PostgreSQL DBA"
+  short_description: "Migra e protege o banco PostgreSQL do AiBoi"
+  default_prompt: "Use $aiboi-postgres-dba para planejar, executar e validar uma mudança segura no banco PostgreSQL do AiBoi."

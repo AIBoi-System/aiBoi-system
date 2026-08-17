@@ -1,84 +1,71 @@
-from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from app.shared.infrastructure.persistence.paddock_repository import paddock_repository
-from app.shared.infrastructure.persistence.property_repository import PropertyRepository
-from app.shared.infrastructure.persistence.pasture_repository import pasture_repository
+from sqlalchemy.orm import Session
+
 from app.presentation.schemas.paddock_schema import PaddockCreate, PaddockUpdate
+from app.shared.infrastructure.persistence.paddock_repository import paddock_repository
+from app.shared.infrastructure.persistence.pasture_repository import pasture_repository
+from app.shared.infrastructure.persistence.property_repository import PropertyRepository
 
 
 class PaddockService:
     def create_paddock(self, db: Session, paddock: PaddockCreate):
-        # a propriedade informada existe?
-        db_property = PropertyRepository.get_by_id(db, paddock.property_id)
-        if not db_property:
+        if not PropertyRepository.get_by_id(db, paddock.property_id):
             raise HTTPException(status_code=404, detail="Property not found")
 
-        # se o usuário vinculou o piquete a um pasto, esse pasto existe?
-        if paddock.pasture_id:
-            db_pasture = pasture_repository.get_by_id(db, paddock.pasture_id)
-            if not db_pasture:
-                raise HTTPException(status_code=404, detail="Pasture not found")
-
-            # o pasto pertence à mesma fazenda que o usuário informou?
-            if db_pasture.property_id != paddock.property_id:
-                raise HTTPException(
-                    status_code=400,
-                    detail="Pasture does not belong to the specified Property",
-                )
-
+        if paddock.pasture_id is not None and not pasture_repository.get_by_id(
+            db, paddock.pasture_id, paddock.property_id
+        ):
+            raise HTTPException(status_code=404, detail="Pasture not found")
         return paddock_repository.create(db, paddock)
 
     def get_paddocks(
         self,
         db: Session,
+        property_id: int,
         skip: int = 0,
         limit: int = 100,
-        property_id: int = None,
-        pasture_id: int = None,
+        pasture_id: int | None = None,
     ):
         return paddock_repository.get_all(
-            db, skip=skip, limit=limit, property_id=property_id, pasture_id=pasture_id
+            db,
+            property_id=property_id,
+            skip=skip,
+            limit=limit,
+            pasture_id=pasture_id,
         )
 
-    def get_paddock(self, db: Session, paddock_id: int):
-        db_paddock = paddock_repository.get_by_id(db, paddock_id)
+    def get_paddock(self, db: Session, paddock_id: int, property_id: int):
+        db_paddock = paddock_repository.get_by_id(db, paddock_id, property_id)
         if not db_paddock:
             raise HTTPException(status_code=404, detail="Paddock not found")
         return db_paddock
 
     def update_paddock(
-        self, db: Session, paddock_id: int, paddock_update: PaddockUpdate
+        self,
+        db: Session,
+        paddock_id: int,
+        property_id: int,
+        paddock_update: PaddockUpdate,
     ):
-        db_paddock = self.get_paddock(db, paddock_id)
+        self.get_paddock(db, paddock_id, property_id)
+        requested_property_id = getattr(paddock_update, "property_id", None)
+        if requested_property_id is not None and requested_property_id != property_id:
+            raise HTTPException(
+                status_code=400,
+                detail="Moving a paddock between properties is not allowed.",
+            )
+        requested_pasture_id = getattr(paddock_update, "pasture_id", None)
+        if requested_pasture_id is not None and not pasture_repository.get_by_id(
+            db, requested_pasture_id, property_id
+        ):
+            raise HTTPException(status_code=404, detail="Pasture not found")
+        return paddock_repository.update(
+            db, paddock_id, property_id, paddock_update
+        )
 
-        # validações de atualização caso existam mudanças de IDs
-        if paddock_update.property_id is not None:
-            if not PropertyRepository.get_by_id(db, paddock_update.property_id):
-                raise HTTPException(status_code=404, detail="New property not found")
-
-        if paddock_update.pasture_id is not None:
-            if not PropertyRepository.get_by_id(db, paddock_update.property_id):
-                raise HTTPException(status_code=404, detail="New pasture not found")
-
-        return paddock_repository.update(db, db_paddock, paddock_update)
-
-    def delete_paddock(self, db: Session, paddock_id: int):
-        db_paddock = self.get_paddock(db, paddock_id)
-        return paddock_repository.delete(db, db_paddock)
+    def delete_paddock(self, db: Session, paddock_id: int, property_id: int):
+        self.get_paddock(db, paddock_id, property_id)
+        return paddock_repository.delete(db, paddock_id, property_id)
 
 
-# instancia unica
 paddock_service = PaddockService()
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -20,7 +20,12 @@ class Weighing(Base):
     weigh_date = Column(Date, default=date.today, nullable=False)
 
     # Chave Estrangeira para o Animal
-    animal_id = Column(Integer, ForeignKey("animals.id_animal"), nullable=False)
+    animal_id = Column(
+        Integer,
+        ForeignKey("animals.id_animal"),
+        nullable=False,
+        index=True,
+    )
 
     # Relacionamento
     animal = relationship("AnimalModel", back_populates="weights")

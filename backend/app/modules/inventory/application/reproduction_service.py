@@ -21,6 +21,16 @@ from app.shared.infrastructure.persistence.step_execution import StepExecution
 
 class ReproductionService:
     @staticmethod
+    def _commit(db: Session, *instances):
+        try:
+            db.commit()
+            for instance in instances:
+                db.refresh(instance)
+        except Exception:
+            db.rollback()
+            raise
+
+    @staticmethod
     def _ensure_reproduction_preconditions(animal: AnimalModel):
         if animal.animal_life_status != AnimalLifeStatus.ACTIVE:
             raise HTTPException(
@@ -62,11 +72,11 @@ class ReproductionService:
             )
 
     @staticmethod
-    def _ensure_step_sequence(db: Session, reproduction_id: int, step: Step):
+    def _ensure_step_sequence(db: Session, reproduction_id: int, property_id: int, step: Step):
         if step.step_name == StepName.ZERO:
             return
 
-        executions = ReproductionService.list_executions_by_reproduction(db, reproduction_id)
+        executions = ReproductionService.list_executions_by_reproduction(db, reproduction_id, property_id)
         completed_names = {
             ex.step.step_name
             for ex in executions
@@ -90,10 +100,18 @@ class ReproductionService:
             )
 
     @staticmethod
-    def create_reproduction(db: Session, data, current_user):
-        animal = db.query(AnimalModel).filter(AnimalModel.id_animal == data.animal_id).first()
+    def create_reproduction(db: Session, data, current_user, property_id: int):
+        animal = (
+            db.query(AnimalModel)
+            .filter(
+                AnimalModel.id_animal == data.animal_id,
+                AnimalModel.property_id == property_id,
+            )
+            .first()
+        )
         if not animal:
             raise HTTPException(status_code=404, detail="Animal not found.")
+
         ReproductionService._ensure_reproduction_preconditions(animal)
         ReproductionService._ensure_module_for_protocol(
             db, current_user, data.reproduction_type
@@ -107,44 +125,52 @@ class ReproductionService:
         reproduction = Reproduction(**data.model_dump())
         db.add(reproduction)
         animal.reproductive_status = AnimalReproductiveStatus.BREEDING_READY
-        db.commit()
-        db.refresh(reproduction)
+        ReproductionService._commit(db, reproduction)
         return reproduction
 
     @staticmethod
-    def list_reproductions(db: Session):
-        return db.query(Reproduction).all()
+    def list_reproductions(db: Session, property_id: int):
+        return (
+            db.query(Reproduction)
+            .join(AnimalModel, Reproduction.animal_id == AnimalModel.id_animal)
+            .filter(AnimalModel.property_id == property_id)
+            .all()
+        )
 
     @staticmethod
-    def get_reproduction(db: Session, reproduction_id: int):
+    def get_reproduction(db: Session, reproduction_id: int, property_id: int):
         reproduction = (
-            db.query(Reproduction).filter(Reproduction.id == reproduction_id).first()
+            db.query(Reproduction)
+            .join(AnimalModel, Reproduction.animal_id == AnimalModel.id_animal)
+            .filter(
+                Reproduction.id == reproduction_id,
+                AnimalModel.property_id == property_id
+            )
+            .first()
         )
         if not reproduction:
             raise HTTPException(status_code=404, detail="Reproduction not found.")
         return reproduction
 
     @staticmethod
-    def update_reproduction(db: Session, reproduction_id: int, data):
-        reproduction = ReproductionService.get_reproduction(db, reproduction_id)
+    def update_reproduction(db: Session, reproduction_id: int, property_id: int, data):
+        reproduction = ReproductionService.get_reproduction(db, reproduction_id, property_id)
         for key, value in data.model_dump(exclude_unset=True).items():
             setattr(reproduction, key, value)
-        db.commit()
-        db.refresh(reproduction)
+        ReproductionService._commit(db, reproduction)
         return reproduction
 
     @staticmethod
-    def delete_reproduction(db: Session, reproduction_id: int):
-        reproduction = ReproductionService.get_reproduction(db, reproduction_id)
+    def delete_reproduction(db: Session, reproduction_id: int, property_id: int):
+        reproduction = ReproductionService.get_reproduction(db, reproduction_id, property_id)
         db.delete(reproduction)
-        db.commit()
+        ReproductionService._commit(db)
 
     @staticmethod
     def create_protocol(db: Session, data):
         protocol = Protocol(**data.model_dump())
         db.add(protocol)
-        db.commit()
-        db.refresh(protocol)
+        ReproductionService._commit(db, protocol)
         return protocol
 
     @staticmethod
@@ -165,8 +191,7 @@ class ReproductionService:
         step_data["protocol_id"] = protocol_id
         step = Step(**step_data)
         db.add(step)
-        db.commit()
-        db.refresh(step)
+        ReproductionService._commit(db, step)
         return step
 
     @staticmethod
@@ -175,8 +200,8 @@ class ReproductionService:
         return db.query(Step).filter(Step.protocol_id == protocol_id).all()
 
     @staticmethod
-    def create_step_execution(db: Session, reproduction_id: int, data):
-        reproduction = ReproductionService.get_reproduction(db, reproduction_id)
+    def create_step_execution(db: Session, reproduction_id: int, property_id: int, data):
+        reproduction = ReproductionService.get_reproduction(db, reproduction_id, property_id)
         step = db.query(Step).filter(Step.id == data.step_id).first()
         if not step:
             raise HTTPException(status_code=404, detail="Step not found.")
@@ -186,7 +211,7 @@ class ReproductionService:
                 status_code=400,
                 detail="This step does not belong to the reproduction protocol.",
             )
-        ReproductionService._ensure_step_sequence(db, reproduction_id, step)
+        ReproductionService._ensure_step_sequence(db, reproduction_id, property_id, step)
 
         payload = data.model_dump()
         payload["reproduction_id"] = reproduction_id
@@ -215,13 +240,12 @@ class ReproductionService:
                     reproduction.reproduction_status = ReproductionStatus.COMPLETED
                     reproduction.animal.reproductive_status = AnimalReproductiveStatus.OPEN
 
-        db.commit()
-        db.refresh(execution)
+        ReproductionService._commit(db, execution)
         return execution
 
     @staticmethod
-    def list_executions_by_reproduction(db: Session, reproduction_id: int):
-        ReproductionService.get_reproduction(db, reproduction_id)
+    def list_executions_by_reproduction(db: Session, reproduction_id: int, property_id: int):
+        ReproductionService.get_reproduction(db, reproduction_id, property_id)
         return (
             db.query(StepExecution)
             .filter(StepExecution.reproduction_id == reproduction_id)
@@ -229,8 +253,8 @@ class ReproductionService:
         )
 
     @staticmethod
-    def register_birth(db: Session, reproduction_id: int, data):
-        reproduction = ReproductionService.get_reproduction(db, reproduction_id)
+    def register_birth(db: Session, reproduction_id: int, property_id: int, data):
+        reproduction = ReproductionService.get_reproduction(db, reproduction_id, property_id)
         if data.birth_date > date.today():
             raise HTTPException(
                 status_code=400,
@@ -253,8 +277,7 @@ class ReproductionService:
             f"Category: {data.calf_category} | Notes: {data.notes or '-'}"
         )
         reproduction.notes = merged_notes.strip()
-        db.commit()
-        db.refresh(reproduction)
+        ReproductionService._commit(db, reproduction)
         return reproduction
 
 

@@ -1,8 +1,17 @@
-from datetime import date
-from typing import List, Optional
-
 # Adicionado ForeignKey à lista de imports
-from sqlalchemy import Column, Integer, String, Date, Float, Enum, Text, ForeignKey
+from sqlalchemy import (
+    Column,
+    Date,
+    Enum,
+    Float,
+    ForeignKey,
+    ForeignKeyConstraint,
+    Index,
+    Integer,
+    String,
+    Text,
+    UniqueConstraint,
+)
 from sqlalchemy.orm import relationship
 
 from app.shared.infrastructure.database.connection import Base
@@ -21,10 +30,28 @@ class AnimalModel(Base):
     """
 
     __tablename__ = "animals"
+    __table_args__ = (
+        UniqueConstraint(
+            "property_id",
+            "identification_number",
+            name="uq_animals_property_identification",
+        ),
+        UniqueConstraint(
+            "id_animal",
+            "property_id",
+            name="uq_animals_id_property",
+        ),
+        ForeignKeyConstraint(
+            ["batch_id", "property_id"],
+            ["batches.id_batch", "batches.property_id"],
+            name="fk_animals_batch_property",
+        ),
+        Index("ix_animals_property_id", "property_id"),
+    )
 
     # Identificação
     id_animal = Column(Integer, primary_key=True, index=True)
-    identification_number = Column(Integer, nullable=False, unique=True)
+    identification_number = Column(Integer, nullable=False)
     chip_id = Column(Integer, nullable=True)
     pedigree_po = Column(Integer, nullable=True)
     name = Column(String(100), nullable=True)
@@ -58,11 +85,11 @@ class AnimalModel(Base):
     property_id = Column(Integer, ForeignKey("properties.id_property"), nullable=False)
 
     # Vincula o animal a um lote específico
-    batch_id = Column(Integer, ForeignKey("batches.id_batch"), nullable=True)
+    batch_id = Column(Integer, nullable=True)
     
     # --- RELACIONAMENTOS ---
     property = relationship("Property")
-    batch = relationship("Batch", back_populates="animals")
+    batch = relationship("Batch", back_populates="animals", overlaps="property")
 
     weights = relationship(
         "Weighing", back_populates="animal", cascade="all, delete-orphan", passive_deletes=True

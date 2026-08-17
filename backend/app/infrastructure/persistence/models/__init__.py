@@ -1,6 +1,7 @@
-"""Modelos ORM — importados no bootstrap para create_all."""
+"""Modelos ORM registrados no metadata usado pelo Alembic e pelos testes."""
 
 from app.shared.infrastructure.persistence.address import Address
+from app.shared.infrastructure.persistence.auth_session import AuthSession
 from app.modules.inventory.infrastructure.persistence.animal import AnimalModel
 from app.shared.infrastructure.persistence.animal_event import AnimalEvent
 from app.shared.infrastructure.persistence.animal_movement import AnimalMovement
@@ -15,6 +16,9 @@ from app.modules.health.infrastructure.persistence.health import HealthModel
 from app.shared.infrastructure.persistence.owner import Owner
 from app.shared.infrastructure.persistence.owner_module import OwnerModule
 from app.shared.infrastructure.persistence.password_reset_token import PasswordResetToken
+from app.shared.infrastructure.persistence.phone_verification_code import (
+    PhoneVerificationCode,
+)
 from app.shared.infrastructure.persistence.paddock import Paddock, PaddockeStatus
 from app.shared.infrastructure.persistence.pasture import Pasture
 from app.shared.infrastructure.persistence.property import Property
@@ -27,6 +31,7 @@ from app.modules.inventory.infrastructure.persistence.weighing import Weighing
 
 __all__ = [
     "Address",
+    "AuthSession",
     "AnimalModel",
     "AnimalEvent",
     "AnimalMovement",
@@ -39,6 +44,7 @@ __all__ = [
     "Owner",
     "OwnerModule",
     "PasswordResetToken",
+    "PhoneVerificationCode",
     "Paddock",
     "PaddockeStatus",
     "Pasture",

@@ -12,16 +12,17 @@ Credenciais:
 from __future__ import annotations
 
 import sys
+import os
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from sqlalchemy.orm import Session
 
-from app.infrastructure.database.connection import SessionLocal, engine, Base
-from app.infrastructure.persistence.repositories.user_repository import get_user_by_email
-from app.infrastructure.security import hash_password
-from app.infrastructure.persistence.models.user import User
+from app.shared.infrastructure.database.connection import SessionLocal
+from app.shared.infrastructure.persistence.user_repository import get_user_by_email
+from app.shared.infrastructure.auth.security import hash_password
+from app.shared.infrastructure.persistence.user import User
 
 TEST_EMAIL = "teste@aiboi.dev"
 TEST_PASSWORD = "Teste123!"
@@ -31,7 +32,6 @@ TEST_PHONE = "11999999999"
 
 
 def seed(db: Session) -> None:
-    Base.metadata.create_all(bind=engine)
     existing = get_user_by_email(db, TEST_EMAIL)
     if existing:
         existing.password = hash_password(TEST_PASSWORD)
@@ -54,11 +54,15 @@ def seed(db: Session) -> None:
 
 
 def main() -> None:
+    if os.getenv("ENV", "development").lower() == "production":
+        raise RuntimeError("Seed de teste bloqueado em produção")
+    if os.getenv("ALLOW_TEST_SEED", "false").lower() != "true":
+        raise RuntimeError("Defina ALLOW_TEST_SEED=true para executar este seed")
+
     db = SessionLocal()
     try:
         seed(db)
-        print(f"Senha: {TEST_PASSWORD}")
-        print("No app: Boas-vindas > Entrar > use o e-mail e senha acima > Home")
+        print("Seed de teste concluído")
     finally:
         db.close()
 

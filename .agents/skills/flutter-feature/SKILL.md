@@ -1,6 +1,6 @@
 ---
 name: flutter-feature
-description: Cria e revisa funcionalidades Flutter organizadas por feature, com estados, validações, integração de API e responsividade. Use ao implementar telas, fluxos, Cubits e componentes do AiBoi. Palavras-chave: cubit, widget, feature-first, mobile, responsividade.
+description: "Cria e revisa funcionalidades Flutter organizadas por feature, com estados, validações, integração de API e responsividade. Use ao implementar telas, fluxos, Cubits e componentes do AiBoi. Palavras-chave: cubit, widget, feature-first, mobile, responsividade."
 ---
 
 # Flutter Feature

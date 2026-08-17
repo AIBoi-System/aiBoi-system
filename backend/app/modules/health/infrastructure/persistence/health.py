@@ -1,6 +1,4 @@
 from datetime import date
-from typing import Optional
-
 from sqlalchemy import (
     Column,
     Integer,
@@ -10,6 +8,8 @@ from sqlalchemy import (
     Enum as SQLEnum,
     Text,
     ForeignKey,
+    ForeignKeyConstraint,
+    Numeric,
 )
 from sqlalchemy.orm import relationship
 
@@ -25,6 +25,18 @@ class HealthModel(Base):
     """
 
     __tablename__ = "health_records"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["animal_id", "property_id"],
+            ["animals.id_animal", "animals.property_id"],
+            name="fk_health_animal_property",
+        ),
+        ForeignKeyConstraint(
+            ["batch_id", "property_id"],
+            ["batches.id_batch", "batches.property_id"],
+            name="fk_health_batch_property",
+        ),
+    )
 
     # Identificação (Mantendo o padrão do Sandro)
     id_health_record = Column(Integer, primary_key=True, index=True)
@@ -37,7 +49,7 @@ class HealthModel(Base):
 
     # Dosagem e Custos
     dosage = Column(Float, nullable=True)
-    unit_price = Column(Float, nullable=True)
+    unit_price = Column(Numeric(12, 2), nullable=True)
 
     notes = Column(Text, nullable=True)
 
@@ -48,14 +60,22 @@ class HealthModel(Base):
     property_id = Column(Integer, ForeignKey("properties.id_property"), nullable=False, index=True)
 
     # Alterado para nullable=True (pois o registro pode ser do Lote em vez do Animal)
-    animal_id = Column(Integer, ForeignKey("animals.id_animal"), nullable=True)
+    animal_id = Column(Integer, nullable=True)
 
     # Adicionado o vínculo com o Lote (Batch)
-    batch_id = Column(Integer, ForeignKey("batches.id_batch"), nullable=True)
+    batch_id = Column(Integer, nullable=True)
 
     # Relacionamentos
-    animal = relationship("AnimalModel", back_populates="health_records")
-    batch = relationship("Batch", back_populates="health_records")
+    animal = relationship(
+        "AnimalModel",
+        back_populates="health_records",
+        overlaps="health_records",
+    )
+    batch = relationship(
+        "Batch",
+        back_populates="health_records",
+        overlaps="animal,health_records",
+    )
 
 
 
