@@ -1,7 +1,5 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-import logging
-
 from app.shared.infrastructure.persistence.user_repository import (
     create_user,
     get_user_by_email,
@@ -45,8 +43,7 @@ def create_user_service(db: Session, data):
     user_dict["cpf"] = cpf_formatado
     user_dict["password"] = hash_password(data.password)
     
-    # Adicionamos o campo 'type' que vimos na sua imagem do MySQL
-    # Isso evita erros de "campo obrigatório" no banco
+    # Mantém o discriminador exigido pelo modelo ORM quando não foi informado.
     if "type" not in user_dict:
         user_dict["type"] = "user" 
 

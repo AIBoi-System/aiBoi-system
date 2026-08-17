@@ -1,6 +1,4 @@
 from datetime import date
-from typing import Optional
-
 from sqlalchemy import Column, Integer, Date, ForeignKey, Text
 from sqlalchemy.orm import relationship
 
@@ -18,11 +16,26 @@ class BatchMovement(Base):
     id_movement = Column(Integer, primary_key=True, index=True)
     
     # Chave Estrangeira para o Lote
-    batch_id = Column(Integer, ForeignKey("batches.id_batch"), nullable=False)
+    batch_id = Column(
+        Integer,
+        ForeignKey("batches.id_batch"),
+        nullable=False,
+        index=True,
+    )
     
     # Chaves Estrangeiras para os Piquetes (Origem e Destino)
-    origin_paddock_id = Column(Integer, ForeignKey("paddocks.id_paddock"), nullable=False)
-    destination_paddock_id = Column(Integer, ForeignKey("paddocks.id_paddock"), nullable=False)
+    origin_paddock_id = Column(
+        Integer,
+        ForeignKey("paddocks.id_paddock"),
+        nullable=False,
+        index=True,
+    )
+    destination_paddock_id = Column(
+        Integer,
+        ForeignKey("paddocks.id_paddock"),
+        nullable=False,
+        index=True,
+    )
     
     # Dados da Movimentação
     movement_date = Column(Date, default=date.today, nullable=False)

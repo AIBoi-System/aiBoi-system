@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional, Any # Usamos Any com "A" maiúsculo aqui
+from typing import Optional
 from app.enums.animal.animal_sex import AnimalSex
 from app.enums.animal.animal_life_status import AnimalLifeStatus
 from app.enums.animal.animal_size import AnimalSize

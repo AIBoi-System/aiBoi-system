@@ -6,7 +6,7 @@ class Address(Base):
     """
     Modelo de base de dados para endereços.
     """
-    __tablename__ = "addresses" # Nome da tabela no MySQL
+    __tablename__ = "addresses"
 
     # Definição das colunas para o SQLAlchemy
     id_address = Column(Integer, primary_key=True, index=True)

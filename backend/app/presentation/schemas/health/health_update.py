@@ -13,6 +13,7 @@ class HealthUpdate(BaseModel):
     dosage: Optional[float] = None
     unit_price: Optional[float] = None
     notes: Optional[str] = None
+    property_id: Optional[int] = None
     animal_id: Optional[int] = None
     batch_id: Optional[int] = None
 

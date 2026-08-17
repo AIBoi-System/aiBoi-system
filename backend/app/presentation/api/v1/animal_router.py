@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, status, Response, HTTPException
+from fastapi import APIRouter, Depends, status, Response
 from sqlalchemy.orm import Session
 
 from app.modules.inventory.application.use_cases import (
@@ -10,7 +10,6 @@ from app.modules.inventory.application.use_cases import (
     UpdateAnimalUseCase,
     DeleteAnimalUseCase,
 )
-from app.shared.application.property.property_service import PropertyService
 from app.modules.inventory.domain.entity import Animal
 from app.shared.infrastructure.database.connection import get_db
 from app.presentation.api.dependencies import (
@@ -20,16 +19,11 @@ from app.presentation.api.dependencies import (
     get_update_animal_use_case,
     get_delete_animal_use_case,
 )
-from app.presentation.api.auth_dependencies import get_current_user
+from app.presentation.api.auth_dependencies import get_current_user, verify_property_access
 from app.presentation.schemas.animal import AnimalCreate, AnimalResponse, AnimalUpdate
 from app.presentation.api.v1.mappers import animal_to_response
 
 router = APIRouter(prefix="/animals", tags=["Animals"])
-
-
-def _verify_property_access(db: Session, property_id: int, user_id: int):
-    # Garante que a propriedade pertence ao usuário logado
-    PropertyService.get_property_by_id(db, property_id, owner_id=user_id)
 
 
 def _schema_to_entity(schema: AnimalCreate, property_id: int) -> Animal:
@@ -46,7 +40,7 @@ def create_animal(
     current_user=Depends(get_current_user),
     use_case: CreateAnimalUseCase = Depends(get_create_animal_use_case),
 ):
-    _verify_property_access(db, property_id, current_user.id_user)
+    verify_property_access(db, property_id, current_user)
     created = use_case.execute(_schema_to_entity(payload, property_id))
     return animal_to_response(created)
 
@@ -58,7 +52,7 @@ def list_animals(
     current_user=Depends(get_current_user),
     use_case: ListAnimalsUseCase = Depends(get_list_animals_use_case),
 ):
-    _verify_property_access(db, property_id, current_user.id_user)
+    verify_property_access(db, property_id, current_user)
     animals = use_case.execute(property_id)
     return [animal_to_response(a) for a in animals]
 
@@ -71,7 +65,7 @@ def get_animal(
     current_user=Depends(get_current_user),
     use_case: GetAnimalUseCase = Depends(get_get_animal_use_case),
 ):
-    _verify_property_access(db, property_id, current_user.id_user)
+    verify_property_access(db, property_id, current_user)
     animal = use_case.execute(animal_id, property_id)
     return animal_to_response(animal)
 
@@ -85,7 +79,7 @@ def update_animal(
     current_user=Depends(get_current_user),
     use_case: UpdateAnimalUseCase = Depends(get_update_animal_use_case),
 ):
-    _verify_property_access(db, property_id, current_user.id_user)
+    verify_property_access(db, property_id, current_user)
     updated = use_case.execute(animal_id, property_id, payload.model_dump(exclude_unset=True))
     return animal_to_response(updated)
 
@@ -98,7 +92,7 @@ def delete_animal(
     current_user=Depends(get_current_user),
     use_case: DeleteAnimalUseCase = Depends(get_delete_animal_use_case),
 ):
-    _verify_property_access(db, property_id, current_user.id_user)
+    verify_property_access(db, property_id, current_user)
     use_case.execute(animal_id, property_id)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 

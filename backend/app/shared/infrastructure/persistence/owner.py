@@ -1,5 +1,3 @@
-from typing import List
-
 from sqlalchemy import Column, Integer, ForeignKey, Enum
 from sqlalchemy.orm import relationship
 

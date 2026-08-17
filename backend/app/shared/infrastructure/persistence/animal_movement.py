@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, ForeignKey, Text
+from sqlalchemy import Column, Integer, Date, ForeignKey, Text
 from sqlalchemy.orm import relationship
 from app.shared.infrastructure.database.connection import Base #
 from datetime import date
@@ -15,9 +15,24 @@ class AnimalMovement(Base):
     notes = Column(Text, nullable=True)
 
     # Chaves Estrangeiras para Animal e Lotes
-    animal_id = Column(Integer, ForeignKey("animals.id_animal"), nullable=False)
-    origin_batch_id = Column(Integer, ForeignKey("batches.id_batch"), nullable=False)
-    destination_batch_id = Column(Integer, ForeignKey("batches.id_batch"), nullable=False)
+    animal_id = Column(
+        Integer,
+        ForeignKey("animals.id_animal"),
+        nullable=False,
+        index=True,
+    )
+    origin_batch_id = Column(
+        Integer,
+        ForeignKey("batches.id_batch"),
+        nullable=False,
+        index=True,
+    )
+    destination_batch_id = Column(
+        Integer,
+        ForeignKey("batches.id_batch"),
+        nullable=False,
+        index=True,
+    )
 
     # Relacionamentos para facilitar consultas no sistema 
     animal = relationship("AnimalModel", back_populates="movements")

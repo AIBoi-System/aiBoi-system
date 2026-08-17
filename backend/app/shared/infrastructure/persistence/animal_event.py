@@ -17,13 +17,33 @@ class AnimalEvent(Base):
     description = Column(Text, nullable=True)
 
     # Chave Estrangeira obrigatória para o Animal
-    animal_id = Column(Integer, ForeignKey("animals.id_animal"), nullable=False)
+    animal_id = Column(
+        Integer,
+        ForeignKey("animals.id_animal"),
+        nullable=False,
+        index=True,
+    )
     
     # Chaves Estrangeiras opcionais para rastreabilidade
-    weighing_id = Column(Integer, ForeignKey("weighings.id"), nullable=True) 
-    health_id = Column(Integer, ForeignKey("health_records.id_health_record"), nullable=True) 
-    reproduction_id = Column(Integer, ForeignKey("reproductions.id"), nullable=True) 
-    batch_id = Column(Integer, ForeignKey("batches.id_batch"), nullable=True) 
+    weighing_id = Column(Integer, ForeignKey("weighings.id"), nullable=True, index=True)
+    health_id = Column(
+        Integer,
+        ForeignKey("health_records.id_health_record"),
+        nullable=True,
+        index=True,
+    )
+    reproduction_id = Column(
+        Integer,
+        ForeignKey("reproductions.id"),
+        nullable=True,
+        index=True,
+    )
+    batch_id = Column(
+        Integer,
+        ForeignKey("batches.id_batch"),
+        nullable=True,
+        index=True,
+    )
 
     # Relacionamento para facilitar consultas
     animal = relationship("AnimalModel", back_populates="events")

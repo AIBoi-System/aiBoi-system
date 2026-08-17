@@ -1,7 +1,5 @@
-from datetime import date
-from typing import Optional, Dict
-
 from sqlalchemy import Column, Integer, Date, Enum, JSON, ForeignKey
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
 from app.shared.infrastructure.database.connection import Base
@@ -20,15 +18,25 @@ class StepExecution(Base):
     id = Column(Integer, primary_key=True, index=True)
     
     # Chaves Estrangeiras
-    reproduction_id = Column(Integer, ForeignKey("reproductions.id"), nullable=False)
-    step_id = Column(Integer, ForeignKey("steps.id"), nullable=False)
+    reproduction_id = Column(
+        Integer,
+        ForeignKey("reproductions.id"),
+        nullable=False,
+        index=True,
+    )
+    step_id = Column(
+        Integer,
+        ForeignKey("steps.id"),
+        nullable=False,
+        index=True,
+    )
     
     # Dados da Execução
     execution_date = Column(Date, nullable=True)
     status = Column(Enum(StepStatus), nullable=False)
     
     # Armazenamento flexível (hormônios, sêmen, etc.)
-    values = Column(JSON, nullable=True)
+    values = Column(JSON().with_variant(JSONB, "postgresql"), nullable=True)
     
     # Resultado técnico (ex: Prenhez Confirmada)
     result = Column(Enum(StepExecultionResult), nullable=True)

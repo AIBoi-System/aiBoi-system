@@ -1,11 +1,11 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.orm import Session
 
 from app.shared.application.user.owner_module_service import OwnerModuleService
 from app.shared.infrastructure.database.connection import get_db
-from app.presentation.api.auth_dependencies import require_roles
+from app.presentation.api.auth_dependencies import require_roles, get_current_user
 from app.presentation.schemas.owner_module_schema import (
     OwnerModuleCreate,
     OwnerModuleResponse,
@@ -27,9 +27,14 @@ def assign_module(payload: OwnerModuleCreate, db: Session = Depends(get_db)):
 @router.get(
     "/{owner_id}",
     response_model=List[OwnerModuleResponse],
-    dependencies=[Depends(require_roles("owner", "admin"))],
 )
-def list_modules(owner_id: int, db: Session = Depends(get_db)):
+def list_modules(
+    owner_id: int,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
+    if current_user.type != "admin" and (current_user.id_user != owner_id or current_user.type != "owner"):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acesso não autorizado.")
     return OwnerModuleService.list_owner_modules(db, owner_id)
 
 

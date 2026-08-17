@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 import app.shared.application.user.user_service as user_service
 from app.shared.infrastructure.database.connection import get_db
+from app.presentation.api.auth_dependencies import get_current_user
 from app.presentation.schemas.user import (
     UserCreateSchema,
     UserResponseSchema,
@@ -16,14 +17,20 @@ router = APIRouter(prefix="/users", tags=["Users"])
 def create_user(
     data: UserCreateSchema,
     db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
 ):
+    if current_user.type != "admin":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acesso não autorizado.")
     return user_service.create_user_service(db, data)
 
 
 @router.get("/", response_model=list[UserResponseSchema])
 def list_users(
     db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
 ):
+    if current_user.type != "admin":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acesso não autorizado.")
     return user_service.list_users_service(db)
 
 
@@ -31,7 +38,10 @@ def list_users(
 def get_user(
     user_id: int,
     db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
 ):
+    if current_user.type != "admin" and current_user.id_user != user_id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acesso não autorizado.")
     return user_service.get_user_service(db, user_id)
 
 
@@ -40,7 +50,10 @@ def update_user(
     user_id: int,
     data: UserUpdateSchema,
     db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
 ):
+    if current_user.type != "admin" and current_user.id_user != user_id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acesso não autorizado.")
     return user_service.update_user_service(db, user_id, data)
 
 
@@ -48,7 +61,10 @@ def update_user(
 def delete_user(
     user_id: int,
     db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
 ):
+    if current_user.type != "admin":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acesso não autorizado.")
     user_service.delete_user_service(db, user_id)
     return {"message": "Usuário deletado com sucesso"}
 

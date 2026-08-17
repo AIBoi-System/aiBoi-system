@@ -7,6 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 os.environ["DATABASE_URL"] = "sqlite:///:memory:"
+os.environ["ENV"] = "test"
 
 from app.shared.infrastructure.database.connection import Base, get_db
 from app.infrastructure.persistence import models  # noqa: F401
@@ -58,4 +59,42 @@ def client(db_session):
     app.dependency_overrides.clear()
 
 
+@pytest.fixture
+def auth_setup(db_session):
+    from app.shared.infrastructure.persistence.owner import Owner
+    from app.shared.infrastructure.persistence.property import Property
+    from app.enums.property.property_type import PropertyType
+    from app.enums.owner.owner_subscription_status import OwnerSubscriptionStatus
+    from app.shared.infrastructure.auth.auth import create_access_token
+
+    owner = Owner(
+        name="Test Owner",
+        email="test_owner@example.com",
+        password="hash_password",
+        cpf="999.999.999-99",
+        type="owner",
+        subscription_status=OwnerSubscriptionStatus.FREE
+    )
+    db_session.add(owner)
+    db_session.commit()
+    db_session.refresh(owner)
+
+    property_ = Property(
+        name="Fazenda Teste",
+        property_type=PropertyType.BEEF,
+        area=120.0,
+        owner_id=owner.id_user
+    )
+    db_session.add(property_)
+    db_session.commit()
+    db_session.refresh(property_)
+
+    token = create_access_token(owner.email, "owner")
+
+    return {
+        "owner": owner,
+        "property": property_,
+        "token": token,
+        "headers": {"Authorization": f"Bearer {token}"}
+    }
 

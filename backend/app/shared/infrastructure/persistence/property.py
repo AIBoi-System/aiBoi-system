@@ -12,7 +12,6 @@ class Property(Base):
     property_type = Column(Enum(PropertyType), nullable=False)
     area = Column(Float, nullable=False)
 
-    # ALTERADO: Agora aponta para 'users.id_user' conforme o MySQL
     owner_id = Column(Integer, ForeignKey("users.id_user"), nullable=False)
     address_id = Column(Integer, ForeignKey("addresses.id_address"), nullable=True)
 
@@ -22,7 +21,10 @@ class Property(Base):
     address = relationship("Address")
 
     paddocks = relationship(
-        "Paddock", back_populates="property", cascade="all, delete-orphan"
+        "Paddock",
+        back_populates="property",
+        cascade="all, delete-orphan",
+        overlaps="paddocks,pasture",
     )
     pastures = relationship(
         "Pasture", back_populates="property", cascade="all, delete-orphan"

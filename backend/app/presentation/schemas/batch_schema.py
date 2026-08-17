@@ -13,6 +13,7 @@ class BatchBase(BaseModel):
     category: str = Field(..., min_length=2, max_length=50)
     check_in: BRDate
     check_out: Optional[BRDate] = None
+    property_id: int
 
 
 class BatchCreate(BatchBase):
@@ -26,6 +27,7 @@ class BatchUpdate(BaseModel):
     category: Optional[str] = Field(default=None, min_length=2, max_length=50)
     check_in: Optional[BRDate] = None
     check_out: Optional[BRDate] = None
+    property_id: Optional[int] = None
 
 
 class BatchResponse(BatchBase):
