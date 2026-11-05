@@ -1,6 +1,6 @@
 <div align="center">
 
-# AiBoi — Gestão para Pecuária 4.0
+# AgroFence — Gestão para Pecuária 4.0
 
 *Digitalização do manejo bovino com dados, reprodução, sanidade e propriedades.*
 
@@ -18,7 +18,7 @@
 
 ## Sobre
 
-O **AiBoi** é um monorepo para gestão pecuária: API REST em **FastAPI** (Clean Architecture + DDD) e aplicativo **Flutter** para produtores e equipe de campo.
+O **AgroFence** é um monorepo para gestão pecuária: API REST em **FastAPI** (Clean Architecture + DDD) e aplicativo **Flutter** para produtores e equipe de campo.
 
 | Módulo | Documentação |
 | :--- | :--- |
@@ -30,7 +30,7 @@ O **AiBoi** é um monorepo para gestão pecuária: API REST em **FastAPI** (Clea
 ## Estrutura do repositório
 
 ```text
-aiBoi-system/
+AgroFence-system/
 ├── backend/          # API FastAPI + SQLAlchemy + MySQL
 ├── frontend/         # App Flutter (Android, iOS, Web, Desktop)
 ├── docker-compose.yml
@@ -45,8 +45,8 @@ aiBoi-system/
 ### Com Docker (recomendado)
 
 ```bash
-git clone https://github.com/seu-usuario/aiBoi-system.git
-cd aiBoi-system
+git clone https://github.com/seu-usuario/AgroFence-system.git
+cd AgroFence-system
 ```
 
 Crie `.env` na raiz (usado pelo `docker-compose`) — veja [backend/README.md](backend/README.md).
